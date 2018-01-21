@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.kinotor.tiar.kinotor"
+    tools:ignore="MissingLeanbackLauncher">
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- <uses-permission android:name="android.permission.INSTALL_PACKAGES"/> -->
+    <uses-feature
+        android:name="android.hardware.screen.portrait"
+        android:required="false" />
+    <!-- говорим о том что хотим универсальное приложение а не только на TV -->
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <!-- говорим что нам не обязателен touchscreen -->
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <!-- говорим о том, что локация нам не обязательна -->
+    <uses-feature
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:required="false" />
+    <!-- говорим о том, что функции телефона тоже не обязательны -->
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <!-- говорим о том, что микрофон нам не обязателен -->
+    <uses-feature
+        android:name="android.permission.RECORD_AUDIO"
+        android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.MainCatalogActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAINSCREEN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.DetailActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".ui.SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:theme="@style/PreferencesTheme"
+            android:label="@string/title_activity_settings">
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Навигация">
+        <menu>
+            <item
+                android:id="@+id/films"
+                android:checkable="true"
+                android:title="Фильмы" />
+            <item
+                android:id="@+id/serials"
+                android:checkable="true"
+                android:title="Сериалы" />
+            <item
+                android:id="@+id/mults"
+                android:checkable="true"
+                android:checked="true"
+                android:title="Мультфильмы" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/favor"
+        android:checkable="true"
+        android:title="Избранное" />
+    <item
+        android:id="@+id/history"
+        android:checkable="true"
+        android:title="История" />
+    <item android:title="Дополнительно">
+        <menu>
+            <item
+                android:id="@+id/coldfilm"
+                android:checkable="true"
+                android:title="Coldfilm" />
+            <item
+                android:id="@+id/exit"
+                android:title="Выход" />
+        </menu>
+    </item>
+
+
+</menu>

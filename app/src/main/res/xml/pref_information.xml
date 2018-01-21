@@ -1,0 +1,34 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Общее">
+        <Preference
+            android:key="pref_static_field_key"
+            android:selectable="false"
+            android:persistent="false"
+            android:title="@string/app_name"
+            android:summary="@string/app_version"/>
+        <Preference
+            android:key="update"
+            android:title="Проверить обновление">
+        </Preference>
+        <Preference
+            android:key="email"
+            android:title="Обратная связь"
+            android:summary="tiarait.dev@gmail.com">
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Поддержка приложения">
+        <Preference
+            android:key="wmr"
+            android:title="R353353790048"/>
+        <Preference
+            android:key="wmu"
+            android:title="U787643357009"/>
+        <Preference
+            android:key="wmz"
+            android:title="Z337989915257"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

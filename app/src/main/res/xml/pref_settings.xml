@@ -1,0 +1,79 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Интерфейс">
+        <ListPreference
+            android:title="@string/pref_title_grid_catalog"
+            android:entries="@array/pref_list_grid_catalog"
+            android:entryValues="@array/pref_values_grid_catalog"
+            android:summary="@string/pref_desc_grid_catalog"
+            android:key="grid_catalog"
+            android:defaultValue="5"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="fullscreen"
+            android:summaryOn="@string/pref_descOn_fullscreen"
+            android:summaryOff="@string/pref_descOf_fullscreen"
+            android:title="@string/pref_title_fullscreen" />
+        <SwitchPreference
+            android:title="Боковое меню"
+            android:key="side_menu"
+            android:defaultValue="true"
+            android:summaryOn="Меню закрепленно."
+            android:summaryOff="Закрепить меню?(для больших экранов)"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Базы данных">
+        <MultiSelectListPreference
+            android:title="@string/pref_title_base_video"
+            android:entries="@array/pref_list_base_video"
+            android:defaultValue="@array/pref_list_base_video"
+            android:entryValues="@array/pref_list_base_video"
+            android:summary="@string/pref_desc_base_video"
+            android:key="base_video" />
+        <MultiSelectListPreference
+            android:title="@string/pref_title_base_tparser"
+            android:entries="@array/pref_list_base_tparser"
+            android:defaultValue="@array/pref_list_base_tparser"
+            android:entryValues="@array/pref_list_base_tparser"
+            android:summary="@string/pref_desc_base_tparser"
+            android:key="base_tparser" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Другое">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="auto_update"
+            android:summaryOn="@string/pref_descOn_auto_update"
+            android:summaryOff="@string/pref_descOf_auto_update"
+            android:title="@string/pref_title_auto_update" />
+        <ListPreference
+            android:title="@string/pref_title_start_category"
+            android:entries="@array/pref_list_start_category"
+            android:entryValues="@array/pref_list_start_category"
+            android:summary="@string/pref_desc_start_category"
+            android:key="start_category"
+            android:defaultValue="Фильмы"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="coldfilm"
+            android:summaryOn="@string/pref_descOn_coldfilm"
+            android:summaryOff="@string/pref_descOf_coldfilm"
+            android:title="@string/pref_title_coldfilm" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="exit"
+            android:summaryOn="@string/pref_descOn_exit"
+            android:summaryOff="@string/pref_descOf_exit"
+            android:title="@string/pref_title_exit" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

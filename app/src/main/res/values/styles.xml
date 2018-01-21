@@ -1,0 +1,70 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="selectableItemBackground">@drawable/item_select</item>
+
+        <item name="colorControlNormal">#FFF</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+        <item name="android:textColorPrimary">#FFF</item>
+        <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
+        <item name="selectableItemBackgroundBorderless">@drawable/item_select</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
+
+        <item name="actionBarItemBackground">@drawable/item_select</item>
+    </style>
+
+    <style name="PreferencesTheme" parent="Theme.AppCompat">
+        <item name="android:windowBackground">@color/colorPrimaryLight</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColorPrimary">#FFF</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:listDivider">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
+
+        <item name="selectableItemBackground">@drawable/item_select</item>
+        <item name="selectableItemBackgroundBorderless">@drawable/item_select</item>
+        <item name="actionBarItemBackground">@drawable/item_select</item>
+    </style>
+
+    <style name="listViewPrefs" parent="@android:style/Widget.ListView">
+        <item name="android:background">@color/colorBlack</item>
+        <item name="android:cacheColorHint">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NavigationView">
+        <item name="android:textColorSecondary">@color/colorAccent</item>
+        <item name="android:listDivider">@color/colorAccent</item>
+    </style>
+
+    <style name="TextStyle">
+        <item name="android:fontFamily">@fonts/serif-monospace</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+        <item name="android:textColorHint">?android:attr/textColorHintInverse</item>
+    </style>
+
+    <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="tabTextAppearance">@style/CustomTabTextAppearance</item>
+    </style>
+
+    <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

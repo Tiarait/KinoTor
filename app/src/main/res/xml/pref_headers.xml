@@ -1,0 +1,16 @@
+<preference-headers
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="com.kinotor.tiar.kinotor.ui.SettingsActivity$InfoPreferenceFragment"
+        android:icon="@drawable/ic_info_white_24dp"
+        android:title="@string/pref_header_info" />
+
+    <header
+        android:fragment="com.kinotor.tiar.kinotor.ui.SettingsActivity$SettingsPreferenceFragment"
+        android:icon="@drawable/ic_menu_settings"
+        android:title="@string/pref_header_settings" />
+
+</preference-headers>

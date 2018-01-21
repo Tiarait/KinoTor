@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.kinotor.tiar.kinotor.ui.DetailActivity$DetailFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tor_item_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/item_list_tor"
+        />
+
+    <LinearLayout
+        android:padding="10dp"
+        android:visibility="gone"
+        android:id="@+id/tor_pb"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:background="@color/colorDarkGrey"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textStyle="bold"
+            android:textColor="@color/colorDarkWhite"
+            android:textSize="18sp"
+            android:text="Поиск торрентов..."/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
