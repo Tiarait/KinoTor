@@ -260,7 +260,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                         if (torrent.select(".li_list_a3").html().contains("class=\"folder"))
                             tor_content = torrent.select(".folder").first().text();
                         else tor_content = "koshara.co";
-                        if (tor_content.contains("файлов)"))
+                        if (tor_content.contains("файлов)") || tor_content.contains("файла)"))
                             tor_content = "koshara.co (" + tor_content.split("\\(")[1].split("\\)")[0] + ")";
 
                         if (!itemDetail.torrents.contains(torrents)) {
@@ -493,13 +493,16 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                         .timeout(5000).ignoreContentType(true).postDataCharset("CP1251").execute();
                 String path = Environment.getExternalStorageDirectory() + "/" +
                         DetailActivity.activity.getString(R.string.app_name) + "/";
+                String name = itemDetail.getTor_name(itemDetail.getCur())
+                        .replace("/", ",").replace(":", " -")
+                        .replace("|", ".");
                 file = new File(path);
                 if (!file.exists()) {
                     file.mkdirs();
                 }
-                if (!itemDetail.getTor_name(itemDetail.getCur()).contains(".torrent"))
-                    file = new File(path + itemDetail.getTor_name(itemDetail.getCur()) + ".torrent");
-                else file = new File(path + itemDetail.getTor_name(itemDetail.getCur()));
+                if (!name.contains(".torrent"))
+                    file = new File(path + name + ".torrent");
+                else file = new File(path + name);
 
                 try {
                     file.createNewFile();

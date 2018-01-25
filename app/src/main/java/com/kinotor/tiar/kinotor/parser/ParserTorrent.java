@@ -62,14 +62,15 @@ public class ParserTorrent extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        if (pref_base.contains("rutor.info"))
-        Tparser(Getdata("http://js1.tparser.org/js1/2.tor.php?callback=one&jsonpx=" + title));
         if (pref_base.contains("rutracker.org"))
-        Tparser(Getdata("http://js3.tparser.org/js3/6.tor.php?callback=one&jsonpx=" + title));
+            Tparser(Getdata("http://js3.tparser.org/js3/6.tor.php?callback=one&jsonpx=" + title));
         if (pref_base.contains("underverse.me"))
-        Tparser(Getdata("http://js5.tparser.org/js5/9.tor.php?callback=one&jsonpx=" + title));
+            Tparser(Getdata("http://js5.tparser.org/js5/9.tor.php?callback=one&jsonpx=" + title));
         if (pref_base.contains("kinozal.tv"))
-        Tparser(Getdata("http://js5.tparser.org/js5/10.tor.php?callback=one&jsonpx=" + title));
+            Tparser(Getdata("http://js5.tparser.org/js5/10.tor.php?callback=one&jsonpx=" + title));
+        if (pref_base.contains("rutor.info"))
+        Tparser(Getdata("http://js1.tparser.org/js1/2.tor.php?callback=one&jsonpx=" + title.split("\\(")[0]));
+//            Rutor(Getdata("http://rutor.info/search/0/0/100/0/" + title));
 
         //thepiratebay.org
 //        Tparser(Getdata("http://js4.tparser.org/js4/8.tor.php?callback=one&jsonpx=" + title));
@@ -77,6 +78,15 @@ public class ParserTorrent extends AsyncTask<Void, Void, Void> {
 
         return null;
     }
+
+//    private void Rutor(Document data) {
+//        String all;
+//        String[] list;
+//        if (data != null) {
+//            if (itemDetail == null)
+//                itemDetail = new ItemDetail();
+//        }
+//    }
 
     private void Tparser(Document data) {
         String all;
@@ -90,19 +100,23 @@ public class ParserTorrent extends AsyncTask<Void, Void, Void> {
                 for (int i = 0; i < list.length; i ++) {
                     if (list[i].split("z':'")[1].split("',")[0].equals("1") &&
                             !itemDetail.torrents.contains(list[i].split("link':'")[1].split("'")[0])) {
-                        itemDetail.setTor_name(list[i].split("name':'")[1].split("'")[0]);
-                        itemDetail.setTorrents(list[i].split("link':'")[1].split("'")[0]);
-                        itemDetail.setTor_size(list[i].split("size':'")[1].split("'")[0] +
-                                " " + list[i].split("t':'")[1].split("',")[0]);
                         String z = list[i].split("link':'")[1].split("',")[0]
                                 .contains("kinozal.tv") ? "2" : "1";
+                        String link = list[i].split("link':'")[1].split("',")[0];
+                        String content = list[i].split("link':'")[1].split("'")[0]
+                                .split("://")[1].split("/")[0];
+                        link = link.contains("fast-tor.net") ? "http://d.rutor.info/download/" +
+                                link.split("torrent/")[1].split("/")[0] : link;
+                        itemDetail.setTor_name(list[i].split("name':'")[1].split("'")[0]);
+                        itemDetail.setTorrents(link);
+                        itemDetail.setTor_size(list[i].split("size':'")[1].split("'")[0] +
+                                " " + list[i].split("t':'")[1].split("',")[0]);
                         itemDetail.setTor_magnet("http://tparser.org/magnet.php?t=" + z +
                                 list[i].split("img':'")[1].split("',")[0] +
                                 list[i].split("d':'")[1].split("',")[0]);
                         itemDetail.setTor_sid(list[i].split("s':'")[1].split("'")[0]);
                         itemDetail.setTor_lich(list[i].split("l':'")[1].split("'")[0]);
-                        itemDetail.setTor_content(list[i].split("link':'")[1].split("'")[0]
-                                .split("://")[1].split("/")[0]);
+                        itemDetail.setTor_content(content.replace("fast-tor.net", "rutor.info"));
                     }
                 }
             }

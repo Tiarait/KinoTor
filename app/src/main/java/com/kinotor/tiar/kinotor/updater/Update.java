@@ -42,13 +42,13 @@ public class Update extends AsyncTask<Void, Void, Void> {
     private void Updater(Document getdata) {
         if (getdata != null) {
             double latest_ver = Double.parseDouble(getdata.select("span.css-truncate-target").first().text());
-            if (curr_ver < latest_ver && getdata.html().contains("ul release-downloads")) {
-                final String download_url ="https://github.com" + getdata.select("ul.release-downloads a").first().attr("href");
+            if (curr_ver < latest_ver && getdata.html().contains(".apk")) {
+                final String download_url ="https://github.com" + getdata.select("a[href$='.apk']").first().attr("href");
                 update_d = new UpdateDialog();
                 update_d.show(activity.getFragmentManager(), download_url);
             } else {
                 new_ver = false;
-                Log.d("mydebug", "version " + curr_ver);
+                Log.d("mydebug", "version: " + curr_ver + " git: " + latest_ver);
             }
         }
     }

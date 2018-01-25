@@ -13,9 +13,8 @@ import android.view.Window;
 import com.kinotor.tiar.kinotor.R;
 
 /**
- * Created by Tiar on 02.07.2017.
+ * Created by Tiar on 02.01.2018.
  */
-
 public class UpdateDialog extends DialogFragment implements View.OnClickListener {
     Intent intent;
     String url;

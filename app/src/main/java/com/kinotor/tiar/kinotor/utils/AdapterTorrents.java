@@ -140,7 +140,8 @@ public class AdapterTorrents extends RecyclerView.Adapter<AdapterTorrents.ViewHo
             @Override
             public void onClick(View view) {
                 if (ParserHtml.itemDetail.getTorrents(cur).contains("koshara") ||
-                        ParserHtml.itemDetail.getTorrents(cur).contains("coldfilm")) {
+                        ParserHtml.itemDetail.getTorrents(cur).contains("coldfilm") ||
+                        ParserHtml.itemDetail.getTorrents(cur).contains("d.rutor.info")) {
                     ParserHtml.itemDetail.setCur(cur);
                     ParserHtml parse = new ParserHtml(ParserHtml.itemDetail.getTorrents(cur), "torrent down play");
                     parse.execute();

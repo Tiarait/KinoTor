@@ -41,22 +41,26 @@
         android:gravity="center">
         <Button
             android:id="@+id/yes"
-            android:layout_width="90dp"
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"
             android:textColor="@color/colorWhite"
-            android:background="@color/colorDarkGrey"
+            android:background="@drawable/item_select"
             android:textStyle="bold"
             android:text="Да"
             tools:ignore="ButtonStyle">
         </Button>
         <Button
             android:id="@+id/no"
-            android:layout_width="90dp"
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:textColor="@color/colorWhite"
-            android:background="@color/colorDarkGrey"
+            android:background="@drawable/item_select"
             android:textStyle="bold"
             android:text="Нет"
             tools:ignore="ButtonStyle">
