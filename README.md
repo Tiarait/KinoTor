@@ -5,9 +5,9 @@
 
 
 ### Что реализовано:
-* Каталог с видео (koshara).
+* Каталог с видео (koshara, amcet).
 * Бд для поиска видео (moonwalk, hdgo).
-* Бд для поиска торрентов ( tparser(rutracker, rutor, kinozal, underverse)).
+* Бд для поиска торрентов ( tparser(rutracker, rutor, kinozal, underverse), freerutor).
 * Поддержка андроид ТВ
 
 ### Скриншоты:
