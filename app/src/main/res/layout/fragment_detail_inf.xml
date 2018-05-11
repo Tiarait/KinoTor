@@ -1,37 +1,58 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kinotor.tiar.kinotor.ui.DetailActivity$DetailFragment">
+    android:background="@color/colorPrimaryLight">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout
+        android:id="@+id/info_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingBottom="15dp"
         android:orientation="vertical">
-
+        <TextView
+            android:id="@+id/title_portret"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/title_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorDarkWhite"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
         <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/l_info"
+            android:id="@+id/portret_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical">
-
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="10dp">
                 <ImageView
-                    android:id="@+id/imgPoster_d"
-                    android:paddingTop="10dp"
+                    android:id="@+id/imgPoster_bg"
                     android:layout_width="match_parent"
-                    android:minWidth="500dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:minHeight="550dp"
+                    android:background="@color/colorGrey"
+                    android:scaleType="centerCrop"/>
+                <ImageView
+                    android:id="@+id/imgPoster_d"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:src="@drawable/loading"
+                    android:minHeight="550dp"
+                    android:background="@color/colorGrey"
                     android:scaleType="fitCenter"/>
                 <TextView
                     android:id="@+id/quality"
@@ -43,7 +64,6 @@
                     android:textColor="@color/colorWhite"
                     android:background="@color/colorRed"
                     android:textSize="16sp"
-                    android:text="@string/loading"
                     android:layout_alignRight="@+id/imgPoster_d" />
                 <TextView
                     android:id="@+id/translator"
@@ -54,7 +74,7 @@
                     android:textColor="@color/colorDarkWhite"
                     android:background="@color/colorDarkGrey"
                     android:textSize="16sp"
-                    android:text="@string/loading"
+                    android:paddingBottom="5dp"
                     android:layout_alignBottom="@+id/imgPoster_d"/>
             </RelativeLayout>
 
@@ -63,92 +83,92 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:orientation="vertical">
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:background="@color/colorPrimaryDark"
+                    android:textColor="@color/colorDarkWhite"
                     android:text="Год:"/>
                 <TextView
                     android:id="@+id/year"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
                     android:textColor="@color/colorWhite"
-                    android:text="@string/loading"/>
+                    />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/l_country"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:orientation="vertical">
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:background="@color/colorPrimaryDark"
+                    android:textColor="@color/colorDarkWhite"
                     android:text="Страна:"/>
                 <TextView
                     android:id="@+id/country"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
                     android:textColor="@color/colorWhite"
-                    android:text="@string/loading"/>
+                    />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/l_genre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:orientation="vertical">
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:background="@color/colorPrimaryDark"
+                    android:textColor="@color/colorDarkWhite"
                     android:text="Жанр:"/>
                 <TextView
                     android:id="@+id/genre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
                     android:textColor="@color/colorWhite"
-                    android:text="@string/loading"/>
+                    />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/l_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:orientation="vertical">
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:background="@color/colorPrimaryDark"
+                    android:textColor="@color/colorDarkWhite"
                     android:text="Время:"/>
                 <TextView
                     android:id="@+id/time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp"
                     android:textColor="@color/colorWhite"
-                    android:text="@string/loading"/>
+                    />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -157,6 +177,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -170,7 +191,7 @@
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
                 android:textColor="@color/colorWhite"
-                android:text="@string/loading" />
+                 />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/l_director"
@@ -178,6 +199,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -191,7 +213,7 @@
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
                 android:textColor="@color/colorWhite"
-                android:text="@string/loading" />
+                 />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/l_actor"
@@ -199,6 +221,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -212,31 +235,69 @@
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
                 android:textColor="@color/colorWhite"
-                android:text="@string/loading" />
+                 />
         </LinearLayout>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorDarkWhite"
+            android:text="Изображения"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/img_pre_1"
+                android:padding="4dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@color/colorGrey"/>
 
+            <ImageView
+                android:id="@+id/img_pre_2"
+                android:padding="4dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@color/colorGrey" />
+
+            <ImageView
+                android:id="@+id/img_pre_3"
+                android:padding="4dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@color/colorGrey" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/more"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/colorDarkWhite"
+                android:text="Смотреть еще"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_more_d"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
     </LinearLayout>
     </ScrollView>
-    <LinearLayout
-        android:padding="10dp"
-        android:id="@+id/inf_pb"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:background="@color/colorDarkGrey"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-        <ProgressBar
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textStyle="bold"
-            android:textColor="@color/colorDarkWhite"
-            android:textSize="18sp"
-            android:text="Подождите..."/>
-    </LinearLayout>
+
 </RelativeLayout>

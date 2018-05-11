@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">KinoTor</string>
-    <string name="app_version">version : 1.0</string>
+    <string name="app_version">версия : 0.38</string>
     <string name="loading"> Загрузка... </string>
     <string name="title_item_detail"> Загрузка... </string>
 
@@ -18,79 +18,95 @@
     <string name="pref_header_info">Информация</string>
     <string name="pref_header_settings">Настройки</string>
 
-    <string name="pref_title_grid_catalog">Сетка</string>
-    <string name="pref_desc_grid_catalog">Размер сетки каталога MxN, где M - колво по горизонтали.</string>
+    <string name="pref_title_grid_catalog">Тип отображения</string>
+    <string name="pref_desc_grid_catalog">Список/Сетка.</string>
     <string-array name="pref_list_grid_catalog">
-        <item>1xN</item>
-        <item>2xN</item>
-        <item>3xN</item>
-        <item>4xN</item>
-        <item>5xN</item>
-        <item>6xN</item>
-        <item>7xN</item>
-        <item>8xN</item>
-        <item>9xN</item>
-        <item>10xN</item>
+        <item>Список</item>
+        <item>Сетка</item>
     </string-array>
     <string-array name="pref_values_grid_catalog">
         <item>1</item>
         <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
     </string-array>
 
     <string name="pref_title_base_video">Видео</string>
-    <string name="pref_desc_base_video">Используемые бд для поиска видео.</string>
+    <string name="pref_desc_base_video">Используемые бд для поиска mp4.</string>
     <string-array name="pref_list_base_video">
         <item>moonwalk</item>
         <item>hdgo</item>
     </string-array>
 
+    <string name="pref_title_base_catalog">Каталог</string>
+    <string name="pref_desc_base_catalog">Используемый каталог видео.</string>
+    <string-array name="pref_list_base_catalog">
+        <item>amcet</item>
+        <item>koshara</item>
+    </string-array>
+
     <string name="pref_title_base_tparser">Торенты</string>
-    <string name="pref_desc_base_tparser">Используемые бд torrent\'ов с tparser.org.</string>
+    <string name="pref_desc_base_tparser">Используемые бд для поиска torrent\'ов.</string>
     <string-array name="pref_list_base_tparser">
+        <item>zooqle.com</item>
         <item>rutor.info</item>
+        <item>freerutor.me</item>
         <item>rutracker.org</item>
         <item>underverse.me</item>
         <item>kinozal.tv</item>
     </string-array>
 
     <string name="pref_title_start_category">Стартовая категория</string>
-    <string name="pref_desc_start_category">Выбирите категорию с которой будет стартовать приложение.</string>
+    <string name="pref_desc_start_category">Выберите категорию с которой будет стартовать приложение.</string>
     <string-array name="pref_list_start_category">
         <item>Фильмы</item>
         <item>Сериалы</item>
         <item>Мультфильмы</item>
+        <item>Аниме</item>
+        <item>AnimeVost</item>
         <item>Coldfilm</item>
     </string-array>
 
+    <string name="pref_title_text_size_detail">Размер текста в описании</string>
+    <string name="pref_title_text_size_main">Размер основного текста</string>
+    <string name="pref_desc_text_size">Установить размер текста.</string>
+    <string-array name="pref_list_text_size">
+        <item>0</item>
+        <item>2</item>
+        <item>4</item>
+        <item>6</item>
+        <item>10</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>39</item>
+    </string-array>
+
     <string name="pref_title_auto_update">Проверка обновлений</string>
-    <string name="pref_descOf_auto_update">Включить проверку обновлений при запуске приложения.</string>
-    <string name="pref_descOn_auto_update">Отключить проверку обновлений при запуске приложения.</string>
+    <string name="pref_desc_auto_update">Проверять обновления при запуске приложения.</string>
 
     <string name="pref_title_coldfilm">Coldfilm</string>
-    <string name="pref_descOf_coldfilm">Включить coldfilm.ru в пункт меню.</string>
-    <string name="pref_descOn_coldfilm">Убрать coldfilm.ru из пункта меню.</string>
+    <string name="pref_desc_coldfilm">Включить coldfilm.info в пункт меню.</string>
+
+    <string name="pref_title_animevost">AnimeVost</string>
+    <string name="pref_desc_animevost">Включить animevost.org в пункт меню.</string>
 
     <string name="pref_title_exit">Кнопка выхода</string>
-    <string name="pref_descOf_exit">Добавить кнопку выхода в пункт меню.</string>
-    <string name="pref_descOn_exit">Убрать кнопку выхода из пункта меню.</string>
+    <string name="pref_desc_exit">Добавить кнопку выхода в пункт меню.</string>
 
     <string name="pref_title_fullscreen">FullScreen mode</string>
-    <string name="pref_descOf_fullscreen">Убрать статус бар телефона.</string>
-    <string name="pref_descOn_fullscreen">Вернуть все как было.</string>
-
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="pref_desc_fullscreen">Убрать статус бар телефона.</string>
 </resources>

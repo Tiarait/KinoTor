@@ -1,0 +1,130 @@
+package com.kinotor.tiar.kinotor.parser.moonwalk;
+
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.kinotor.tiar.kinotor.items.ItemVideo;
+import com.kinotor.tiar.kinotor.utils.OnTaskVideoCallback;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
+
+import static android.content.ContentValues.TAG;
+
+/**
+ * Created by Tiar on 02.2018.
+ */
+
+public class MoonwalkSeries extends AsyncTask<Void, Void, Void> {
+    private String id, id_trans, cur_season;
+    private final String TOKEN = "997e626ac4d9ce453e6c920785db8f45";
+    private ItemVideo items;
+    private OnTaskVideoCallback callback;
+
+    public MoonwalkSeries(String id, String id_trans, String season, OnTaskVideoCallback callback) {
+        this.id = id;
+        this.cur_season = season;
+        this.id_trans = id_trans;
+        this.callback = callback;
+
+        items = new ItemVideo();
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        callback.OnCompleted(items);
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+        getSeries(GetData(id, id_trans));
+        return null;
+    }
+
+    private void getSeries(Document doc) {
+        if (doc != null) {
+            String episode = "error", translator = "error", url = "error";
+
+            int cur_s = Integer.parseInt(cur_season.trim());
+
+            if (doc.body().text().contains("title_ru\":\""))
+                episode = doc.body().text().split("title_ru\":\"")[1].split("\",")[0];
+            else if (doc.body().text().contains("title_ru\": \""))
+                episode = doc.body().text().split("title_ru\": \"")[1].split("\",")[0];
+            if (doc.body().text().contains("translator\":\""))
+                translator = doc.body().text().split("translator\":\"")[1].split("\",")[0];
+            else if (doc.body().text().contains("translator\": \""))
+                translator = doc.body().text().split("translator\": \"")[1].split("\",")[0];
+            items.setTitle("series back");
+            items.setType("moonwalk");
+            items.setToken(TOKEN);
+            items.setId_trans(id_trans);
+            items.setId(id);
+            items.setSeason(cur_season);
+            items.setUrl(url);
+            items.setEpisode(episode);
+            items.setTranslator(translator);
+
+            String iframe_url = "error";
+            if (doc.body().text().contains("iframe_url\":\""))
+                iframe_url = doc.body().text().split("iframe_url\":\"")[1].split("\",")[0];
+
+            String[] array = doc.body().text().split("\\{\"season_");
+            //если колво сезонов меньше последнего сезона
+            for (int i = 1; i < array.length; i ++){
+                String numb = array[i].split("number\":")[1].split(",")[0].trim();
+                if (numb.equals(cur_season))
+                    cur_s = i;
+            }
+            //разные форматы hdgo и moonwalk
+            String series = "";
+            if (array[cur_s].contains("episodes\":["))
+                series = array[cur_s].split("episodes\":\\[")[1].split("\\]")[0];
+            else if (array[cur_s].contains("episodes\": ["))
+                series = array[cur_s].split("episodes\": \\[")[1].split("\\]")[0];
+            String[] series_arr = series.split(",");
+            //построение списка
+            for (int i = 0; i < series_arr.length; i ++){
+                if (series_arr[i].contains("\""))
+                    url = series_arr[i].replaceAll("\"", "");
+                if (!series_arr[i].contains("http://"))
+                    series_arr[i] = iframe_url + "?episode=" + series_arr[i] + "&season=" + cur_season;
+                url = series_arr[i];
+                items.setTitle("series");
+                items.setType("moonwalk");
+                items.setToken(TOKEN);
+                items.setId_trans(id_trans);
+                items.setId(id);
+                items.setSeason(cur_season);
+                items.setUrl(url);
+                if (array[cur_s].contains("episodes\":[0"))
+                    items.setEpisode(String.valueOf(i));
+                else items.setEpisode(String.valueOf(i + 1));
+                items.setTranslator(translator);
+            }
+        }
+    }
+
+    private Document GetData(String id, String id_trans){
+        final String url;
+        id = id.contains("world_art") ? "world_art_id=" + id.replace("world_art", "") : "kinopoisk_id=" + id;
+        if (id_trans.equals("null"))
+            url = "http://moonwalk.cc/api/serial_episodes.json?api_token="+ TOKEN +
+                    "&" + id;
+        else url = "http://moonwalk.cc/api/serial_episodes.json?api_token="+ TOKEN +
+                "&" + id + "&translator_id=" + id_trans;
+        try {
+            Document htmlDoc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
+                    .timeout(5000).ignoreContentType(true).referrer("hdgo.cc").get();
+            Log.d(TAG, "GetSeasonMoonwalk: get connected to " + url);
+            return htmlDoc;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "GetSeasonMoonwalk: error connected to " + url);
+            return null;
+        }
+    }
+}

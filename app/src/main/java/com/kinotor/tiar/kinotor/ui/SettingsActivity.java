@@ -4,11 +4,14 @@ package com.kinotor.tiar.kinotor.ui;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -34,24 +37,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        onBack(isXLargeTablet(this));
-    }
-
-    public void onBack(boolean splash){
-        if (splash){
-            finish();
-            Intent i = new Intent(SettingsActivity.this, SplashActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
-        } else super.onBackPressed();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            onBack(true);
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -91,7 +80,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected boolean isValidFragment(String fragmentName) {
         return PreferenceFragment.class.getName().equals(fragmentName)
                 || InfoPreferenceFragment.class.getName().equals(fragmentName)
-                || SettingsPreferenceFragment.class.getName().equals(fragmentName);
+                || SettingsPreferenceFragment.class.getName().equals(fragmentName)
+                || DomensPreferenceFragment.class.getName().equals(fragmentName);
     }
 
     /**
@@ -194,12 +184,36 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_settings);
             setHasOptionsMenu(true);
+        }
 
-//            bindPreferenceSummaryToValue(findPreference("grid_catalog"));
-//            bindPreferenceSummaryToValue(findPreference("base_video"));
-//            bindPreferenceSummaryToValue(findPreference("auto_update"));
-//            bindPreferenceSummaryToValue(findPreference("coldfilm"));
-//            bindPreferenceSummaryToValue(findPreference("exit"));
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            int id = item.getItemId();
+            if (id == android.R.id.home) {
+                getActivity().onBackPressed();
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class DomensPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_domen);
+            setHasOptionsMenu(true);
+
+            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            EditTextPreference kosharaUrl = (EditTextPreference) findPreference("koshara_url");
+            kosharaUrl.setSummary("http://koshara." + preference.getString("koshara_url", "co"));
+            EditTextPreference coldfilmUrl = (EditTextPreference) findPreference("coldfilm_url");
+            coldfilmUrl.setSummary("http://coldfilm." + preference.getString("coldfilm_url", "info"));
+            EditTextPreference animevostUrl = (EditTextPreference) findPreference("animevost_url");
+            animevostUrl.setSummary("http://animevost." + preference.getString("animevost_url", "org"));
+            EditTextPreference amcetUrl = (EditTextPreference) findPreference("amcet_url");
+            amcetUrl.setSummary("https://amcet." + preference.getString("amcet_url", "net"));
         }
 
         @Override

@@ -1,6 +1,5 @@
 package com.kinotor.tiar.kinotor.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,14 +14,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -31,33 +27,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kinotor.tiar.kinotor.R;
-import com.kinotor.tiar.kinotor.items.ItemMain;
-import com.kinotor.tiar.kinotor.parser.ParserBase;
+import com.kinotor.tiar.kinotor.items.ItemHtml;
+import com.kinotor.tiar.kinotor.parser.ParserAmcet;
 import com.kinotor.tiar.kinotor.parser.ParserHtml;
-import com.kinotor.tiar.kinotor.parser.ParserTorrent;
-import com.kinotor.tiar.kinotor.utils.AdapterTorrents;
+import com.kinotor.tiar.kinotor.parser.animevost.ParserAnimevost;
 import com.kinotor.tiar.kinotor.utils.DBHelper;
+import com.kinotor.tiar.kinotor.utils.OnTaskCallback;
+import com.kinotor.tiar.kinotor.utils.Utils;
 import com.squareup.picasso.Picasso;
 
-import static com.kinotor.tiar.kinotor.items.ItemMain.isLoading;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
     private DBHelper dbHelper;
-    public static String url_poster, title, voice, quality;
-    private static LinearLayout info, pb;
-    private static boolean lv = true, lt = true, li = true;
-    static final private String load = "...загрузка...";
-    public static String type, season, serie, iframe = "error", link;
-
-    public static Activity activity;
-    public static View fragm_inf, fragm_tor, fragm_vid;
+    private String url_poster = "error", title = "error",
+            quality = "error", season = "error", serie = "error";
+    public static String url = "error";
+    private ItemHtml itempath;
+    private LinearLayout pb;
+    SharedPreferences preference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        preference = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         if (preference.getBoolean("fullscreen", false)) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -65,158 +59,160 @@ public class DetailActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_detail);
 
-        activity = this;
-
-        lt = true;
-        lv = true;
-        li = true;
-        fragm_inf = null;
-        fragm_vid = null;
-        fragm_tor = null;
-
         Bundle bundle = getIntent().getExtras();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_d);
+        Toolbar toolbar = findViewById(R.id.toolbar_d);
         setSupportActionBar(toolbar);
-        if (bundle.getString("Url").contains("http:"))
-            toolbar.setSubtitle(bundle.getString("Url").split("http://")[1].split("/")[0]);
-        else if (bundle.getString("Url").contains("https:"))
-            toolbar.setSubtitle(bundle.getString("Url").split("https://")[1].split("/")[0]);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
-        info = (LinearLayout) findViewById(R.id.info);
+        pb = findViewById(R.id.detail_pb);
+        if (bundle != null) {
+            if (bundle.getString("Url") != null) {
+                if (bundle.getString("Url").contains("http:")) {
+                    toolbar.setSubtitle(bundle.getString("Url").split("http://")[1].split("/")[0]);
+                } else if (bundle.getString("Url").contains("https:"))
+                    toolbar.setSubtitle(bundle.getString("Url").split("https://")[1].split("/")[0]);
+            }
+            url_poster = bundle.getString("Img");
+            title = bundle.getString("Title");
+            url = bundle.getString("Url");
+            quality = bundle.getString("Quality");
+            season = bundle.getString("Season");
+            serie = bundle.getString("Serie");
+            setInfo();
+        }
+        setTitle(title);
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        dbHelper = new DBHelper(this);
+
+        final ViewPager mViewPager = findViewById(R.id.container);
+        final SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setFocusable(true);
         mViewPager.requestFocus();
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        url_poster = bundle.getString("Img");
-        title = bundle.getString("Title");
-        link = bundle.getString("Url");
-        voice = bundle.getString("Voice");
-        quality = bundle.getString("Quality");
-        season = bundle.getString("Season");
-        serie = bundle.getString("Serie");
-        if (!season.equals("0")) {
-            type = "serial";
-            if (!title.contains("сезон)"))
-                if (!serie.equals("0")) title = title + " (" + serie + " серия " + season + " сезон)";
-                else title = title + " (" + season + " сезон)";
-        } else type = "movie";
-        setTitle(title);
+        getItem(mViewPager, mSectionsPagerAdapter);
+    }
 
-        if (title.contains("серия")) {
-            type = "serial";
-            serie = title.split("\\(")[1].split(" серия")[0].trim();
-            season = title.split("серия ")[1].split(" сезон")[0].trim();
-        } else if (title.contains("сезон)")){
-            type = "serial";
-            season = title.split("\\(")[1].split(" сезон")[0].trim();
+    public void getItem(final ViewPager mViewPager, final SectionsPagerAdapter mSectionsPagerAdapter) {
+        if (url.contains("amcet")) {
+            ParserAmcet parserAmcet = new ParserAmcet(url, null, new ItemHtml(),
+                    new OnTaskCallback() {
+                        @Override
+                        public void OnCompleted(ArrayList<ItemHtml> items, ItemHtml itempath) {
+                            taskDone(mViewPager, mSectionsPagerAdapter, itempath);
+                        }
+                    });
+            parserAmcet.execute();
+        } else if (url.contains("animevost")) {
+            ParserAnimevost parserAnimevost = new ParserAnimevost(url, null, new ItemHtml(),
+                    new OnTaskCallback() {
+                        @Override
+                        public void OnCompleted(ArrayList<ItemHtml> items, ItemHtml itempath) {
+                            taskDone(mViewPager, mSectionsPagerAdapter, itempath);
+                        }
+                    });
+            parserAnimevost.execute();
+        } else {
+            ParserHtml parserHtml = new ParserHtml(url, null, new ItemHtml(),
+                    new OnTaskCallback() {
+                        @Override
+                        public void OnCompleted(ArrayList<ItemHtml> items, ItemHtml itempath) {
+                            taskDone(mViewPager, mSectionsPagerAdapter, itempath);
+                        }
+                    });
+            parserHtml.execute();
         }
+    }
 
-        if (info != null) {
-            ImageView poster = (ImageView) findViewById(R.id.imgPoster);
+    private void taskDone(ViewPager mViewPager, SectionsPagerAdapter mSectionsPagerAdapter, ItemHtml itempath) {
+        if (itempath != null) {
+            Log.d("DetailActivity", "taskDone: " + itempath.getTitle(0) + " " + itempath.getType(0));
+            pb.setVisibility(View.GONE);
+            try {
+                itempath.setSeason(Integer.parseInt(season));
+                itempath.getSeries(Integer.parseInt(serie));
+            } catch (Exception ignored) {
+            }
+            this.itempath = itempath;
+            addToDB("history");
+            mSectionsPagerAdapter.addFragment(new DetailInfo(itempath), "Информация");
+            mSectionsPagerAdapter.addFragment(new DetailVideo(itempath), "Видео");
+            mSectionsPagerAdapter.addFragment(new DetailTorrents(itempath), "Торренты");
+            mViewPager.getAdapter().notifyDataSetChanged();
+            setInfo();
+        } else getItem(mViewPager, mSectionsPagerAdapter);
+    }
+
+    private void setInfo() {
+        ImageView poster = findViewById(R.id.imgPoster_d);
+        Utils utils = new Utils();
+        if (utils.isTablet(this) && poster != null) {
             Picasso.with(this)
                     .load(url_poster)
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.error)
                     .into(poster);
-        }
-
-        dbHelper = new DBHelper(this);
-
-        ParserHtml.itemDetail = null;
-    }
-
-    public static void setInfo() {
-        TextView t_year, t_country, t_genre, t_time,t_quality, t_tranlator;
-        TextView t_description, t_director, t_actor;
-        if (info != null) {
-            t_year = (TextView) activity.findViewById(R.id.year);
-            t_country = (TextView) activity.findViewById(R.id.country);
-            t_genre = (TextView) activity.findViewById(R.id.genre);
-            t_time = (TextView) activity.findViewById(R.id.time);
-            t_quality = (TextView) activity.findViewById(R.id.quality);
-            t_tranlator = (TextView) activity.findViewById(R.id.translator);
-        } else {
-            Log.d("mydebug", "portret/small");
-            LinearLayout info =  (LinearLayout) fragm_inf.findViewById(R.id.l_info);
-            info.setVisibility(View.VISIBLE);
-            ImageView poster = (ImageView) fragm_inf.findViewById(R.id.imgPoster_d);
-            Picasso.with(fragm_inf.getContext())
-                    .load(url_poster)
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .into(poster);
-            t_year = (TextView) fragm_inf.findViewById(R.id.year);
-            t_country = (TextView) fragm_inf.findViewById(R.id.country);
-            t_genre = (TextView) fragm_inf.findViewById(R.id.genre);
-            t_time = (TextView) fragm_inf.findViewById(R.id.time);
-            t_quality = (TextView) fragm_inf.findViewById(R.id.quality);
-            t_tranlator = (TextView) fragm_inf.findViewById(R.id.translator);
-        }
-        t_description = (TextView) fragm_inf.findViewById(R.id.desc_inf);
-        t_director = (TextView) fragm_inf.findViewById(R.id.director);
-        t_actor = (TextView) fragm_inf.findViewById(R.id.actor);
-
-        t_year.setText(load);
-        t_country.setText(load);
-        t_genre.setText(load);
-        t_time.setText(load);
-        t_quality.setText(load);
-        t_tranlator.setText(load);
-        t_description.setText(load);
-        t_director.setText(load);
-        t_actor.setText(load);
-
-        if (ParserHtml.itemDetail != null) {
-            t_year.setText(ParserHtml.itemDetail.getYear());
-            t_country.setText(ParserHtml.itemDetail.getCountry());
-            t_genre.setText(ParserHtml.itemDetail.getGenre());
-            t_time.setText(ParserHtml.itemDetail.getTime());
-            t_quality.setText(ParserHtml.itemDetail.getQuality());
-            t_tranlator.setText(ParserHtml.itemDetail.getTranslator());
-            t_description.setText("\t" + ParserHtml.itemDetail.getDescription());
-            t_director.setText("\t" + ParserHtml.itemDetail.getDirector());
-            t_actor.setText("\t" + ParserHtml.itemDetail.getActors());
-            iframe = ParserHtml.itemDetail.getIframe();
-
-            addToDB("history");
-        }
-
-        if (fragm_tor != null){
-            if (lt) {
-                RecyclerView rv = DetailActivity.fragm_tor.findViewById(R.id.tor_item_list);
-                rv.setAdapter(new AdapterTorrents());
-
-                ParserTorrent parserTorrent = new ParserTorrent(title, rv);
-                parserTorrent.execute();
-                lt = false;
+            TextView t_year = findViewById(R.id.year);
+            TextView t_country = findViewById(R.id.country);
+            TextView t_genre = findViewById(R.id.genre);
+            TextView t_time = findViewById(R.id.time);
+            //TextView t_extra = findViewById(R.id.extra);
+            TextView t_quality = findViewById(R.id.quality);
+            TextView t_voice = findViewById(R.id.translator);
+            LinearLayout l_year = findViewById(R.id.l_year);
+            LinearLayout l_country = findViewById(R.id.l_country);
+            LinearLayout l_genre = findViewById(R.id.l_genre);
+            LinearLayout l_time = findViewById(R.id.l_time);
+            if (itempath != null) {
+                l_year.setVisibility(View.VISIBLE);
+                l_country.setVisibility(View.VISIBLE);
+                l_genre.setVisibility(View.VISIBLE);
+                l_time.setVisibility(View.VISIBLE);
+                t_quality.setVisibility(View.VISIBLE);
+                if (itempath.getDate(0).contains("error"))
+                    l_year.setVisibility(View.GONE);
+                else t_year.setText(itempath.getDate(0));
+                if (itempath.getCountry(0).contains("error"))
+                    l_country.setVisibility(View.GONE);
+                else t_country.setText(itempath.getCountry(0));
+                if (itempath.getGenre(0).contains("error"))
+                    l_genre.setVisibility(View.GONE);
+                else t_genre.setText(itempath.getGenre(0));
+                if (itempath.getTime(0).contains("error"))
+                    l_time.setVisibility(View.GONE);
+                else t_time.setText(itempath.getTime(0));
+                if (itempath.getQuality(0).contains("error"))
+                    t_quality.setVisibility(View.GONE);
+                else quality = itempath.getQuality(0);
+                if (itempath.getVoice(0).contains("error"))
+                    t_voice.setVisibility(View.GONE);
+                else t_voice.setText(itempath.getVoice(0));
+//                if (itempath.getExtraDetail().contains("error"))
+//                    t_extra.setVisibility(View.GONE);
+//                else t_extra.setText(itempath.getExtraDetail());
             }
-        }
-        if (fragm_vid != null) {
-            if (lv) {
-                ParserBase parserBase = new ParserBase(title.split(" \\(")[0], type, "catalog");
-                parserBase.execute();
-                lv = false;
-            }
+            if (quality.contains("error"))
+                t_quality.setVisibility(View.GONE);
+            t_quality.setText(quality);
         }
     }
 
     private void addToDBbtn(MenuItem item) {
-        if (!dbHelper.getRepeat("favor", getTitle() + "") && !ItemMain.isLoading) {
+        if (!dbHelper.getRepeat("favor", getTitle() + "")) {
             addToDB("favor");
             item.setIcon(R.drawable.ic_menu_fav);
             Toast.makeText(this,
                     "Добавленно в избранное", Toast.LENGTH_LONG).show();
-        } else if (dbHelper.getRepeat("favor", getTitle() + "") && !ItemMain.isLoading) {
+        } else if (dbHelper.getRepeat("favor", getTitle() + "")) {
             dbHelper.delete("favor", title);
             item.setIcon(R.drawable.ic_menu_fav_add);
             Toast.makeText(this,
@@ -224,15 +220,19 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    private static void addToDB (String db) {
-        if (season.equals("")) season = "0";
+    private void addToDB (String db) {
         DBHelper dbHelper;
-        dbHelper = new DBHelper(activity);
+        dbHelper = new DBHelper(this);
         if (dbHelper.getRepeat(db, title) && db.equals("history"))
             dbHelper.delete(db, title);
         dbHelper.Write();
-        dbHelper.insert(db, title, url_poster, link, voice, quality,
-                Integer.parseInt(season), ParserHtml.itemDetail.getSeries());
+        try {
+            dbHelper.insert(db, title, url_poster, url, itempath.getVoice(0), quality,
+                    itempath.getSeason(0), itempath.getSeries(0));
+        } catch (Exception o){
+            dbHelper.insert(db, title, url_poster, url, itempath.getVoice(0), quality,
+                    0, 0);
+        }
     }
 
     @Override
@@ -254,65 +254,12 @@ public class DetailActivity extends AppCompatActivity {
                 addToDBbtn(item);
                 break;
             case R.id.action_refresh:
-                if (!isLoading || lt || lv || li) {
-                    lt = true;
-                    lv = true;
-                    li = true;
-                    pb.setVisibility(View.VISIBLE);
-                    ParserHtml.itemDetail = null;
-                    ParserHtml parserHtml = new ParserHtml(link, "detail", null, pb);
-                    parserHtml.execute();
-                }
-                break;
-            case R.id.action_cd:
-                final String[] ctg_list = {
-                        "Открыть в Браузере",
-                        "Скопировать..."};
-                AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this, 2);
-                builder.setTitle("Выберите категорию").setItems(ctg_list, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (i == 0) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse(link));
-                            startActivity(intent);
-                        } else if (i == 1) {
-                            final String[] ctg_list = {
-                                    "Название",
-                                    "Режисер",
-                                    "Акторы",
-                                    "Жанр"};
-                            AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this, 2);
-                            builder.setTitle("Выберите категорию").setItems(ctg_list, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    String copiedText = "";
-                                    if (i == 0) {
-                                        copiedText = title.split("\\(")[0];
-                                    } else if (i == 1) {
-                                        copiedText = ParserHtml.itemDetail.getDirector();
-                                    } else if (i == 2) {
-                                        copiedText = ParserHtml.itemDetail.getActors();
-                                    } else if (i == 3) {
-                                        copiedText = ParserHtml.itemDetail.getGenre();
-                                    }
-                                    int sdk = android.os.Build.VERSION.SDK_INT;
-                                    if(sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-                                        @SuppressWarnings("deprecation") android.text.ClipboardManager clipboard = (android.text.ClipboardManager) DetailActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
-                                        clipboard.setText(copiedText);
-                                    } else {
-                                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) DetailActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
-                                        android.content.ClipData clip = android.content.ClipData.newPlainText("TAG", copiedText);
-                                        clipboard.setPrimaryClip(clip);
-                                    }
-                                    Toast.makeText(DetailActivity.this, "Сделано", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            builder.create().show();
-                        }
-                    }
-                });
-                builder.create().show();
+                Intent intent = getIntent();
+                overridePendingTransition(0, 0);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -320,59 +267,48 @@ public class DetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class DetailFragment extends Fragment {
-        private static final String ARG_SECTION = "section";
-
-        public DetailFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static DetailFragment newInstance(String section) {
-            DetailFragment fragment = new DetailFragment();
-            Bundle args = new Bundle();
-            args.putString(ARG_SECTION, section);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView;
-
-            if (getArguments().getString(ARG_SECTION).equals("Информация")) {
-                rootView = inflater.inflate(R.layout.fragment_detail_inf, container, false);
-                fragm_inf = rootView;
-                pb = (LinearLayout) fragm_inf.findViewById(R.id.inf_pb);
-                if (info == null) {
-                    LinearLayout info_s = (LinearLayout) rootView.findViewById(R.id.l_info);
-                    info_s.setVisibility(View.VISIBLE);
+    public void onActionCopy(MenuItem item) {
+        if (itempath != null) {
+            final String[] ctg_list = {
+                    "Название",
+                    "Режисер",
+                    "Актеры",
+                    "Жанр"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this, 2);
+            builder.setTitle("Выберите категорию").setItems(ctg_list, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    String copiedText = "";
+                if (i == 0) {
+                    copiedText = title.split("\\(")[0];
+                } else if (i == 1) {
+                    copiedText = itempath.getDirector(0);
+                } else if (i == 2) {
+                    copiedText = itempath.getActors(0);
+                } else if (i == 3) {
+                    copiedText = itempath.getGenre(0);
                 }
-                if (li) {
-                    ParserHtml parserHtml = new ParserHtml(link, "detail", null, pb);
-                    parserHtml.execute();
-                    li = false;
+                    int sdk = android.os.Build.VERSION.SDK_INT;
+                    if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
+                        @SuppressWarnings("deprecation")
+                        android.text.ClipboardManager clipboard = (android.text.ClipboardManager) DetailActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
+                        if (clipboard != null) clipboard.setText(copiedText);
+                    } else {
+                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) DetailActivity.this.getSystemService(Context.CLIPBOARD_SERVICE);
+                        android.content.ClipData clip = android.content.ClipData.newPlainText("TAG", copiedText);
+                        if (clipboard != null) clipboard.setPrimaryClip(clip);
+                    }
+                    Toast.makeText(DetailActivity.this, "Сделано", Toast.LENGTH_SHORT).show();
                 }
-                if (!ItemMain.isLoading)
-                    pb.setVisibility(View.GONE);
-            } else if (getArguments().getString(ARG_SECTION).equals("Видео")) {
-                rootView = inflater.inflate(R.layout.fragment_detail_vid, container, false);
-                fragm_vid = rootView;
-            } else if (getArguments().getString(ARG_SECTION).equals("Торренты")) {
-                rootView = inflater.inflate(R.layout.fragment_detail_tor, container, false);
-                fragm_tor = rootView;
-                RecyclerView rv = DetailActivity.fragm_tor.findViewById(R.id.tor_item_list);
-                rv.setAdapter(new AdapterTorrents());
-            } else rootView = null;
-            setInfo();
-            return rootView;
+            });
+            builder.create().show();
         }
+    }
+
+    public void onActionWeb(MenuItem item) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 
     /**
@@ -380,37 +316,31 @@ public class DetailActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 2)
-                return DetailFragment.newInstance("Торренты");
-            if (position == 1)
-                return DetailFragment.newInstance("Видео");
-            return DetailFragment.newInstance("Информация");
+            return mFragmentList.get(position);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return mFragmentList.size();
+        }
+
+        void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Информация";
-                case 1:
-                    return "Видео";
-                case 2:
-                    return "Торренты";
-            }
-            return null;
+            return mFragmentTitleList.get(position);
         }
     }
 }

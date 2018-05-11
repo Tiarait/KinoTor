@@ -16,6 +16,11 @@
                 android:checkable="true"
                 android:checked="true"
                 android:title="Мультфильмы" />
+            <item
+                android:id="@+id/anime"
+                android:checkable="true"
+                android:checked="true"
+                android:title="Аниме" />
         </menu>
     </item>
     <item
@@ -28,6 +33,10 @@
         android:title="История" />
     <item android:title="Дополнительно">
         <menu>
+            <item
+                android:id="@+id/animevost"
+                android:checkable="true"
+                android:title="AnimeVost" />
             <item
                 android:id="@+id/coldfilm"
                 android:checkable="true"

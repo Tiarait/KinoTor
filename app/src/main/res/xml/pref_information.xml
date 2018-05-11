@@ -22,13 +22,16 @@
         android:title="Поддержка приложения">
         <Preference
             android:key="wmr"
-            android:title="R353353790048"/>
+            android:title="R353353790048"
+            android:summary="webmoney рубли"/>
         <Preference
             android:key="wmu"
-            android:title="U787643357009"/>
+            android:title="U787643357009"
+            android:summary="webmoney гривны"/>
         <Preference
             android:key="wmz"
-            android:title="Z337989915257"/>
+            android:title="Z337989915257"
+            android:summary="webmoney доллары"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

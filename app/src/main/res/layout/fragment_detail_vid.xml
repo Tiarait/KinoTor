@@ -2,8 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.kinotor.tiar.kinotor.ui.DetailActivity$DetailFragment">
+    android:paddingRight="8dp"
+    android:paddingLeft="8dp"
+    android:background="@color/colorPrimaryDark"
+    tools:context="com.kinotor.tiar.kinotor.ui.DetailVideo">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,18 +15,9 @@
             android:id="@+id/vid_item_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_list_vid" />
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/catlog_video_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/item_list_vid" />
     </LinearLayout>
     <LinearLayout
-        android:padding="10dp"
-        android:visibility="gone"
         android:id="@+id/vid_pb"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -32,10 +25,12 @@
         android:background="@color/colorDarkGrey"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
-        <ProgressBar
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="">
+            <include layout="@layout/pb"/>
+        </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemMain {
-    public static List<Item> ITEMS = new ArrayList<Item>();
-    public static int cur_page = 1, cur_items = 0;
-    public static boolean isLoading = false;
+    public static int cur_items = 0;
     public static String cur_url = "http://koshara.co/nerufilm/";
-    public static String status;
     //stat for parse base catalog
-    public static String stat;
+    public static String xs_search = "";
+    public static String xs_field = "defaultsort";
+    public static String xs_value = "";
 
+
+    public static List<Item> ITEMS = new ArrayList<Item>();
     public void addItem(Item item) {
         ITEMS.add(item);
     }

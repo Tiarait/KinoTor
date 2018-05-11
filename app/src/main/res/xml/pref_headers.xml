@@ -12,5 +12,9 @@
         android:fragment="com.kinotor.tiar.kinotor.ui.SettingsActivity$SettingsPreferenceFragment"
         android:icon="@drawable/ic_menu_settings"
         android:title="@string/pref_header_settings" />
+    <header
+        android:fragment="com.kinotor.tiar.kinotor.ui.SettingsActivity$DomensPreferenceFragment"
+        android:icon="@drawable/ic_menu_settings"
+        android:title="Домены" />
 
 </preference-headers>

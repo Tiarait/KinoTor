@@ -1,37 +1,20 @@
 package com.kinotor.tiar.kinotor.parser;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.kinotor.tiar.kinotor.R;
-import com.kinotor.tiar.kinotor.items.ItemDetail;
 import com.kinotor.tiar.kinotor.items.ItemHtml;
 import com.kinotor.tiar.kinotor.items.ItemMain;
-import com.kinotor.tiar.kinotor.ui.DetailActivity;
-import com.kinotor.tiar.kinotor.utils.AdapterCatalog;
+import com.kinotor.tiar.kinotor.items.Statics;
+import com.kinotor.tiar.kinotor.utils.OnTaskCallback;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
-
-import static com.kinotor.tiar.kinotor.items.ItemMain.isLoading;
 
 /**
  * Created by Tiar on 24.09.2017.
@@ -39,95 +22,48 @@ import static com.kinotor.tiar.kinotor.items.ItemMain.isLoading;
 
 public class ParserHtml extends AsyncTask<Void, Void, Void> {
     private String url;
-    private RecyclerView rv;
-    private RelativeLayout pb = null;
-    private LinearLayout lpb = null;
-    public static ArrayList<ItemHtml> items;
-    public static ItemHtml itemHtml;
-    public static ItemDetail itemDetail;
-    private String page;
-    private File file;
+    private ArrayList<ItemHtml> items;
+    private ItemHtml itempath;
+    private OnTaskCallback callback;
 
-    public ParserHtml(String url, String page, RecyclerView rv, RelativeLayout pb){
+    public ParserHtml(String url, ArrayList<ItemHtml> items, ItemHtml itempath, OnTaskCallback callback){
         this.url = url;
-        this.page = page;
-        this.rv = rv;
-        this.pb = pb;
-    }
-
-    public ParserHtml(String url, String page, RecyclerView rv, LinearLayout pb) {
-        this.url = url;
-        this.page = page;
-        this.rv = rv;
-        this.lpb = pb;
-    }
-
-    public ParserHtml(String url, String page) {
-        this.url = url;
-        this.page = page;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        isLoading = true;
-        if (pb != null) pb.setVisibility(View.VISIBLE);
-        if (lpb != null) lpb.setVisibility(View.VISIBLE);
-        super.onPreExecute();
+        if (items != null) this.items = items;
+        else this.items = new ArrayList<>();
+        if (itempath != null) this.itempath = itempath;
+        else this.itempath = new ItemHtml();
+        this.callback = callback;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        if (items != null && rv != null) {
-            ((AdapterCatalog) rv.getAdapter()).setHtmlItems(items);
-            rv.getAdapter().notifyDataSetChanged();
-        }
-        if (page.equals("detail")) {
-            DetailActivity.setInfo();
-        }
-        if (page.contains("torrent")){
-            if (page.contains("play")) {
-                playTor(file);
-                ItemMain.status = "Запуск bittorrent клиента...";
-            } else
-                ItemMain.status = "Загружено в " + file;
-
-            Toast.makeText(DetailActivity.fragm_tor.getContext(),
-                    ItemMain.status, Toast.LENGTH_LONG).show();
-        }
-        isLoading = false;
-        if (pb != null) pb.setVisibility(View.GONE);
-        if (lpb != null) lpb.setVisibility(View.GONE);
+        callback.OnCompleted(items, itempath);
         super.onPostExecute(aVoid);
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
-        if(page.contains("torrent")) {
-            Torrent(url);
-        }  else ParseHtml(Getdata(url));
+        ParseHtml(Getdata(url));
         return null;
     }
 
     private void ParseHtml(Document data) {
         if (data != null) {
-            if (items == null) {
-                items = new ArrayList<>();
-                itemHtml = new ItemHtml();
-            }
-            if (itemDetail == null) itemDetail = new ItemDetail();
+//            if (itemDetail == null) itemDetail = new ItemDetail();
             String title = "error parsing", url_entry = "error parsing", img = "error parsing",
                     date = "error parsing", description = "error parsing", voice = "error parsing",
                     quality = "error parsing";
             String name = "error", year = "error parsing", country = "error parsing", genre = "error parsing",
                     time = "error parsing", quality_t = "error parsing", translator = "error parsing",
                     director = "error parsing", actors = "error parsing", description_t = "error parsing",
-                    img_t = "error parsing", torrents = "error parsing", tor_name = "error parsing",
-                    tor_magnet = "error parsing", tor_size = "error parsing", tor_takes = "error parsing",
-                    tor_content = "error parsing", iframe = "error";
-            String season = "0", series = "0";
-            if (url.contains("koshara.co")) {
+                    subname = "error", tor_magnet = "error parsing", tor_size = "error parsing",
+                    iframe = "error", type;
+            String moretitle = "error", moreurl = "error", moreimg = "error", moreseason = "0",
+                    moreseries = "0", morequality = "error";
+            String season = "", series = "0";
+            if (url.contains(Statics.KOSHARA_URL)) {
                 //main page
-                if (page.equals("catalog")) {
+                if (!data.html().contains("full-article")) {
                     Elements allEntries = data.select(".movie-item");
                     for (Element entry : allEntries) {
                         if (entry.html().contains("movie-title")) {
@@ -136,7 +72,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                                 season = title.split(" сезон\\)")[0];
                                 if (season.contains(")"))
                                     if (season.contains(") ("))
-                                    season = season.split("\\) \\(")[1];
+                                        season = season.split("\\) \\(")[1];
                                     else season = season.split("\\)\\(")[1];
                                 else season = season.split("\\(")[1];
                                 title = title.split(" сезон")[0];
@@ -149,7 +85,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                         if (entry.html().contains("movie-img")) {
                             img = entry.select(".movie-img img").first().attr("src");
                             if (!img.contains("://"))
-                                img = "http://koshara.co" + img;
+                                img = Statics.KOSHARA_URL + img;
                             quality = entry.select(".movie-img span").first().text();
                             if (!title.contains(")"))
                                 title = entry.select(".movie-img img").first().attr("alt");
@@ -180,7 +116,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
 
                         description = description.split("1400Mb")[0].split("2100Mb")[0];
 
-                        items.add(AddItem(itemHtml, title, url_entry, img, date,
+                        items.add(AddItem(itempath, title, url_entry, img, date,
                                 description + "...", voice, quality, season, series));
                     }
                     //search
@@ -192,7 +128,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                         if (search.html().contains("sres-img")) {
                             img = search.select(".sres-img img").first().attr("src");
                             if (!img.contains("://"))
-                                img = "http://koshara.co" + img;
+                                img = Statics.KOSHARA_URL + img;
                         }
                         if (search.html().contains("sres-date"))
                             date = search.select(".sres-date").first().text();
@@ -203,34 +139,36 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                         date = date.split(",")[0];
                         description = description.split("1400Mb")[0].split("2100Mb")[0];
 
-                        items.add(AddItem(itemHtml, title, url_entry, img, date,
+                        items.add(AddItem(itempath, title, url_entry, img, date,
                                 description + "...", voice, quality, season, series));
                     }
                 }
                 //video page
-                if (page.equals("detail") && data.html().contains("full-article")) {
+                else if (data.html().contains("full-article")) {
                     Elements details = data.select(".full-article");
                     if (details.html().contains("side-title"))
-                        name = details.select(".side-title").first().text();
+                        subname = details.select(".side-title").first().text();
+                    if (data.html().contains("m-img"))
+                        img = Statics.KOSHARA_URL + data.select(".m-img img").attr("src");
+                    if (details.html().contains("h1"))
+                        name = details.select("h1").first().text();
                     else
                         name = details.html().split("смотреть онлайн ")[1].split(" в хорошем качестве")[0];
                     if (details.html().contains("в хорошем качестве")) {
                         String n = details.html().split("смотреть онлайн ")[1].split(" в хорошем качестве")[0];
                         if (n.contains("сезон)")) {
-                            DetailActivity.type = "serial";
                             season = n.split(" сезон\\)")[0];
                             if (season.contains(")"))
                                 if (season.contains(") ("))
                                     season = season.split("\\) \\(")[1];
                                 else season = season.split("\\)\\(")[1];
                             else season = season.split("\\(")[1];
-                            DetailActivity.season = season.trim();
-                        } else if (n.contains("мини-сериал")){
-                            DetailActivity.type = "serial";
+                            season = season.trim();
+                        } else if (n.contains("мини-сериал")) {
                             if (n.contains("сезон"))
-                                DetailActivity.season = n.split(" сезон\\)")[0].split("\\(")[1].trim();
+                                season = n.split(" сезон\\)")[0].split("\\(")[1].trim();
                             else
-                                DetailActivity.season = "1";
+                                season = "1";
                         }
                     }
                     if (details.html().contains("m-info")) {
@@ -248,167 +186,121 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
 
                     if (details.html().contains("player-box visible full-text"))
                         iframe = details.select(".player-box.visible.full-text iframe").first().attr("src");
-
+                    if (iframe.contains("error")) iframe = details.select("iframe").first().attr("src");
                     Elements allTorrents = data.select(".torrent");
                     for (Element torrent : allTorrents) {
-                        torrents = "http://koshara.co" + torrent.select(".title a").first().attr("href");
-                        tor_name = torrent.select(".info_d").first().text();
+                        String torrents = Statics.KOSHARA_URL + torrent.select(".title a").first().attr("href");
+                        String tor_name = torrent.select(".info_d").first().text();
                         if (tor_name.contains("_KOSHARA"))
                             tor_name = tor_name.split("_KOSHARA")[0];
                         tor_size = torrent.select(".cont").first().text().split("Размер: ")[1].split("Последняя")[0];
                         tor_magnet = torrent.select("a[href^='magnet']").first().attr("href");
+                        String tor_content;
                         if (torrent.select(".li_list_a3").html().contains("class=\"folder"))
                             tor_content = torrent.select(".folder").first().text();
-                        else tor_content = "koshara.co";
+                        else tor_content = "koshara";
                         if (tor_content.contains("файлов)") || tor_content.contains("файла)"))
-                            tor_content = "koshara.co (" + tor_content.split("\\(")[1].split("\\)")[0] + ")";
+                            tor_content = "koshara (" + tor_content.split("\\(")[1].split("\\)")[0] + ")";
 
-                        if (!itemDetail.torrents.contains(torrents)) {
-                            itemDetail.setTorrents(torrents);
-                            itemDetail.setTor_name(tor_name);
-                            itemDetail.setTor_size(tor_size);
-                            itemDetail.setTor_magnet(tor_magnet);
-                            itemDetail.setTor_content(tor_content);
-                            itemDetail.setTor_lich("x");
-                            itemDetail.setTor_sid("x");
+                        if (!itempath.tortitle.contains(tor_name)) {
+                            itempath.setTorUrl(torrents);
+                            itempath.setTorTitle(tor_name);
+                            itempath.setTorSize(tor_size);
+                            itempath.setTorMagnet(tor_magnet);
+                            itempath.setTorContent(tor_content);
+                            itempath.setTorLich("x");
+                            itempath.setTorSid("x");
                         }
                     }
 
-                    Elements allMore = data.select(".owl-item");
+                    if (genre.contains("сериал") || genre.contains("мини сериал")) type = "serial";
+                    else if (genre.contains("фильм") && !genre.contains("мультфильм")) type = "movie";
+                    else if (!season.contains("error") && !season.isEmpty()) type = "serial";
+                    else type = "movie";
+
+//                    Log.d("qwer", "ParseHtml: " + type + " " + season + " " + genre);
+
+                    if (genre.contains("аниме")) type += " anime";
+
+                    Elements allMore = data.select(".rel-movie");
                     for (Element more : allMore) {
-                        String more_img = more.select(".rel-movie img").attr("src");
-                        String more_url = more.select(".rel-movie").attr("href");
-                        itemDetail.setMore_url(more_url.contains("://") ? more_url : "http://koshara.co" + more_url);
-                        itemDetail.setMore_img(more_img.contains("://") ? more_img : "http://koshara.co" + more_img);
-                        itemDetail.setMore_title(more.select(".rel-movie-title").text());
+                        moreseason = "0";
+                        moretitle = more.select("img").first().attr("alt").trim();
+                        moreurl = more.select("a").first().attr("href");
+                        moreimg = Statics.KOSHARA_URL + more.select("img").first().attr("data-src");
+                        if (moretitle.contains("сезон")) {
+                            moreseason = moretitle.split("сезон")[0].trim();
+                            if (moreseason.contains("("))
+                                moreseason = moreseason.split("\\(")[1];
+                            else moreseason = "0";
+                        }
+                        itempath.setMoreTitle(moretitle);
+                        itempath.setMoreUrl(moreurl);
+                        itempath.setMoreImg(moreimg);
+                        itempath.setMoreQuality(morequality);
+                        itempath.setMoreVoice("error");
+                        itempath.setMoreSeason(moreseason);
+                        itempath.setMoreSeries(moreseries);
                     }
 
-                    itemDetail.setName(name);
-                    itemDetail.setYear(year);
-                    itemDetail.setCountry(country);
-                    itemDetail.setTranslator(translator);
-                    itemDetail.setGenre(genre);
-                    itemDetail.setQuality(quality_t);
-                    itemDetail.setDirector(director);
-                    itemDetail.setActors(actors);
-                    itemDetail.setTime(time);
-                    itemDetail.setDescription(description_t);
+                    Elements allImg = data.select(".text_spoiler img");
+                    for (Element preimg : allImg) {
+                        itempath.setPreImg(preimg.attr("src"));
+                    }
+                    if (name.contains("СЕЗОН)") || name.contains("сезон)"))
+                        name = name.split("\\(")[0];
 
-                    itemDetail.setSeries(0);
-                    itemDetail.setSeason(Integer.parseInt(season));
-                    itemDetail.setIframe(iframe);
+                    itempath.setUrl(url);
+                    itempath.setTitle(name);
+                    itempath.setImg(img);
+                    itempath.setSubTitle(subname);
+                    itempath.setQuality(quality_t);
+                    itempath.setVoice(translator);
+                    itempath.setDescription(description_t);
+                    itempath.setDate(year);
+                    itempath.setCountry(country);
+                    itempath.setGenre(genre);
+                    itempath.setDirector(director);
+                    itempath.setActors(actors);
+                    itempath.setTime(time);
+                    itempath.setIframe(iframe);
+                    itempath.setType(type);
+                    itempath.setPreImg("error");
 
-                    DetailActivity.iframe = iframe;
+                    try {
+                        itempath.setSeason(Integer.parseInt(season));
+                    } catch (Exception e) {
+                        itempath.setSeason(0);
+                    }
+                    itempath.setSeries(0);
                 }
-                //torrent file
-                if (page.equals("torrent")) {
-                }
-            } else if (url.contains("coldfilm.ru")){
+            } else if (url.contains("coldfilm")) {
                 voice = "Coldfilm";
-                quality = "HD";
-                if (page.equals("catalog")) {
-                    //search
-                    if (url.contains("/search/")){
-                        //sres-wrap
-                        Elements allEntries = data.select(".sres-wrap");
-                        for (Element entry : allEntries) {
-                            if (entry.html().contains("sres-text")) {
-                                title = entry.select(".sres-text h2").first().text();
-                                if (title.contains("сезон")) {
-                                    season = title.split("сезон")[0];
-                                    String[] arr = season.split(" ");
-                                    season = arr[arr.length - 1].replaceAll("\u00a0", "").trim();
-                                    if (title.contains("серия")) {
-                                        series = title.split("сезон")[1].split("серия")[0].replaceAll("\u00a0", "").trim();
-                                        if (series.contains("-"))
-                                            series = series.split("-")[1];
-                                    }
-                                    title = title.split(season)[0];
-                                } else title = "error";
-                                url_entry = entry.attr("href");
-                                if (!url_entry.contains("://"))
-                                    url_entry = "http://coldfilm.ru" + url_entry;
-                                if (entry.html().contains("sres-img") && entry.html().contains("img src")) {
-                                    img = entry.select(".sres-img img").first().attr("src");
-                                    if (!img.contains("://"))
-                                        img = "http://coldfilm.ru" + img;
-                                }
-                                if (entry.html().contains("sres-desc"))
-                                    description = entry.select(".sres-desc").first().text();
-                                if (description.contains("Обзор]") || description.contains("Трейлер]") ||
-                                        description.contains("Удалено по просьбе правообладателя"))
-                                    title = "error";
-
-                                if (!title.contains("error"))
-                                    items.add(AddItem(itemHtml, title, url_entry, img, date,
-                                            description + "...", voice, quality, season, series));
-                            }
-                        }
-                    //main page
-                    } else {
-                        Elements allEntries = data.select(".kino-item");
-                        for (Element entry : allEntries) {
-                            if (entry.html().contains("kino-title")) {
-                                title = entry.select(".kino-title a").first().text();
-                                if (title.contains("сезон")) {
-                                    season = title.split("сезон")[0];
-                                    String[] arr = season.split(" ");
-                                    season = arr[arr.length - 1].replaceAll("\u00a0", "").trim();
-                                    if (title.contains("серия")) {
-                                        series = title.split("сезон")[1].split("серия")[0].replaceAll("\u00a0", "").trim();
-                                        if (series.contains("-"))
-                                            series = series.split("-")[1];
-                                    }
-                                    title = title.split(season)[0];
-                                } else title = "error";
-                                url_entry = entry.select(".kino-title a").first().attr("href");
-                                if (!url_entry.contains("://"))
-                                    url_entry = "http://coldfilm.ru" + url_entry;
-                            }
-                            if (entry.html().contains("kino-img")) {
-                                img = entry.select(".kino-img img").first().attr("src");
-                                if (!img.contains("://"))
-                                    img = "http://coldfilm.ru" + img;
-                            }
-                            if (entry.html().contains("kino-lines"))
-                                quality = entry.select(".kino-lines").first().text()
-                                        .split("Качество:")[1].split("Просмотров")[0];
-                            if (entry.html().contains("kino-date"))
-                                date = entry.select(".kino-date").first().text();
-                            if (entry.html().contains("kino-desc"))
-                                description = entry.select(".kino-desc").first().text();
-                            if (description.contains("Обзор]") || description.contains("Трейлер]"))
-                                title = "error";
-
-                            if (!title.contains("error"))
-                                items.add(AddItem(itemHtml, title, url_entry, img, date,
-                                        description + "...", voice, quality, season, series));
-                        }
-                    }
-                }
                 //video page
-                if (page.equals("detail") && data.html().contains("kino-inner-full")) {
-                    DetailActivity.type = "serial";
+                if (data.html().contains("kino-inner-full")) {
+                    type = "serial";
                     if (data.html().contains("kino-h")) {
                         name = data.select(".kino-h").first().text();
-                        season = name.split("сезон")[0];
-                        String[] arr = season.split(" ");
-                        season = arr[arr.length - 1].replaceAll("\u00a0", "").trim();
-                        if (title.contains("серия")) {
-                            series = title.split("сезон")[1].split("серия")[0].replaceAll("\u00a0", "").trim();
+                        if (name.contains(" сезон")) {
+                            season = name.split(" сезон")[0];
+                            String[] arr = season.split(" ");
+                            season = arr[arr.length - 1].replaceAll("\u00a0", "").trim();
+                        } else season = "1";
+                        if (name.contains(" серия")) {
+                            series = name.split(" сезон")[1].split(" серия")[0].replaceAll("\u00a0", "").trim();
                             if (series.contains("-"))
                                 series = series.split("-")[1];
                         }
                     }
                     if (name.contains("[Смотреть")) name = name.split("\\[Смотреть")[0];
-
-                    country = "...";
+                    if (name.contains(" сезон")) {
+                        name = name.split(" сезон")[0];
+                        name = name.substring(0, name.length() - 2);
+                    }
+                    if (data.html().contains("kino-desc full-text"))
+                        img = Statics.COLDFILM_URL + data.select(".kino-desc.full-text img").attr("src");
                     translator = "ColdFilm";
-                    genre = "...";
                     quality_t = "HD";
-                    director = "...";
-                    actors = "...";
-                    time = "...";
                     description_t = "Перевод: Профессиональный многоголосый закадровый - ColdFilm";
 
                     if (data.html().contains("player-box visible full-text"))
@@ -419,52 +311,143 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
 
                     Elements allTorrents = data.select("a[href$=\".torrent\"]");
                     for (Element torrent : allTorrents) {
-                        torrents = torrent.attr("href");
+                        String torrents = torrent.attr("href");
                         String[] arr = torrents.split("/");
-                        tor_name = arr[arr.length - 1].split(".torrent")[0];
+                        String tor_name = arr[arr.length - 1].split(".torrent")[0];
 
-                        if (!itemDetail.torrents.contains(torrents)) {
-                            itemDetail.setTorrents(torrents);
-                            itemDetail.setTor_name(tor_name);
-                            itemDetail.setTor_size(tor_size);
-                            itemDetail.setTor_magnet(tor_magnet);
-                            itemDetail.setTor_content("coldfilm.ru");
-                            itemDetail.setTor_lich("x");
-                            itemDetail.setTor_sid("x");
+                        if (!itempath.tortitle.contains(tor_name)) {
+                            itempath.setTorUrl(torrents);
+                            itempath.setTorTitle(tor_name);
+                            itempath.setTorSize(tor_size);
+                            itempath.setTorMagnet(tor_magnet);
+                            itempath.setTorContent("coldfilm.info");
+                            itempath.setTorLich("x");
+                            itempath.setTorSid("x");
                         }
                     }
 
-                    Elements allMore = data.select(".owl-item");
+                    Elements allMore = data.select(".rel-kino");
                     for (Element more : allMore) {
-                        String more_img = more.select(".rel-kino-img img").attr("src");
-                        String more_url = more.select(".rel-kino").attr("href");
-                        itemDetail.setMore_url(more_url.contains("://") ? more_url : "http://coldfilm.ru" + more_url);
-                        itemDetail.setMore_img(more_img.contains("://") ? more_img : "http://coldfilm.ru" + more_img);
-                        itemDetail.setMore_title(more.select(".rel-kino-title").text());
+                        moreseason = "0";
+                        moreseries = "0";
+                        moretitle = more.select("img").first().attr("alt").trim();
+                        moreurl = more.select("a").first().attr("href");
+                        moreimg = "https://";
+                        if (moretitle.contains(" сезон")) {
+                            moreseason = moretitle.split(" сезон")[0].trim();
+                            String moreseas[] = moreseason.split(" ");
+                            moreseason = moreseas[moreseas.length - 1];
+                            if (moretitle.contains(" серия"))
+                                moreseries = moretitle.split(" сезон")[1].split(" серия")[0].trim();
+                        }
+                        itempath.setMoreTitle(moretitle);
+                        itempath.setMoreUrl(moreurl);
+                        itempath.setMoreImg(moreimg);
+                        itempath.setMoreQuality(morequality);
+                        itempath.setMoreVoice("error");
+                        itempath.setMoreSeason(moreseason);
+                        itempath.setMoreSeries(moreseries);
                     }
 
-                    itemDetail.setName(name);
-                    itemDetail.setYear(year);
-                    itemDetail.setCountry(country);
-                    itemDetail.setTranslator(translator);
-                    itemDetail.setGenre(genre);
-                    itemDetail.setQuality(quality_t);
-                    itemDetail.setDirector(director);
-                    itemDetail.setActors(actors);
-                    itemDetail.setTime(time);
-                    itemDetail.setDescription(description_t);
+                    itempath.setUrl(url);
+                    itempath.setTitle(name);
+                    itempath.setSubTitle(subname);
+                    itempath.setImg(img);
+                    itempath.setQuality(quality_t);
+                    itempath.setVoice(translator);
+                    itempath.setDescription(description_t);
+                    itempath.setDate(year);
+                    itempath.setCountry(country);
+                    itempath.setGenre(genre);
+                    itempath.setDirector(director);
+                    itempath.setActors(actors);
+                    itempath.setTime(time);
+                    itempath.setIframe(iframe);
+                    itempath.setType(type);
+                    itempath.setPreImg("error");
 
-                    itemDetail.setSeries(Integer.parseInt(series));
-                    itemDetail.setSeason(Integer.parseInt(season));
-                    itemDetail.setIframe(iframe);
+                    try {
+                        itempath.setSeries(Integer.parseInt(series));
+                        itempath.setSeason(Integer.parseInt(season));
+                    } catch (Exception e) {
+                        itempath.setSeries(0);
+                        itempath.setSeason(0);
+                    }
+                } else if (url.contains("/search/")) {
+                    //sres-wrap
+                    Elements allEntries = data.select(".sres-wrap");
+                    for (Element entry : allEntries) {
+                        if (entry.html().contains("sres-text")) {
+                            title = entry.select(".sres-text h2").first().text();
+                            if (title.contains("сезон")) {
+                                season = title.split("сезон")[0];
+                                String[] arr = season.split(" ");
+                                season = arr[arr.length - 1].replaceAll("\u00a0", "").trim();
+                                if (title.contains("серия")) {
+                                    series = title.split("сезон")[1].split("серия")[0].replaceAll("\u00a0", "").trim();
+                                    if (series.contains("-"))
+                                        series = series.split("-")[1];
+                                }
+                                title = title.split(season)[0];
+                            } else title = "error";
+                            url_entry = entry.attr("href");
+                            if (!url_entry.contains("://"))
+                                url_entry = Statics.COLDFILM_URL + url_entry;
+                            if (entry.html().contains("sres-img") && entry.html().contains("img src")) {
+                                img = entry.select(".sres-img img").first().attr("src");
+                                if (!img.contains("://"))
+                                    img = Statics.COLDFILM_URL + img;
+                            }
+                            if (entry.html().contains("sres-desc"))
+                                description = entry.select(".sres-desc").first().text();
+                            if (description.contains("Обзор]") || description.contains("Трейлер]") ||
+                                    description.contains("Удалено по просьбе правообладателя"))
+                                title = "error";
 
-                    DetailActivity.iframe = iframe;
+                            if (!title.contains("error"))
+                                items.add(AddItem(itempath, title, url_entry, img, date,
+                                        description + "...", voice, quality, season, series));
+                        }
+                    }
+                    //main page
+                } else {
+                    Elements allEntries = data.select(".kino-item");
+                    for (Element entry : allEntries) {
+                        if (entry.html().contains("kino-title")) {
+                            title = entry.select(".kino-title a").first().text();
+                            if (title.contains("сезон")) {
+                                season = title.split("сезон")[0];
+                                String[] arr = season.split(" ");
+                                season = arr[arr.length - 1].replaceAll("\u00a0", "").trim();
+                                if (title.contains("серия")) {
+                                    series = title.split("сезон")[1].split("серия")[0].replaceAll("\u00a0", "").trim();
+                                    if (series.contains("-"))
+                                        series = series.split("-")[1];
+                                }
+                                title = title.split(season)[0];
+                            } else title = "error";
+                            url_entry = entry.select(".kino-title a").first().attr("href");
+                            if (!url_entry.contains("://"))
+                                url_entry = Statics.COLDFILM_URL + url_entry;
+                        }
+                        if (entry.html().contains("kino-img")) {
+                            img = entry.select(".kino-img img").first().attr("src");
+                            if (!img.contains("://"))
+                                img = Statics.COLDFILM_URL + img;
+                        }
+                        if (entry.html().contains("kino-date"))
+                            date = entry.select(".kino-date").first().text();
+                        if (entry.html().contains("kino-desc"))
+                            description = entry.select(".kino-desc").first().text();
+                        if (description.contains("Обзор]") || description.contains("Трейлер]"))
+                            title = "error";
+
+                        if (!title.contains("error"))
+                            items.add(AddItem(itempath, title, url_entry, img, date,
+                                    description + "...", voice, quality, season, series));
+                    }
                 }
-            } else {
-                items.add(AddItem(itemHtml, title, url_entry, img, date, description,
-                        voice, quality, season, series));
             }
-            Log.d("mydebug","parse items done");
         }
     }
 
@@ -477,75 +460,28 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
         htmlItem.setDescription(description);
         htmlItem.setVoice(voice);
         htmlItem.setQuality(quality);
-        if (TextUtils.isDigitsOnly(season)) htmlItem.setSeason(Integer.parseInt(season));
-        else htmlItem.setSeason(99);
-        if (TextUtils.isDigitsOnly(series)) htmlItem.setSeries(Integer.parseInt(series));
-        else htmlItem.setSeries(99);
+        try {
+            if (TextUtils.isDigitsOnly(season)) htmlItem.setSeason(Integer.parseInt(season));
+            else htmlItem.setSeason(99);
+            if (TextUtils.isDigitsOnly(series)) htmlItem.setSeries(Integer.parseInt(series));
+            else htmlItem.setSeries(99);
+        } catch (Exception e) {
+            htmlItem.setSeason(0);
+            htmlItem.setSeries(0);
+        }
 
         return htmlItem;
     }
 
-    public void Torrent(String url){
-        if (page.contains("down")) {
-            try {
-                String ref = url.contains("koshara.co") ? "http://koshara.co" : "http://coldfilm.ru";
-                Connection.Response res = Jsoup.connect(url).referrer(ref)
-                        .timeout(5000).ignoreContentType(true).postDataCharset("CP1251").execute();
-                String path = Environment.getExternalStorageDirectory() + "/" +
-                        DetailActivity.activity.getString(R.string.app_name) + "/";
-                String name = itemDetail.getTor_name(itemDetail.getCur())
-                        .replace("/", ",").replace(":", " -")
-                        .replace("|", ".");
-                file = new File(path);
-                if (!file.exists()) {
-                    file.mkdirs();
-                }
-                if (!name.contains(".torrent"))
-                    file = new File(path + name + ".torrent");
-                else file = new File(path + name);
-
-                try {
-                    file.createNewFile();
-                    OutputStream fo = new FileOutputStream(file);
-                    fo.write(res.bodyAsBytes());
-                    fo.close();
-                    Log.d("mydebug", "file : " + file);
-
-                } catch (IOException e) {
-                    ItemMain.status = "Ошибка торрент файла ):";
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                ItemMain.status = "Ошибка загрузки торрент файла ):";
-                Log.d("mydebug", "connected false to " + url);
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void playTor (File file) {
-        Uri uri = file != null ? Uri.fromFile(file) : Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-
-        try {
-            intent.setDataAndType(uri, "application/x-bittorrent");
-            DetailActivity.fragm_tor.getContext().startActivity(intent);
-        } catch (Exception e) {
-            intent.setDataAndType(uri, "application/*");
-            DetailActivity.fragm_tor.getContext().startActivity(intent);
-            e.printStackTrace();
-        }
-    }
-
-
     private Document Getdata(String url) {
         try {
+            Log.d("mydebug","get connected to " + url);
             Document htmlDoc;
             String ref = "";
-            if (ItemMain.cur_url.contains("koshara.co") || url.contains("koshara.co"))
-                ref = "http://koshara.co";
-            if (ItemMain.cur_url.contains("coldfilm.ru") || url.contains("coldfilm.ru"))
-                ref = "http://coldfilm.ru";
+            if (ItemMain.cur_url.contains(Statics.KOSHARA_URL) || url.contains(Statics.KOSHARA_URL))
+                ref = Statics.KOSHARA_URL;
+            if (ItemMain.cur_url.contains(Statics.COLDFILM_URL) || url.contains(Statics.COLDFILM_URL))
+                ref = Statics.COLDFILM_URL;
             htmlDoc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
                     .timeout(10000).ignoreContentType(true).referrer(ref).get();

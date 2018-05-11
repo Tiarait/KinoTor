@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorPrimaryLight"
     tools:context="com.kinotor.tiar.kinotor.ui.DetailActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -18,25 +17,34 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_d"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
             app:popupTheme="@style/AppTheme.AppBarOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
-        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:tabTextColor="@color/colorDarkWhite"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:background="@color/colorPrimaryDark"
         app:tabSelectedTextColor="@color/colorAccent"
-        android:background="@color/colorPrimaryLight"/>
+        app:tabTextColor="@color/colorDarkWhite" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="?android:attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryLight"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <LinearLayout
+        android:id="@+id/detail_pb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorGrey"
+        android:gravity="center">
+
+        <include layout="@layout/pb" />
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

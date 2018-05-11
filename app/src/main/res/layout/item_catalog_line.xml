@@ -17,13 +17,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:background="@color/colorPrimaryDark"
-            android:layout_height="235dp">
+            android:padding="8dp"
+            android:layout_height="205dp">
 
             <ImageView
                 android:id="@+id/imgPoster"
                 android:layout_width="160dp"
-                android:layout_height="235dp"
-                android:scaleType="centerCrop"
+                android:layout_height="205dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/loading" />
 
             <LinearLayout
@@ -35,7 +36,6 @@
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="3"
                     android:padding="3dp"
                     android:gravity="center_vertical"
                     android:text="@string/loading"
@@ -51,7 +51,7 @@
                 android:gravity="bottom|right"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/quality"
+                    android:id="@+id/voice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/loading"
@@ -62,19 +62,16 @@
                     android:textStyle="bold"
                     android:textColor="@color/colorDarkWhite" />
                 <TextView
-                    android:id="@+id/voice"
-                    android:layout_width="match_parent"
+                    android:id="@+id/quality"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:lines="1"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
                     android:text="@string/loading"
-                    android:textAlignment="center"
-                    android:background="@color/colorDarkGrey"
-                    android:textColor="@color/colorDarkWhite"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:paddingRight="2dp"
+                    android:paddingLeft="3dp"
+                    android:layout_marginLeft="160dp"
+                    android:lines="1"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorDarkWhite" />
             </LinearLayout>
 
         </RelativeLayout>

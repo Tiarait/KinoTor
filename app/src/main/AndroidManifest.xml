@@ -35,13 +35,16 @@
 
     <application
         android:allowBackup="true"
+        android:banner="@drawable/banner"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="UnusedAttribute">
         <activity
             android:name=".ui.MainCatalogActivity"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAINSCREEN" />
@@ -52,22 +55,23 @@
         <activity
             android:name=".ui.DetailActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ui.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.SettingsActivity"
-            android:theme="@style/PreferencesTheme"
-            android:label="@string/title_activity_settings">
-        </activity>
+            android:label="@string/title_activity_settings"
+            android:theme="@style/PreferencesTheme"></activity>
+        <activity android:name=".ui.ImageActivity"></activity>
     </application>
 
 </manifest>

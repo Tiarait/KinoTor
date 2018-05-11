@@ -6,21 +6,13 @@
     android:orientation="horizontal"
     tools:context="com.kinotor.tiar.kinotor.ui.MainCatalogActivity">
 
-    <!--<ImageView-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:src="@drawable/bg_strip"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:alpha="0.9"-->
-        <!--android:tint="#90203342"/>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/item_list"
         android:name="co.koshara.tiar.koshara.ItemListFragment"
-        android:layout_width="@dimen/item_width"
+        android:layout_width="230dp"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/item_list_content"

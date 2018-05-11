@@ -2,77 +2,88 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="175dp"
+        android:layout_height="295dp"
         android:orientation="vertical"
         android:layout_gravity="center"
         app:cardCornerRadius="0dp"
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="160dp"
-            android:layout_height="30dp"
-            android:maxLines="1"
-            android:padding="3dp"
-            android:gravity="center_vertical"
-            android:text="@string/loading"
-            android:ellipsize="end"
-            android:textSize="13sp"
-            android:textColor="@color/colorWhite"
-            android:background="@color/colorBlack"
-            android:textStyle="bold" />
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="30dp"
             android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/imgPoster"
-                android:layout_width="160dp"
-                android:layout_height="235dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="42dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/loading" />
+                android:background="@color/colorPrimaryDark"/>
 
             <LinearLayout
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:gravity="end">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
                 <TextView
-                    android:id="@+id/quality"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="42dp"
+                    android:maxLines="2"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:gravity="center_vertical"
                     android:text="@string/loading"
-                    android:paddingRight="2dp"
-                    android:paddingLeft="3dp"
-                    android:lines="1"
-                    android:textStyle="bold"
-                    android:textSize="17sp"
-                    android:background="@color/colorRed"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
+                    android:ellipsize="end"
+                    android:textSize="13sp"
+                    android:textColor="@color/colorWhite"
+                    android:background="@color/colorBlack"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end">
+                    <TextView
+                        android:id="@+id/quality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/loading"
+                        android:paddingRight="2dp"
+                        android:paddingLeft="3dp"
+                        android:lines="1"
+                        android:textStyle="bold"
+                        android:textSize="17sp"
+                        android:background="@color/colorRed"
+                        android:textColor="@color/colorWhite" />
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/voice"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="218dp"
-                android:background="@color/colorBlack"
-                android:gravity="center"
-                android:lines="1"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:text="@string/loading"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom">
+
+                    <TextView
+                        android:id="@+id/voice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorBlack"
+                        android:layout_gravity="bottom"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:padding="2dp"
+                        android:text="@string/loading"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
 
         </RelativeLayout>
         <include layout="@layout/selected" />

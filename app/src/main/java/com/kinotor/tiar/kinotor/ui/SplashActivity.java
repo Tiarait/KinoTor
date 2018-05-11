@@ -10,8 +10,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.kinotor.tiar.kinotor.R;
+import com.kinotor.tiar.kinotor.items.ItemMain;
 
 public class SplashActivity extends AppCompatActivity {
+    private boolean l = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -21,6 +23,11 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
+        if (l) onPlay();
+    }
+
+    private void onPlay() {
+        l = false;
         TextView splash_title = (TextView) findViewById(R.id.splash_title);
         TextView splash_subtitle = (TextView) findViewById(R.id.splash_subtitle);
         Animation splash = AnimationUtils.loadAnimation(this, R.anim.splash);
@@ -37,19 +44,26 @@ public class SplashActivity extends AppCompatActivity {
                     while(logoTimer < 4000)
                     {
                         sleep(100);
-                        logoTimer = logoTimer +100;
+                        logoTimer += 100;
                     }
                     Intent intent = new Intent(SplashActivity.this, MainCatalogActivity.class);
                     startActivity(intent);
-                }
-                catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
-                finally {
-                    finish();
+                } finally {
+                    l = true;
                 }
             }
         };
         logoTimer.start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ItemMain.cur_url.equals("q")) {
+            ItemMain.cur_url = "";
+            finish();
+        } else if (l) onPlay();
     }
 }

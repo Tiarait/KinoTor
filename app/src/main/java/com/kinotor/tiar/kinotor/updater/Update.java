@@ -55,7 +55,9 @@ public class Update extends AsyncTask<Void, Void, Void> {
 
     public Document Getdata(String url){
         try {
-            Document htmlDoc = Jsoup.connect(url).get();
+            Document htmlDoc = Jsoup.connect(url).validateTLSCertificates(false)
+                    .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
+                    .timeout(10000).ignoreContentType(true).get();
             Log.d("mydebug","connected to " + url);
             return htmlDoc;
         } catch (Exception e) {

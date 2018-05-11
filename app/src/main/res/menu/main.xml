@@ -7,13 +7,86 @@
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
     <item android:id="@+id/action_category"
-        android:title="Список"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_menu_list">
+        android:title="Категории"
+        app:showAsAction="never">
     </item>
     <item android:id="@+id/action_settings"
         android:title="Настройки"
         app:showAsAction="always"
         android:icon="@drawable/ic_menu_settings">
+    </item>
+    <item
+        android:id="@+id/action_catalog"
+        android:orderInCategory="1"
+        android:title="Каталог">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/menuСatalogAmcet"
+                    android:onClick="onSelectCatalog"
+                    android:title="Amcet"
+                    android:checkable="true"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuСatalogKoshara"
+                    android:onClick="onSelectCatalog"
+                    android:checkable="true"
+                    android:title="Koshara"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:visible="false"
+        android:id="@+id/action_db_save"
+        android:onClick="onDBsave"
+        android:title="Сохранить"
+        app:showAsAction="never" />
+    <item
+        android:visible="false"
+        android:id="@+id/action_db_del"
+        android:onClick="onDBdel"
+        android:title="Очистить"
+        app:showAsAction="never" />
+    <item
+        android:visible="false"
+        android:id="@+id/action_db_restore"
+        android:onClick="onDBrest"
+        android:title="Восстановить"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_sort"
+        android:orderInCategory="2"
+        android:title="Сортировать">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/menuSortOrderList"
+                    android:onClick="onSortOrderList"
+                    android:title="По списку"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuSortOrderCategory"
+                    android:onClick="onSortOrderGenre"
+                    android:title="По жанру"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuSortOrderYear"
+                    android:onClick="onSortOrderYear"
+                    android:title="По году"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuSortOrderCountry"
+                    android:onClick="onSortOrderCountry"
+                    android:title="По стране"
+                    app:showAsAction="never" />
+                <item
+                    android:visible="false"
+                    android:id="@+id/menuSortAll"
+                    android:onClick="onSortAll"
+                    android:title="Все параметры"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
     </item>
 </menu>

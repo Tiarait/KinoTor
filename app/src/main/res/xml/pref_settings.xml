@@ -1,5 +1,4 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:title="Интерфейс">
@@ -9,14 +8,13 @@
             android:entryValues="@array/pref_values_grid_catalog"
             android:summary="@string/pref_desc_grid_catalog"
             android:key="grid_catalog"
-            android:defaultValue="5"
+            android:defaultValue="2"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="fullscreen"
-            android:summaryOn="@string/pref_descOn_fullscreen"
-            android:summaryOff="@string/pref_descOf_fullscreen"
+            android:summary="@string/pref_desc_fullscreen"
             android:title="@string/pref_title_fullscreen" />
         <SwitchPreference
             android:title="Боковое меню"
@@ -24,11 +22,37 @@
             android:defaultValue="true"
             android:summaryOn="Меню закрепленно."
             android:summaryOff="Закрепить меню?(для больших экранов)"/>
-
+        <ListPreference
+            android:title="@string/pref_title_text_size_main"
+            android:entries="@array/pref_list_text_size"
+            android:entryValues="@array/pref_list_text_size"
+            android:summary="@string/pref_desc_text_size"
+            android:key="text_size_main"
+            android:defaultValue="14"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <ListPreference
+            android:title="@string/pref_title_text_size_detail"
+            android:entries="@array/pref_list_text_size"
+            android:entryValues="@array/pref_list_text_size"
+            android:summary="@string/pref_desc_text_size"
+            android:key="text_size_detail"
+            android:defaultValue="16"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="Базы данных">
+        <ListPreference
+            android:title="@string/pref_title_base_catalog"
+            android:entries="@array/pref_list_base_catalog"
+            android:defaultValue="amcet"
+            android:entryValues="@array/pref_list_base_catalog"
+            android:summary="@string/pref_desc_base_catalog"
+            android:key="catalog"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"/>
         <MultiSelectListPreference
             android:title="@string/pref_title_base_video"
             android:entries="@array/pref_list_base_video"
@@ -50,8 +74,7 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="auto_update"
-            android:summaryOn="@string/pref_descOn_auto_update"
-            android:summaryOff="@string/pref_descOf_auto_update"
+            android:summary="@string/pref_desc_auto_update"
             android:title="@string/pref_title_auto_update" />
         <ListPreference
             android:title="@string/pref_title_start_category"
@@ -64,15 +87,18 @@
             android:positiveButtonText="@null" />
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="coldfilm"
-            android:summaryOn="@string/pref_descOn_coldfilm"
-            android:summaryOff="@string/pref_descOf_coldfilm"
+            android:key="animevost_menu"
+            android:summary="@string/pref_desc_animevost"
+            android:title="@string/pref_title_animevost" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="coldfilm_menu"
+            android:summary="@string/pref_desc_coldfilm"
             android:title="@string/pref_title_coldfilm" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="exit"
-            android:summaryOn="@string/pref_descOn_exit"
-            android:summaryOff="@string/pref_descOf_exit"
+            android:summary="@string/pref_desc_exit"
             android:title="@string/pref_title_exit" />
     </PreferenceCategory>
 

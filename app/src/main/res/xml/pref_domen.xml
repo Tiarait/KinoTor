@@ -1,0 +1,22 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Каталоги">
+        <EditTextPreference
+            android:title="Coldfilm"
+            android:key="coldfilm_url"
+            android:defaultValue="info"/>
+        <EditTextPreference
+            android:title="Animevost"
+            android:key="animevost_url"
+            android:defaultValue="org"/>
+        <EditTextPreference
+            android:title="Amcet"
+            android:key="amcet_url"
+            android:defaultValue="net"/>
+        <EditTextPreference
+            android:title="Koshara"
+            android:key="koshara_url"
+            android:defaultValue="co"/>
+    </PreferenceCategory>
+</PreferenceScreen>

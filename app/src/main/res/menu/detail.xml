@@ -9,8 +9,12 @@
         android:title="Обновить"
         android:icon="@drawable/ic_menu_refresh"
         app:showAsAction="always" />
-    <item android:id="@+id/action_cd"
-        android:title="Список"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_menu_list"/>
+    <item android:id="@+id/action_copy"
+        android:title="Скопировать..."
+        android:onClick="onActionCopy"
+        app:showAsAction="never"/>
+    <item android:id="@+id/action_web"
+        android:title="В браузере"
+        android:onClick="onActionWeb"
+        app:showAsAction="never"/>
 </menu>
