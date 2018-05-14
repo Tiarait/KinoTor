@@ -30,6 +30,7 @@ import com.kinotor.tiar.kinotor.parser.hdgo.ParserHdgo;
 import com.kinotor.tiar.kinotor.parser.moonwalk.ParserMoonwalk;
 import com.kinotor.tiar.kinotor.parser.trailer.ParserTrailer;
 import com.kinotor.tiar.kinotor.utils.AdapterVideo;
+import com.kinotor.tiar.kinotor.utils.DBHelper;
 import com.kinotor.tiar.kinotor.utils.OnTaskCallback;
 import com.kinotor.tiar.kinotor.utils.OnTaskLocationCallback;
 import com.kinotor.tiar.kinotor.utils.OnTaskVideoCallback;
@@ -116,7 +117,7 @@ public class DetailVideo extends Fragment {
             }
 
             @Override
-            public void play(String[] quality, final String[] url, final String s, final String e, final boolean play) {
+            public void play(String[] quality, final String[] url, final String translator, final String s, final String e, final boolean play) {
                 pb.setVisibility(View.GONE);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), 2);
                 builder.setTitle("Выберите качество").setItems(quality, new DialogInterface.OnClickListener() {
@@ -130,12 +131,12 @@ public class DetailVideo extends Fragment {
                                 GetLocation click = new GetLocation(url[i], new OnTaskLocationCallback() {
                                     @Override
                                     public void OnCompleted(String location) {
-                                        videoIntent(location, s, e, play);
+                                        videoIntent(location, translator, s, e, play);
                                     }
                                 });
                                 click.execute();
                             } else {
-                                videoIntent(url[i], s, e, play);
+                                videoIntent(url[i], translator, s, e, play);
                             }
                         } else dialogInterface.cancel();
                     }
@@ -198,7 +199,7 @@ public class DetailVideo extends Fragment {
             pb.setVisibility(View.GONE);
     }
 
-    private void videoIntent(String url, String s, String e, boolean play) {
+    private void videoIntent(String url, String translator, String s, String e, boolean play) {
         pb.setVisibility(View.GONE);
         String t = item.getTitle(0).contains("(") ? item.getTitle(0).split("\\(")[0] :
                 item.getTitle(0);
@@ -228,6 +229,16 @@ public class DetailVideo extends Fragment {
             getContext().startActivity(intent);
             Log.d("download", title + " " + url);
         }
+
+        DBHelper dbHelper = new DBHelper(getContext());
+        if (!dbHelper.getRepeatWatch(3, item.getTitle(0).trim(),
+                translator.trim(), s.trim(), e.trim())) {
+            dbHelper.Write();
+            dbHelper.insertWatch(item.getTitle(0).trim(), translator.trim(), s, e);
+            rv.getRecycledViewPool().clear();
+            rv.getAdapter().notifyDataSetChanged();
+        }
+
     }
 
     private void itemSetRv(ItemVideo items) {

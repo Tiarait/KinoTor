@@ -82,10 +82,6 @@ public class Tparser extends AsyncTask<Void, Void, Void> {
                             torrent.setTorMagnet("http://tparser.org/magnet.php?t=" + z +
                                     aList.split("img':'")[1].split("',")[0] +
                                     aList.split("d':'")[1].split("',")[0]);
-                            Log.d("qwer", "parser: " +
-                                    "http://tparser.org/magnet.php?t=" + z +
-                                    aList.split("img':'")[1].split("',")[0] +
-                                    aList.split("d':'")[1].split("',")[0]);
                             torrent.setTorSid(sid);
                             torrent.setTorLich(aList.split("l':'")[1].split("'")[0]);
                             torrent.setTorContent(content.replace("fast-tor.net", "rutor.info"));

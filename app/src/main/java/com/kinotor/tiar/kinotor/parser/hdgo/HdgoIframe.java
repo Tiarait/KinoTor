@@ -185,7 +185,7 @@ public class HdgoIframe extends AsyncTask<Void, Void, Void> {
                         items.setSeason("error");
                         items.setEpisode("error");
                         items.setTranslator(item.getVoice(0).contains("error") ?
-                                item.getTitle(0) : item.getVoice(0));
+                                item.getTitle(0).trim() : item.getVoice(0).trim());
                         Log.d(TAG, "site " + DetailActivity.url.split("/")[2] + ": add " + src);
                     }
                     if (iframe.html().contains("The video file to be processed.")) {

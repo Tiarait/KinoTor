@@ -70,18 +70,23 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
     public void onBindViewHolder(final AdapterVideo.ViewHolder holder, int position) {
         final int cur = position;
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+        DBHelper dbHelper = new DBHelper(context);
         int sizetext = Integer.parseInt(preference.getString("text_size_detail", "13"));
 
         if (items.getTitle(cur).contains(CATALOG)) {
             holder.name.setText(items.getTranslator(cur));
             holder.desc.setText(items.getType(cur));
             if (!items.getSeason(cur).contains(ERROR)) {
+                if (dbHelper.getRepeatWatch(1, item.getTitle(0), items.getTranslator(cur), "", ""))
+                    holder.icon.setImageResource(R.drawable.ic_folder_view);
+                else holder.icon.setImageResource(R.drawable.ic_folder);
                 holder.size.setVisibility(View.VISIBLE);
                 holder.size.setText("s" + items.getSeason(cur) + "e" + items.getEpisode(cur));
-                holder.icon.setImageResource(R.drawable.ic_folder);
                 holder.download.setVisibility(View.GONE);
             } else {
-                holder.icon.setImageResource(R.drawable.ic_mp4_file);
+                if (dbHelper.getRepeatWatch(1, item.getTitle(0), items.getTranslator(cur), "", ""))
+                    holder.icon.setImageResource(R.drawable.ic_mp4_file_view);
+                else holder.icon.setImageResource(R.drawable.ic_mp4_file);
                 holder.size.setVisibility(View.GONE);
                 holder.download.setVisibility(View.VISIBLE);
             }
@@ -94,11 +99,13 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 holder.size.setText(items.getType(cur));
                 holder.icon.setImageResource(R.drawable.ic_back_arrow);
             } else {
-                holder.icon.setImageResource(R.drawable.ic_folder);
+                if (dbHelper.getRepeatWatch(2, item.getTitle(0), items.getTranslator(cur),
+                        items.getSeason(cur), ""))
+                    holder.icon.setImageResource(R.drawable.ic_folder_view);
+                else holder.icon.setImageResource(R.drawable.ic_folder);
                 holder.name.setText(items.getSeason(cur) + " сезон");
                 holder.size.setText(items.getEpisode(cur) + seriesPatteg(items.getEpisode(cur)));
             }
-
         } else if (items.getTitle(cur).contains(SERIES)) {
             if (items.getTitle(cur).contains(BACK)){
                 holder.download.setVisibility(View.GONE);
@@ -109,7 +116,10 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 holder.desc.setText(items.getTranslator(cur).contains(ERROR) ? "Неизвестный" : items.getTranslator(cur));
                 holder.icon.setImageResource(R.drawable.ic_back_arrow);
             } else {
-                holder.icon.setImageResource(R.drawable.ic_mp4_file);
+                if (dbHelper.getRepeatWatch(3, item.getTitle(0), items.getTranslator(cur),
+                        items.getSeason(cur), items.getEpisode(cur)))
+                    holder.icon.setImageResource(R.drawable.ic_mp4_file_view);
+                else holder.icon.setImageResource(R.drawable.ic_mp4_file);
                 holder.name.setText(items.getEpisode(cur) + " серия");
                 holder.download.setVisibility(View.VISIBLE);
                 holder.desc.setVisibility(View.GONE);
@@ -220,7 +230,8 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 MoonwalkUrl getMp4 = new MoonwalkUrl(items.getUrl(cur), new OnTaskUrlCallback() {
                     @Override
                     public void OnCompleted(String[] quality, String[] url) {
-                        play(quality, url, items.getSeason(cur), items.getEpisode(cur), play);
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
+                                items.getEpisode(cur), play);
                     }
                 });
                 getMp4.execute();
@@ -228,7 +239,8 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 HdgoUrl getMp4 = new HdgoUrl(items.getUrl(cur), new OnTaskUrlCallback() {
                     @Override
                     public void OnCompleted(String[] quality, String[] url) {
-                        play(quality, url, items.getSeason(cur), items.getEpisode(cur), play);
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
+                                items.getEpisode(cur), play);
                     }
                 });
                 getMp4.execute();
@@ -236,7 +248,8 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 AnimevostUrl getMp4 = new AnimevostUrl(items.getUrlSite(cur), new OnTaskUrlCallback() {
                     @Override
                     public void OnCompleted(String[] quality, String[] url) {
-                        play(quality, url, items.getSeason(cur), items.getEpisode(cur), play);
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
+                                items.getEpisode(cur), play);
                     }
                 });
                 getMp4.execute();
@@ -245,7 +258,8 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 TrailerUrl getMp4 = new TrailerUrl(items.getUrl(cur), new OnTaskUrlCallback() {
                     @Override
                     public void OnCompleted(String[] quality, String[] url) {
-                        play(quality, url, items.getSeason(cur), items.getEpisode(cur), play);
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
+                                items.getEpisode(cur), play);
                     }
                 });
                 getMp4.execute();
@@ -370,7 +384,7 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
 
     public abstract void update(ItemVideo items);
     public abstract void reload(ItemVideo items);
-    public abstract void play(String[] quality, String[] url, String s, String e, boolean play);
+    public abstract void play(String[] quality, String[] url, String translator, String s, String e, boolean play);
 
 
     @Override

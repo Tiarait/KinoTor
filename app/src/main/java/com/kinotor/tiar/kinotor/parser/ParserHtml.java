@@ -255,7 +255,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                     itempath.setImg(img);
                     itempath.setSubTitle(subname);
                     itempath.setQuality(quality_t);
-                    itempath.setVoice(translator);
+                    itempath.setVoice(translator.trim());
                     itempath.setDescription(description_t);
                     itempath.setDate(year);
                     itempath.setCountry(country);
@@ -354,7 +354,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                     itempath.setSubTitle(subname);
                     itempath.setImg(img);
                     itempath.setQuality(quality_t);
-                    itempath.setVoice(translator);
+                    itempath.setVoice(translator.trim());
                     itempath.setDescription(description_t);
                     itempath.setDate(year);
                     itempath.setCountry(country);
@@ -458,7 +458,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
         htmlItem.setImg(img);
         htmlItem.setDate(date);
         htmlItem.setDescription(description);
-        htmlItem.setVoice(voice);
+        htmlItem.setVoice(voice.trim());
         htmlItem.setQuality(quality);
         try {
             if (TextUtils.isDigitsOnly(season)) htmlItem.setSeason(Integer.parseInt(season));

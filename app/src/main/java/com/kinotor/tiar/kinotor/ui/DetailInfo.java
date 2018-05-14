@@ -64,14 +64,17 @@ public class DetailInfo extends Fragment {
     }
 
     private void setInfo(final View rootView) {
-        int sizetext = Integer.parseInt(PreferenceManager
-                .getDefaultSharedPreferences(getContext())
-                .getString("text_size_detail", "13"));
+        int sizetext = 16;
         Utils utils = new Utils();
-        LinearLayout portret = rootView.findViewById(R.id.portret_info);
-        if (utils.isTablet(getContext()) && getResources().getConfiguration().orientation == 2) {
-            portret.setVisibility(View.GONE);
-        } else portret.setVisibility(View.VISIBLE);
+        if (getActivity() != null) {
+            sizetext = Integer.parseInt(PreferenceManager
+                    .getDefaultSharedPreferences(getActivity())
+                    .getString("text_size_detail", "16"));
+            LinearLayout portret = rootView.findViewById(R.id.portret_info);
+            if (utils.isTablet(getActivity()) && getResources().getConfiguration().orientation == 2) {
+                portret.setVisibility(View.GONE);
+            } else portret.setVisibility(View.VISIBLE);
+        }
         ImageView poster = rootView.findViewById(R.id.imgPoster_d);
         ImageView posterBG = rootView.findViewById(R.id.imgPoster_bg);
         ImageView preimgFirst = rootView.findViewById(R.id.img_pre_1);
@@ -249,6 +252,8 @@ public class DetailInfo extends Fragment {
             }
         }
     }
+
+
 
     private void taskDone(ItemHtml itempath, View rootView) {
         this.item = itempath;

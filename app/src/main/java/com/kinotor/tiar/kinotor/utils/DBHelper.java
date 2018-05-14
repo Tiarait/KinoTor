@@ -27,9 +27,11 @@ import static android.content.ContentValues.TAG;
 public class DBHelper extends SQLiteOpenHelper {
     private SQLiteDatabase sqLiteDatabase;
     private Context context;
+    private final static String DATABASE_NAME = "DB";
+    private static final int DATABASE_VERSION = 2;
 
     public DBHelper(Context context) {
-        super(context, "DB", null, 1);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
     @Override
@@ -55,19 +57,42 @@ public class DBHelper extends SQLiteOpenHelper {
                 "season integer," +
                 "series integer" +
                 ");");
+        db.execSQL("create table historyWatch (" +
+                "id integer primary key autoincrement," +
+                "title text," +
+                "translator text," +
+                "season text," +
+                "series text" +
+                ");");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("create table historyWatch (" +
+                "id integer primary key autoincrement," +
+                "title text," +
+                "translator text," +
+                "season text," +
+                "series text" +
+                ");");
     }
 
-    public void Read() throws android.database.SQLException {
+    private void Read() throws android.database.SQLException {
         sqLiteDatabase = this.getReadableDatabase();
     }
 
     public void Write() throws android.database.SQLException {
         sqLiteDatabase = this.getWritableDatabase();
+    }
+
+    public long insertWatch(String title, String translator, String season, String series){
+        ContentValues cv = new ContentValues();
+        cv.put("title", title);
+        cv.put("translator", translator);
+        cv.put("season", season);
+        cv.put("series", series);
+        Log.d(TAG, "--- " + title + " Insert to historyWatch ---");
+        return sqLiteDatabase.insert("historyWatch", null, cv);
     }
 
     public long insert(String db, String title, String img_src, String link, String voice,
@@ -151,6 +176,48 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean getRepeatWatch(int steps, String title, String translator, String season, String series) {
+        Read();
+        boolean r = false;
+        Cursor cursor = sqLiteDatabase.query("historyWatch", null, null,
+                null, null, null, null);
+        if (cursor.moveToFirst()) {
+            int titleColIndex = cursor.getColumnIndex("title");
+            int translatorColIndex = cursor.getColumnIndex("translator");
+            int seasonColIndex = cursor.getColumnIndex("season");
+            int seriesColIndex = cursor.getColumnIndex("series");
+            do {
+                if (steps == 1) {
+                    if (cursor.getString(titleColIndex).trim().equals(title.trim()) &&
+                            cursor.getString(translatorColIndex).trim().equals(translator.trim())) {
+                        r = true;
+                        break;
+                    }
+                } else if (steps == 2) {
+                    if (cursor.getString(titleColIndex).trim().equals(title.trim()) &&
+                            cursor.getString(translatorColIndex).trim().equals(translator.trim()) &&
+                            cursor.getString(seasonColIndex).trim().equals(season.trim())) {
+                        r = true;
+                        break;
+                    }
+                } else if (steps == 3) {
+                    if (cursor.getString(titleColIndex).trim().equals(title.trim()) &&
+                            cursor.getString(translatorColIndex).trim().equals(translator.trim()) &&
+                            cursor.getString(seasonColIndex).trim().equals(season.trim()) &&
+                            cursor.getString(seriesColIndex).trim().equals(series.trim())) {
+                        r = true;
+                        break;
+                    }
+                } else r = false;
+            } while (cursor.moveToNext());
+            cursor.close();
+            return r;
+        } else {
+            cursor.close();
+            return false;
+        }
+    }
+
     public boolean getRepeat(String db, String title) {
         Read();
         boolean r = false;
@@ -167,7 +234,7 @@ public class DBHelper extends SQLiteOpenHelper {
             return r;
         } else {
             cursor.close();
-            return r;
+            return false;
         }
     }
 

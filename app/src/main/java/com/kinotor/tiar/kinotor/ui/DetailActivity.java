@@ -221,8 +221,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void addToDB (String db) {
-        DBHelper dbHelper;
-        dbHelper = new DBHelper(this);
+        DBHelper dbHelper = new DBHelper(this);
         if (dbHelper.getRepeat(db, title) && db.equals("history"))
             dbHelper.delete(db, title);
         dbHelper.Write();

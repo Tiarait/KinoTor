@@ -10,4 +10,17 @@
     <path
         android:pathData="M30 0C13.458 0 0 13.458 0 30 0 46.542 13.458 60 30 60 46.542 60 60 46.542 60 30 60 13.458 46.542 0 30 0Zm0 58C14.561 58 2 45.439 2 30 2 14.561 14.561 2 30 2 45.439 2 58 14.561 58 30 58 45.439 45.439 58 30 58Z"
         android:fillColor="#ffffff" />
+    <path
+        android:pathData="M58.671851 48.819672A10.234366 9.9999924 0 0 1 48.437485 58.819664 10.234366 9.9999924 0 0 1 38.203118 48.819672 10.234366 9.9999924 0 0 1 48.437485 38.819679 10.234366 9.9999924 0 0 1 58.671851 48.819672Z"
+        android:strokeWidth="1.5"
+        android:fillColor="#ffffff"
+        android:strokeColor="#ffffff" />
+    <path
+        android:pathData="M47.676048 42.598026l-0.140846 8.309857"
+        android:strokeWidth="1.5"
+        android:strokeColor="#000000" />
+    <path
+        android:pathData="M46.971825 50.344501l8.450698 -0.140846"
+        android:strokeWidth="1.5"
+        android:strokeColor="#000000" />
 </vector>
