@@ -89,4 +89,10 @@
             </group>
         </menu>
     </item>
+    <item
+        android:visible="false"
+        android:id="@+id/action_actor_search"
+        android:onClick="onActorSearch"
+        android:title="Поиск по актерам"
+        app:showAsAction="never" />
 </menu>

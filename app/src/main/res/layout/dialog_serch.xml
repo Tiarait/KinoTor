@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@android:style/Theme.NoTitleBar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="top|center"
+    android:background="@color/colorPrimaryDark"
+    android:layout_marginTop="50dp"
+    android:padding="8dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top">
+        <EditText
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:minWidth="200dp"
+            android:layout_height="wrap_content"
+            android:hint="Введите актера"
+            android:background="@color/colorPrimaryLight"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:inputType="text"
+            android:textSize="22sp"
+            android:padding="8dp"/>
+        <ImageButton
+            app:srcCompat="@drawable/ic_menu_search"
+            android:id="@+id/b_search"
+            android:focusable="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/item_select"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:padding="8dp">
+        </ImageButton>
+        <Button
+            android:id="@+id/b_cancel"
+            android:focusable="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/item_select"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:padding="8dp"
+            android:text="X"
+            tools:ignore="ButtonStyle">
+        </Button>
+    </LinearLayout>
+
+</LinearLayout>

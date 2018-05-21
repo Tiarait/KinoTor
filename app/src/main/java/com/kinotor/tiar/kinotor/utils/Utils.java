@@ -49,6 +49,26 @@ public class Utils {
         else return 1;
     }
 
+    public boolean trueTitle(String t_m, String t_n) {
+        boolean tit = tit = ("." + t_m + ".").contains("." + t_n + ".") ||
+                ("." + t_m + ",").contains("." + t_n + ",") ||
+                ("." + t_m + " ").contains("." + t_n + " ") ||
+                ("." + t_m + ":").contains("." + t_n + ":") ||
+                ("." + t_m + ";").contains("." + t_n + ";") ||
+                ("(" + t_m + ")").contains("(" + t_n + ")") ||
+                ("." + t_m + " /").contains("." + t_n + " /") ||
+                ("/ " + t_m + ".").contains("/ " + t_n + ".") ||
+                ("." + t_n + ".").contains("." + t_m + ".") ||
+                ("." + t_n + ",").contains("." + t_m + ",") ||
+                ("." + t_n + " ").contains("." + t_m + " ") ||
+                ("." + t_n + ":").contains("." + t_m + ":") ||
+                ("." + t_n + ";").contains("." + t_m + ";") ||
+                ("(" + t_n + ")").contains("(" + t_m + ")") ||
+                ("." + t_n + " /").contains("." + t_m + " /") ||
+                ("/ " + t_n + ".").contains("/ " + t_m + ".");
+        return tit;
+    }
+
     public String replaceTitle(String t) {
         if (t.contains("Гавайи 5.0"))
             return t.replace("5.0", "5-0");
@@ -58,6 +78,8 @@ public class Utils {
             return t.replace("Агенты ЩИТ", "Агенты «Щ.И.Т.»");
         else if (t.contains("Боруто"))
             return "Боруто";
+        else if (t.contains("Древние") && t.contains("/"))
+            return "Древние";
         else return t;
     }
 }

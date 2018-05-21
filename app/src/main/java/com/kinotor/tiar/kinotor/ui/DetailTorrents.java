@@ -34,8 +34,9 @@ import java.util.Set;
 public class DetailTorrents extends Fragment {
     private ItemHtml item;
     private RecyclerView rv;
-
     private LinearLayout pb;
+    private String[] torBaseArr = {"zooqle.com", "underverse.me", "kinozal.tv"};
+    private String torBase = Arrays.toString(torBaseArr);
 
 
     public DetailTorrents() {
@@ -100,16 +101,16 @@ public class DetailTorrents extends Fragment {
             torrent.addHtmlItems(item);
         rv.setAdapter(new AdapterTorrents(getContext(), torrent));
 
-        HashSet<String> def = new HashSet<>(Arrays.asList("zooqle.com", "rutor.info", "rutracker.org",
-                "underverse.me", "kinozal.tv", "freerutor.me"));
+        HashSet<String> def = new HashSet<>(Arrays.asList(torBaseArr));
         Set<String> pref_base = PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getStringSet("base_tparser", def);
+        torBase = pref_base.toString();
         if (pref_base.contains("zooqle.com")) {
             pb.setVisibility(View.VISIBLE);
             Zooqle zooqle = new Zooqle(item, new OnTaskTorrentCallback() {
                 @Override
                 public void OnCompleted(ItemTorrent item) {
-                    itemAddRv(item);
+                    itemAddRv(item, "zooqle.com");
                 }
             });
             zooqle.execute();
@@ -119,7 +120,7 @@ public class DetailTorrents extends Fragment {
             Tparser tparser = new Tparser(item, "rutor.info", new OnTaskTorrentCallback() {
                 @Override
                 public void OnCompleted(ItemTorrent item) {
-                    itemAddRv(item);
+                    itemAddRv(item, "rutor.info");
                 }
             });
             tparser.execute();
@@ -129,7 +130,7 @@ public class DetailTorrents extends Fragment {
             Freerutor freerutor = new Freerutor(item, new OnTaskTorrentCallback() {
                 @Override
                 public void OnCompleted(ItemTorrent item) {
-                    itemAddRv(item);
+                    itemAddRv(item, "freerutor.me");
                 }
             });
             freerutor.execute();
@@ -139,7 +140,7 @@ public class DetailTorrents extends Fragment {
             Tparser tparser = new Tparser(item, "rutracker.org", new OnTaskTorrentCallback() {
                 @Override
                 public void OnCompleted(ItemTorrent item) {
-                    itemAddRv(item);
+                    itemAddRv(item, "rutracker.org");
                 }
             });
             tparser.execute();
@@ -149,7 +150,7 @@ public class DetailTorrents extends Fragment {
             Tparser tparser = new Tparser(item, "underverse.me", new OnTaskTorrentCallback() {
                 @Override
                 public void OnCompleted(ItemTorrent item) {
-                    itemAddRv(item);
+                    itemAddRv(item, "underverse.me");
                 }
             });
             tparser.execute();
@@ -159,7 +160,7 @@ public class DetailTorrents extends Fragment {
             Tparser tparser = new Tparser(item, "kinozal.tv", new OnTaskTorrentCallback() {
                 @Override
                 public void OnCompleted(ItemTorrent item) {
-                    itemAddRv(item);
+                    itemAddRv(item, "kinozal.tv");
                 }
             });
             tparser.execute();
@@ -167,7 +168,13 @@ public class DetailTorrents extends Fragment {
         if (pref_base.isEmpty())
             pb.setVisibility(View.GONE);
     }
-    private void itemAddRv(ItemTorrent items) {
+    private void itemAddRv(ItemTorrent items, String source) {
+        torBase = torBase.replace(source, "");
+        if (torBase.contains("rutor.info") || torBase.contains("zooqle.com") ||
+                torBase.contains("rutracker.org") || torBase.contains("underverse.me")
+                || torBase.contains("kinozal.tv") || torBase.contains("freerutor.me")) {
+            pb.setVisibility(View.VISIBLE);
+        } else pb.setVisibility(View.GONE);
         pb.setVisibility(View.GONE);
         ((AdapterTorrents) rv.getAdapter()).addItems(items);
         rv.getAdapter().notifyDataSetChanged();

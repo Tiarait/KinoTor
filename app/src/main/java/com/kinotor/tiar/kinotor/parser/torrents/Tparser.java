@@ -29,7 +29,7 @@ public class Tparser extends AsyncTask<Void, Void, Void> {
         
         torrent = new ItemTorrent();
         this.title = item.getTitle(0).replaceAll(" ", "%20")
-                .replace(".", "");
+                .replace("\u00a0", "%20").replace(".", "");
     }
 
     @Override
@@ -67,21 +67,27 @@ public class Tparser extends AsyncTask<Void, Void, Void> {
                         String z = aList.split("link':'")[1].split("',")[0]
                                 .contains("kinozal.tv") ? "2" : "1";
                         String link = aList.split("link':'")[1].split("',")[0];
+                        String magnet = "http://tparser.org/magnet.php?t=" + z +
+                                aList.split("img':'")[1].split("',")[0] +
+                                aList.split("d':'")[1].split("',")[0];
                         String content = aList.split("link':'")[1].split("'")[0]
                                 .split("://")[1].split("/")[0];
-                        link = link.contains("fast-tor.net") ? "http://d.rutor.info/download/" +
-                                link.split("torrent/")[1].split("/")[0] : link;
                         String name = aList.split("name':'")[1].split("'")[0];
                         String sid = aList.split("s':'")[1].split("'")[0].trim();
+
+                        if (link.contains("kinozal.tv")) {
+                            link = "https://ndvm3-dot-kzal-tv.appspot.com/download?id=" + link.split("id=")[1].trim();
+                            magnet = link;
+                        } else
+                            link = link.contains("fast-tor.net") ? "http://d.rutor.info/download/" +
+                                link.split("torrent/")[1].split("/")[0] : link;
                         if (item.getType(0).contains("movie") && name.contains(item.getDate(0).trim()) &&
                                 !sid.equals("0") && !sid.equals("1")) {
                             torrent.setTorTitle(name);
                             torrent.setTorUrl(link);
                             torrent.setTorSize(aList.split("size':'")[1].split("'")[0] +
                                     " " + aList.split("t':'")[1].split("',")[0]);
-                            torrent.setTorMagnet("http://tparser.org/magnet.php?t=" + z +
-                                    aList.split("img':'")[1].split("',")[0] +
-                                    aList.split("d':'")[1].split("',")[0]);
+                            torrent.setTorMagnet(magnet);
                             torrent.setTorSid(sid);
                             torrent.setTorLich(aList.split("l':'")[1].split("'")[0]);
                             torrent.setTorContent(content.replace("fast-tor.net", "rutor.info"));

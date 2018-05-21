@@ -1,6 +1,7 @@
 package com.kinotor.tiar.kinotor.ui;
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +36,7 @@ import com.kinotor.tiar.kinotor.R;
 import com.kinotor.tiar.kinotor.items.ItemCatalogUrls;
 import com.kinotor.tiar.kinotor.items.ItemMain;
 import com.kinotor.tiar.kinotor.items.Statics;
+import com.kinotor.tiar.kinotor.ui.dialogs.DialogSearch;
 import com.kinotor.tiar.kinotor.updater.Update;
 import com.kinotor.tiar.kinotor.utils.DBHelper;
 import com.kinotor.tiar.kinotor.utils.Utils;
@@ -318,28 +320,18 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
         MenuItem dbRest = menu.findItem(R.id.action_db_restore);
         MenuItem menuCatalog = menu.findItem(R.id.action_catalog);
         MenuItem menuSortCountry = menu.findItem(R.id.menuSortOrderCountry);
+        MenuItem menuSearchActor = menu.findItem(R.id.action_actor_search);
 
-        if (catalog.equals("amcet")) {
-            menuSort.setVisible(true);
-            amcet.setChecked(true);
-            amcet.setEnabled(false);
-            koshara.setChecked(false);
-        } else {
-            menuSort.setVisible(false);
-            amcet.setChecked(false);
-            koshara.setChecked(true);
-            koshara.setEnabled(false);
-        }
+        menuSort.setVisible(catalog.equals("amcet"));
+        amcet.setChecked(catalog.equals("amcet"));
+        amcet.setEnabled(catalog.equals("amcet"));
+        koshara.setChecked(catalog.equals("amcet"));
 
-        if (subtitle.equals("История") || subtitle.equals("Избранное")) {
-            dbSave.setVisible(true);
-            dbDel.setVisible(true);
-            dbRest.setVisible(true);
-        } else {
-            dbSave.setVisible(false);
-            dbDel.setVisible(false);
-            dbRest.setVisible(false);
-        }
+        dbSave.setVisible(subtitle.equals("История") || subtitle.equals("Избранное"));
+        dbDel.setVisible(subtitle.equals("История") || subtitle.equals("Избранное"));
+        dbRest.setVisible(subtitle.equals("История") || subtitle.equals("Избранное"));
+
+        menuSearchActor.setVisible(ItemMain.cur_url.contains("amcet"));
 
         if (ItemMain.cur_url.contains("coldfilm") || subtitle.equals("Избранное") ||
                 subtitle.equals("История")) {
@@ -469,7 +461,7 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
     }
 
     public void onSortAll(MenuItem item) {
-//        DialogFragment sort = new SortDialog() {
+//        DialogFragment sort = new DialogSort() {
 //            @Override
 //            public void ok(String[] x) {
 //                ItemMain.xs_value = x;
@@ -579,6 +571,28 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
         setupRecyclerView((RecyclerView) recyclerView);
 
         OnPage(ItemMain.cur_url, subtitle);
+    }
+
+    public void onActorSearch(MenuItem item) {
+        DialogFragment search = new DialogSearch() {
+            @Override
+            public void ok(String s) {
+                subtitle = "Поиск: " + s;
+                onAttachedToWindow();
+                ItemMain.cur_items = 0;
+                ItemMain.xs_value = "";
+
+                if (ItemMain.cur_url.contains("amcet"))
+                    ItemMain.cur_url = "https://amcet.net/xfsearch/actors/" + s.replace(" ", "+") + "/";
+
+                MainCatalogFragment fragment = new MainCatalogFragment(ItemMain.cur_url, "ПоискАктер");
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.item_detail_container, fragment)
+                        .commit();
+                setTitle();
+            }
+        };
+        search.show(this.getFragmentManager(), subtitle);
     }
 
     @Override

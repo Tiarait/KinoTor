@@ -23,10 +23,14 @@ import com.kinotor.tiar.kinotor.parser.hdgo.HdgoSeason;
 import com.kinotor.tiar.kinotor.parser.hdgo.HdgoSeries;
 import com.kinotor.tiar.kinotor.parser.hdgo.HdgoUrl;
 import com.kinotor.tiar.kinotor.parser.hdgo.ParserHdgo;
+import com.kinotor.tiar.kinotor.parser.kinosha.KinoshaList;
+import com.kinotor.tiar.kinotor.parser.kinosha.ParserKinosha;
 import com.kinotor.tiar.kinotor.parser.moonwalk.MoonwalkSeason;
 import com.kinotor.tiar.kinotor.parser.moonwalk.MoonwalkSeries;
 import com.kinotor.tiar.kinotor.parser.moonwalk.MoonwalkUrl;
 import com.kinotor.tiar.kinotor.parser.moonwalk.ParserMoonwalk;
+import com.kinotor.tiar.kinotor.parser.onlainfilm.OnlainfilmList;
+import com.kinotor.tiar.kinotor.parser.onlainfilm.ParserOnlainfilm;
 import com.kinotor.tiar.kinotor.parser.trailer.ParserTrailer;
 import com.kinotor.tiar.kinotor.parser.trailer.TrailerUrl;
 import com.kinotor.tiar.kinotor.ui.DetailActivity;
@@ -225,8 +229,28 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
     private void getUrl(final int cur, final boolean play) {
         pb.setVisibility(View.VISIBLE);
         if (items.url.size() > 0) {
-            Log.d(TAG, "getUrl: " + items.getType(cur) + " " + items.getUrl(cur));
-            if (items.getType(cur).contains("moonwalk")) {
+            Log.d(TAG, "getUrl: " + items.getType(cur) + "|" + items.getUrl(cur));
+            if (items.getType(cur).contains("kinosha")) {
+                KinoshaList getMp4 = new KinoshaList(items.getUrl(cur), items.getSeason(cur),
+                        items.getEpisode(cur), new OnTaskUrlCallback() {
+                    @Override
+                    public void OnCompleted(String[] quality, String[] url) {
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
+                                items.getEpisode(cur), play);
+                    }
+                }, true);
+                getMp4.execute();
+            } else if (items.getType(cur).contains("onlainfilm")) {
+                OnlainfilmList getMp4 = new OnlainfilmList(items.getUrl(cur), items.getSeason(cur),
+                        items.getEpisode(cur), new OnTaskUrlCallback() {
+                    @Override
+                    public void OnCompleted(String[] quality, String[] url) {
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
+                                items.getEpisode(cur), play);
+                    }
+                }, true);
+                getMp4.execute();
+            } else if (items.getType(cur).contains("moonwalk")) {
                 MoonwalkUrl getMp4 = new MoonwalkUrl(items.getUrl(cur), new OnTaskUrlCallback() {
                     @Override
                     public void OnCompleted(String[] quality, String[] url) {
@@ -286,6 +310,22 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 }
             });
             getSeason.execute();
+        } else if (items.getType(cur).contains("kinosha")) {
+            KinoshaList getSeason = new KinoshaList(items.getUrl(cur), new OnTaskVideoCallback() {
+                @Override
+                public void OnCompleted(ItemVideo items) {
+                    reload(items);
+                }
+            }, true, items.getTranslator(cur));
+            getSeason.execute();
+        } else if (items.getType(cur).contains("onlainfilm")) {
+            OnlainfilmList getSeason = new OnlainfilmList(items.getUrl(cur), new OnTaskVideoCallback() {
+                @Override
+                public void OnCompleted(ItemVideo items) {
+                    reload(items);
+                }
+            }, true, items.getTranslator(cur));
+            getSeason.execute();
         }
     }
 
@@ -329,6 +369,22 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 }
             });
             getSeries.execute();
+        } else if (items.getType(cur).contains("kinosha")) {
+            KinoshaList getSeason = new KinoshaList(items.getUrl(cur), new OnTaskVideoCallback() {
+                @Override
+                public void OnCompleted(ItemVideo items) {
+                    reload(items);
+                }
+            }, true, items.getTranslator(cur),items.getSeason(cur));
+            getSeason.execute();
+        } else if (items.getType(cur).contains("onlainfilm")) {
+            OnlainfilmList getSeason = new OnlainfilmList(items.getUrl(cur), new OnTaskVideoCallback() {
+                @Override
+                public void OnCompleted(ItemVideo items) {
+                    reload(items);
+                }
+            }, true, items.getTranslator(cur),items.getSeason(cur));
+            getSeason.execute();
         }
     }
 
@@ -338,18 +394,20 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
         Set<String> pref_base = PreferenceManager.getDefaultSharedPreferences(context)
                 .getStringSet("base_video", def);
 
-        ParserTrailer parserTrailer = new ParserTrailer(item, new OnTaskVideoCallback() {
-            @Override
-            public void OnCompleted(ItemVideo items) {
-                update(items);
-            }
-        });
-        parserTrailer.execute();
+        if (pref_base.contains("kinomania")) {
+            ParserTrailer parserTrailer = new ParserTrailer(item, new OnTaskVideoCallback() {
+                @Override
+                public void OnCompleted(ItemVideo items) {
+                    update(items, "kinomania");
+                }
+            });
+            parserTrailer.execute();
+        }
         if (item.getIframe(0).contains("hdgo")){
             HdgoIframe getIframe = new HdgoIframe(item, true, new OnTaskVideoCallback() {
                 @Override
                 public void OnCompleted(ItemVideo items) {
-                    update(items);
+                    update(items, "iframe");
                 }
             });
             getIframe.execute();
@@ -357,7 +415,25 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
             AnimevostSeries getList = new AnimevostSeries(item, true, new OnTaskVideoCallback() {
                 @Override
                 public void OnCompleted(ItemVideo items) {
-                    update(items);
+                    update(items, "animevost");
+                }
+            });
+            getList.execute();
+        }
+        if (pref_base.contains("kinosha")){
+            ParserKinosha getList = new ParserKinosha(item, new OnTaskVideoCallback() {
+                @Override
+                public void OnCompleted(ItemVideo items) {
+                    update(items, "kinosha");
+                }
+            });
+            getList.execute();
+        }
+        if (pref_base.contains("onlainfilm")){
+            ParserOnlainfilm getList = new ParserOnlainfilm(item, new OnTaskVideoCallback() {
+                @Override
+                public void OnCompleted(ItemVideo items) {
+                    update(items, "onlainfilm");
                 }
             });
             getList.execute();
@@ -366,7 +442,7 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
             ParserMoonwalk getList = new ParserMoonwalk(item, new OnTaskVideoCallback() {
                 @Override
                 public void OnCompleted(ItemVideo items) {
-                    update(items);
+                    update(items, "moonwalk");
                 }
             });
             getList.execute();
@@ -375,14 +451,14 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
             ParserHdgo getList = new ParserHdgo(item, new OnTaskVideoCallback() {
                 @Override
                 public void OnCompleted(ItemVideo items) {
-                    update(items);
+                    update(items, "hdgo");
                 }
             });
             getList.execute();
         }
     }
 
-    public abstract void update(ItemVideo items);
+    public abstract void update(ItemVideo items, String source);
     public abstract void reload(ItemVideo items);
     public abstract void play(String[] quality, String[] url, String translator, String s, String e, boolean play);
 

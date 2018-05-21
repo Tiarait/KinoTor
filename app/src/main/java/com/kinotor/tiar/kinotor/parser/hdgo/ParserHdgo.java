@@ -32,6 +32,7 @@ public class ParserHdgo extends AsyncTask<Void, Void, Void> {
         if (itempath.getTitle(0).contains("("))
             search_title = new Utils().replaceTitle(itempath.getTitle(0).split("\\(")[0]);
         else search_title = new Utils().replaceTitle(itempath.getTitle(0));
+        search_title = search_title.trim().replace("\u00a0", " ");
         type = itempath.getType(0);
     }
 
@@ -53,8 +54,11 @@ public class ParserHdgo extends AsyncTask<Void, Void, Void> {
             for (int i = 0; i < array.length; i ++){
                 String title_m = "error", url = "error", season = "error", episode = "error",
                         translator = "error", id = "error", id_trans = "error", type_m = "error";
+                String q = "";
                 if (array[i].contains("title") && !array[i].contains("title\":null"))
                     title_m = array[i].split("title\":\"")[1].split("\"")[0].trim();
+                if (array[i].contains("quality\":") && !array[i].contains("quality\":null"))
+                    q = " (" + array[i].split("quality\":\"")[1].split("\"")[0].trim() + ")";
 
                 String sname = search_title.toLowerCase().replace("ё", "е").replace(".", "-").trim();
                 String stitle = title_m.toLowerCase().replace("ё", "е").replace(".", "-").trim();
@@ -73,7 +77,7 @@ public class ParserHdgo extends AsyncTask<Void, Void, Void> {
                     if (this.type.contains(type_m)) {
                         if (season.equals("error")) items.setTitle("catalog video");
                         else items.setTitle("catalog serial");
-                        items.setType(title_m +"\nhdgo");
+                        items.setType(title_m + q +"\nhdgo");
                         items.setToken(TOKEN);
                         items.setId_trans(id_trans);
                         items.setId(id);
@@ -88,8 +92,8 @@ public class ParserHdgo extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    private Document GetData(String name){
-        name = name.trim().replace(" ", "%20");
+    private Document GetData(String s){
+        String name = s.trim().replace(" ", "%20").replace("\u00a0", "%20");
         final String url = "http://hdgo.cc/api/video.json?token="+ TOKEN +"&title=" + name;
         try {
             Document htmlDoc = Jsoup.connect(url)
@@ -99,7 +103,6 @@ public class ParserHdgo extends AsyncTask<Void, Void, Void> {
             return htmlDoc;
         } catch (Exception e) {
             Log.d(TAG, "GetdataHDGO: connected false to " + url);
-            e.printStackTrace();
             return null;
         }
     }

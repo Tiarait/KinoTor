@@ -39,8 +39,8 @@ public class ParserTrailer extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         getTrailer(getData(
-                item.getSubTitle(0).contains("error") ? item.getTitle(0).trim() :
-                        item.getSubTitle(0).trim()));
+                item.getSubTitle(0).contains("error") ? item.getTitle(0)
+                        .replace("\u00a0", " ").trim() : item.getSubTitle(0).trim()));
         return null;
     }
 
@@ -75,10 +75,13 @@ public class ParserTrailer extends AsyncTask<Void, Void, Void> {
                     curyear = item.getDate(0).trim();
                 else curyear = year;
                 if (item.getUrl(0).contains("coldfilm")) curyear = year;
-//                Log.d(TAG, "ParseTrailer 1: " +subtitle + "|" + year);
-//                Log.d(TAG, "ParseTrailer 2: " +cursubtitle + "|" + curyear);
+                Log.d(TAG, "ParseTrailer 1: " +subtitle + "|" + year);
+                Log.d(TAG, "ParseTrailer 2: " +cursubtitle + "|" + curyear);
 
-                if (curyear.contains(year) && (cursubtitle.contains(subtitle) || cursubtitle.contains(title))) {
+                boolean titsub = (cursubtitle.toLowerCase().contains(subtitle.toLowerCase())) ||
+                        (cursubtitle.toLowerCase().contains(subtitle.toLowerCase()));
+
+                if ((curyear.contains(year) && cursubtitle.contains(title)) || titsub) {
                     items.setTitle("catalog video");
                     items.setType(subtitle.contains("error") ? title : subtitle
                             + " " + year + "\nkinomania");
@@ -96,14 +99,15 @@ public class ParserTrailer extends AsyncTask<Void, Void, Void> {
 
             if (items.translator.size() == 0 && !item.getSubTitle(0).contains("error") && !stop) {
                 stop = true;
-                getTrailer(getData(item.getTitle(0)));
+                getTrailer(getData(item.getTitle(0).replace("\u00a0", " ")));
             }
         }
     }
 
     private Document getData(String title){
         if (title.startsWith("The ")) title = title.replace("The ", "");
-        String url = "http://www.kinomania.ru/search?q=" + title.replace(" ", "%20");
+        String url = "http://www.kinomania.ru/search?q=" + title.replace(" ", "%20")
+                .replace("\u00a0", "%20");
         try {
             Document htmlDoc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")

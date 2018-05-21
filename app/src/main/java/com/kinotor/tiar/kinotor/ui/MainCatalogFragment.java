@@ -116,7 +116,8 @@ public class MainCatalogFragment extends Fragment {
             parserHtml.execute();
         } else if (cur_url.contains("amcet")) {
             ParserAmcet parserAmcet;
-            if (category.contains("Поиск")) url = cur_url + "'page'" + cur_page;
+            if (category.contains("ПоискАктер")) url = cur_url + "page/" + cur_page + "/";
+            else if (category.contains("Поиск")) url = cur_url + "'page'" + cur_page;
             else url = cur_url + "page/" + cur_page + "/";
             parserAmcet = new ParserAmcet(url, itemsCat, itemPathCat,
                         new OnTaskCallback() {

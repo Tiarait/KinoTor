@@ -250,6 +250,9 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                     if (name.contains("СЕЗОН)") || name.contains("сезон)"))
                         name = name.split("\\(")[0];
 
+                    if (quality_t.contains("/"))
+                        quality_t = quality_t.split("/")[1];
+
                     itempath.setUrl(url);
                     itempath.setTitle(name);
                     itempath.setImg(img);

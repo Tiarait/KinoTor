@@ -56,14 +56,14 @@
         <MultiSelectListPreference
             android:title="@string/pref_title_base_video"
             android:entries="@array/pref_list_base_video"
-            android:defaultValue="@array/pref_list_base_video"
+            android:defaultValue="@array/pref_def_base_video"
             android:entryValues="@array/pref_list_base_video"
             android:summary="@string/pref_desc_base_video"
             android:key="base_video" />
         <MultiSelectListPreference
             android:title="@string/pref_title_base_tparser"
             android:entries="@array/pref_list_base_tparser"
-            android:defaultValue="@array/pref_list_base_tparser"
+            android:defaultValue="@array/pref_def_base_tparser"
             android:entryValues="@array/pref_list_base_tparser"
             android:summary="@string/pref_desc_base_tparser"
             android:key="base_tparser" />

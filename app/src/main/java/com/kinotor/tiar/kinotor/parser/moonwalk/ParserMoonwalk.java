@@ -34,6 +34,7 @@ public class ParserMoonwalk extends AsyncTask<Void, Void, Void> {
         if (itempath.getTitle(0).contains("("))
             search_title = new Utils().replaceTitle(itempath.getTitle(0).split("\\(")[0]);
         else search_title = new Utils().replaceTitle(itempath.getTitle(0));
+        search_title = search_title.trim().replace("\u00a0", " ");
         type = itempath.getType(0);
         year = itempath.getDate(0);
     }
@@ -54,9 +55,10 @@ public class ParserMoonwalk extends AsyncTask<Void, Void, Void> {
             if (items == null) items = new ItemVideo();
             String[] array = doc.body().text().split("\\},\\{\"t");
             for (String anArray : array) {
-                String title_m = "error", year_m = "error", year_n = year, url = "error",
+                String title_m = "error", year_m = "error", year_n = year.trim(), url = "error",
                         season = "error", episode = "error", translator = "error",
                         id = "error", id_trans = "error", type_m = "error", title_en = "error";
+                String q = "";
 
                 if (anArray.contains("itle_ru") && !anArray.contains("itle_ru\":null")) {
                     title_m = anArray.split("itle_ru\":\"")[1].split("\"")[0].trim();
@@ -65,6 +67,9 @@ public class ParserMoonwalk extends AsyncTask<Void, Void, Void> {
                     title_en = anArray.split("title_en\":\"")[1].split("\"")[0].trim()
                             .replace("\\u0026", "&");
                 }
+                if (anArray.contains("source_type\":") && !anArray.contains("source_type\":null")) {
+                    q = " (" + anArray.split("source_type\":\"")[1].split("\"")[0].trim() + ")";
+                }
 
                 boolean en_title = false;
                 if (!itempath.getSubTitle(0).equals("error") && !title_en.equals("error")) {
@@ -72,9 +77,7 @@ public class ParserMoonwalk extends AsyncTask<Void, Void, Void> {
                             .replace(".", "-").replace("'", "").trim();
                     String en_this = title_en.toLowerCase().replace("ё", "е")
                             .replace(".", "-").replace("'", "").trim();
-                    if (en_curr.contains(en_this) || en_this.contains(en_curr)) {
-                        en_title = true;
-                    }
+                    en_title = en_curr.contains(en_this) || en_this.contains(en_curr);
                 }
                 if (anArray.contains("year\":") && !anArray.contains("year\":null")) {
                     year_m = anArray.split("year\":")[1].split(",")[0].trim();
@@ -90,16 +93,11 @@ public class ParserMoonwalk extends AsyncTask<Void, Void, Void> {
                         .replace(".", "-").trim();
                 if (year_n.contains("serial")) year_n = year_m;
 
-                Log.d(TAG, "AllList: " + sname + "/" + stitle);
-                Log.d(TAG, "AllList: " + en_title + " " + itempath.getSubTitle(0) + "/" + title_en);
-                Log.d(TAG, "AllList: " + year_n + "/" + year_m);
+                boolean tit = new Utils().trueTitle(sname, stitle);
 
-                boolean tit = (sname + ".").contains(stitle + ".") || (sname + ",").contains(stitle + ",")
-                        || (sname + " ").contains(stitle + " ") || (sname + ":").contains(stitle + ":") ||
-                        (sname + ";").contains(stitle + ";") ||
-                        (stitle + ".").contains(sname + ".") || (stitle + ",").contains(sname + ",")
-                        || (stitle + " ").contains(sname + " ") || (stitle + ":").contains(sname + ":") ||
-                        (stitle + ";").contains(sname + ";");
+                Log.d(TAG, "AllListMoon name: " + tit + " " + sname + "/" + stitle);
+                Log.d(TAG, "AllListMoon eng: " + en_title + " " + itempath.getSubTitle(0) + "/" + title_en);
+                Log.d(TAG, "AllListMoon year: " + year_n + "/" + year_m);
 
                 if (tit && (year_n.trim().equals(year_m.trim()) || en_title)) {
                     if (anArray.contains("kinopoisk_id"))
@@ -141,7 +139,7 @@ public class ParserMoonwalk extends AsyncTask<Void, Void, Void> {
                     if (this.type.contains(type_m)) {
                         if (season.equals("error")) items.setTitle("catalog video");
                         else items.setTitle("catalog serial");
-                        items.setType(title_m + "\nmoonwalk");
+                        items.setType(title_m + q + "\nmoonwalk");
                         items.setToken(TOKEN);
                         items.setId_trans(id_trans);
                         items.setId(id);
@@ -156,16 +154,16 @@ public class ParserMoonwalk extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    private Document GetData(String name){
-        Log.d(TAG, "GetData: "+ name.trim() +"/"+ itempath.getSubTitle(0) +" "+ year);
-        name = name.trim().replace(" ", "%20");
-        name = name.replaceAll("ё", "е");
-        final String url = "http://moonwalk.cc/api/videos.json?api_token=" + TOKEN + "&title=" + name;
+    private Document GetData(String s){
+        Log.d(TAG, "GetData: "+ s.trim() +"/"+ itempath.getSubTitle(0) +" "+ year);
+        String n = s.trim().replace(" ", "%20").replace("\u00a0", "%20")
+                .replace("ё", "е");
+        String url = "http://moonwalk.cc/api/videos.json?api_token=" + TOKEN + "&title=" + n;
         try {
             Document htmlDoc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
                     .timeout(5000).ignoreContentType(true).referrer("moonwalk.cc").get();
-            Log.d(TAG, "GetdataMoonwalk: get connected to " + url);
+            Log.d(TAG, "GetdataMoonwalk: get connected to " + htmlDoc.location());
             return htmlDoc;
         } catch (Exception e) {
             Log.d(TAG, "GetdataMoonwalk: connected false to " + url);

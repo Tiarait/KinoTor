@@ -61,7 +61,7 @@
                         android:textStyle="bold"
                         android:gravity="right"
                         android:textColor="@color/colorWhite"
-                        android:background="@color/colorRed"
+                        android:background="@color/colorAccentDark"
                         android:textSize="16sp"
                         android:layout_alignRight="@+id/imgPoster_d" />
                     <LinearLayout

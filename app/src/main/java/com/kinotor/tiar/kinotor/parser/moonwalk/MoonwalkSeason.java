@@ -20,8 +20,8 @@ import static android.content.ContentValues.TAG;
 public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
     private String id, id_trans;
     private final String TOKEN = "997e626ac4d9ce453e6c920785db8f45";
-    private OnTaskVideoCallback callback;
     private ItemVideo items;
+    private OnTaskVideoCallback callback;
 
     public MoonwalkSeason(String id, String id_trans, OnTaskVideoCallback callback) {
         this.id = id;
@@ -34,7 +34,8 @@ public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        getSeson(GetData(id, id_trans));
+        if (id.contains("serial\":")) getSeson(id);
+        else parse(GetData(id, id_trans));
         return null;
     }
 
@@ -43,25 +44,29 @@ public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
         callback.OnCompleted(items);
     }
 
-    private void getSeson(Document doc) {
-        if (doc != null) {
-            String[] array = doc.body().text().split(",\"description")[0].split("\\{\"season_");
-            String title = "error", season = "error", episode = "error", translator = "error";
+    private void parse(Document doc) {
+        if (doc != null) getSeson(doc.body().text());
+    }
 
-            title = "back";
-            if (doc.body().text().contains("title_ru\":\""))
-                episode = doc.body().text().split("title_ru\":\"")[1].split("\",")[0];
-            else if (doc.body().text().contains("title_ru\": \""))
-                episode = doc.body().text().split("title_ru\": \"")[1].split("\",")[0];
-            if (doc.body().text().contains("translator\":\""))
-                translator = doc.body().text().split("translator\":\"")[1].split("\",")[0];
-            else if (doc.body().text().contains("translator\": \""))
-                translator = doc.body().text().split("translator\": \"")[1].split("\",")[0];
+    private void getSeson(String doc) {
+        if (doc != null) {
+            String[] array = doc.split(",\"description")[0].split("\\{\"season_");
+            String season = "error", episode = "error", translator = "error";
+
+            if (doc.contains("title_ru\":\""))
+                episode = doc.split("title_ru\":\"")[1].split("\",")[0];
+            else if (doc.contains("title_ru\": \""))
+                episode = doc.split("title_ru\": \"")[1].split("\",")[0];
+            if (doc.contains("translator\":\""))
+                translator = doc.split("translator\":\"")[1].split("\",")[0];
+            else if (doc.contains("translator\": \""))
+                translator = doc.split("translator\": \"")[1].split("\",")[0];
 
             items.setTitle("season back");
             items.setType("moonwalk");
             items.setToken(TOKEN);
-            items.setId(id);
+            items.setId(doc);
+            items.setUrl(doc);
             items.setId_trans(id_trans);
             items.setSeason(season);
             items.setEpisode(episode);
@@ -82,7 +87,8 @@ public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
                 items.setTitle("season");
                 items.setType("moonwalk");
                 items.setToken(TOKEN);
-                items.setId(id);
+                items.setId(doc);
+                items.setUrl(doc);
                 items.setId_trans(id_trans);
                 items.setSeason(season);
                 items.setEpisode(episode);

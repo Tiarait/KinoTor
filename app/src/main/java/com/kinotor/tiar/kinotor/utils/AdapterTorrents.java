@@ -168,7 +168,15 @@ public class AdapterTorrents extends RecyclerView.Adapter<AdapterTorrents.ViewHo
                         }
                     });
                     getTor.execute();
-                }else {
+                } else if (item.getTorUrl(cur).contains("kzal-tv")) {
+                    GetLocation getLocation = new GetLocation(item.getTorUrl(cur), new OnTaskLocationCallback() {
+                        @Override
+                        public void OnCompleted(String location) {
+                            onMagnet(location);
+                        }
+                    });
+                    getLocation.execute();
+                } else {
                     onMagnet(item.getTorUrl(cur));
                 }
             }
@@ -176,49 +184,8 @@ public class AdapterTorrents extends RecyclerView.Adapter<AdapterTorrents.ViewHo
     }
 
     private void startIntent(Uri uri) {
-//            intent.setDataAndType(uri, "application/x-bittorrent");
-//            intent.setDataAndType(uri, "application/*");
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setDataAndType(uri, "application/x-bittorrent");
-
-//        PackageManager packageManager = context.getPackageManager();
-//        List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
-////        List<ApplicationInfo> activities = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-//        Log.d("adaptertorrent", "startIntent: " + uri + " " + activities.size());
-//        if (activities.size() > 0) {
-//            context.startActivity(intent);
-//            List<Intent> targetedShareIntents = new ArrayList<>();
-//            for (ResolveInfo r : activities) {
-//                Intent progIntent = (Intent)intent.clone();
-//                String packageName = r.activityInfo.packageName;
-//                progIntent.setPackage(packageName);
-//                if (packageName.contains("torrent")
-//                        || packageName.contains("mediaget")) {
-//                    targetedShareIntents.add(progIntent);
-//                }
-//            }
-//            if (targetedShareIntents.size() > 0) {
-//                Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0),
-//                        "Открыть с помощью...");
-//                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
-//                        targetedShareIntents.toArray(new Parcelable[] {}));
-//                context.startActivity(chooserIntent);
-//            } else {
-//                intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setDataAndType(uri, "application/*");
-//
-//                packageManager = context.getPackageManager();
-//                activities = packageManager.queryIntentActivities(intent, 0);
-//                if (activities.size() > 0)
-//                    CIntent.createChooser(intent, "Торрент клиент не найден.."));
-//            }
-//        } else {
-//            intent = new Intent(Intent.ACTION_VIEW);
-//            intent.setData(uri);
-//            context.startActivity(intent);
-//        }
         if (uri.toString().contains("magnet") || uri.toString().contains("rutracker") ||
-                uri.toString().contains("underverse") || uri.toString().contains("kinozal")) {
+                uri.toString().contains("underverse") || uri.toString().contains("kzal-tv")) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(uri);
             context.startActivity(intent);
@@ -248,7 +215,7 @@ public class AdapterTorrents extends RecyclerView.Adapter<AdapterTorrents.ViewHo
             });
             getMagnet.execute();
         } else {
-            if (url.contains("tparser")) {
+            if (url.contains("tparser") || url.contains("kzal-tv")) {
                 url = url.replace("'", "").replace("}", "");
                 GetLocation getLocation = new GetLocation(url, new OnTaskLocationCallback() {
                     @Override
@@ -257,7 +224,7 @@ public class AdapterTorrents extends RecyclerView.Adapter<AdapterTorrents.ViewHo
                     }
                 });
                 getLocation.execute();
-            } else if (!url.startsWith("magnet")) {
+            } else if (!url.startsWith("magnet") && !url.contains("kzal-tv")) {
                 FreerutorLocation getLocation = new FreerutorLocation(url, new OnTaskLocationCallback() {
                     @Override
                     public void OnCompleted(String location) {
