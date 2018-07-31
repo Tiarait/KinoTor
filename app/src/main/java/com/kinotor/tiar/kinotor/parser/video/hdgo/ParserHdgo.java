@@ -1,4 +1,4 @@
-package com.kinotor.tiar.kinotor.parser.hdgo;
+package com.kinotor.tiar.kinotor.parser.video.hdgo;
 
 import android.os.AsyncTask;
 import android.util.Log;

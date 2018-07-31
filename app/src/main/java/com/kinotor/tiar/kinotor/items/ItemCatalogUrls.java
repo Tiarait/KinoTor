@@ -5,6 +5,111 @@ package com.kinotor.tiar.kinotor.items;
  */
 
 public class ItemCatalogUrls {
+    private final String[] cKinoFS = {"Новинки",
+            "Фильмы",
+            "Сериалы",
+            "Зарубежные cериалы",
+            "Русские cериалы",
+            "Мультфильмы",
+            "Мультсериалы",
+            "Аниме",
+            "ТВ Передачи",
+            "Фильмы ТОП-100",
+            "Сериалы ТОП-100",
+            "Скоро в кино"};
+    private final String[] cKinoFSUrl = {Statics.KINOFS_URL + "/load/novinki/46",
+            Statics.KINOFS_URL + "/load/1",
+            Statics.KINOFS_URL + "/load/22",
+            Statics.KINOFS_URL + "/load/30",
+            Statics.KINOFS_URL + "/load/29",
+            Statics.KINOFS_URL + "/load/42",
+            Statics.KINOFS_URL + "/load/43",
+            Statics.KINOFS_URL + "/load/49",
+            Statics.KINOFS_URL + "/load/47",
+            Statics.KINOFS_URL + "/top_100_luchshikh_filmov",
+            Statics.KINOFS_URL + "/top_100_luchshikh_serialov",
+            Statics.KINOFS_URL + "/load/48"};
+    private final String[] csKinoFS = {"Зарубежные",
+            "Русские"};
+    private final String[] csKinoFSUrl = {Statics.KINOFS_URL + "/load/30",
+            Statics.KINOFS_URL + "/load/29"};
+    private final String[] cfKinoFS = {"Боевики",
+            "Биография",
+            "Вестерны",
+            "Военные",
+            "Детективы",
+            "Драмы",
+            "Исторические",
+            "Комедии",
+            "Криминальные",
+            "Короткометражка",
+            "Мелодрамы",
+            "Мюзиклы",
+            "Приключения",
+            "Семейные",
+            "Спортивные",
+            "Триллеры",
+            "Ужасы",
+            "Фантастика",
+            "Фэнтези",
+            "Документальные",
+            "Скоровкино"};
+    private final String[] cfKinoFSUrl = {
+            Statics.KINOFS_URL + "/load/2",
+            Statics.KINOFS_URL + "/load/31",
+            Statics.KINOFS_URL + "/load/3",
+            Statics.KINOFS_URL + "/load/4",
+            Statics.KINOFS_URL + "/load/5",
+            Statics.KINOFS_URL + "/load/6",
+            Statics.KINOFS_URL + "/load/7",
+            Statics.KINOFS_URL + "/load/8",
+            Statics.KINOFS_URL + "/load/9",
+            Statics.KINOFS_URL + "/load/44",
+            Statics.KINOFS_URL + "/load/10",
+            Statics.KINOFS_URL + "/load/12",
+            Statics.KINOFS_URL + "/load/13",
+            Statics.KINOFS_URL + "/load/14",
+            Statics.KINOFS_URL + "/load/15",
+            Statics.KINOFS_URL + "/load/16",
+            Statics.KINOFS_URL + "/load/17",
+            Statics.KINOFS_URL + "/load/18",
+            Statics.KINOFS_URL + "/load/19",
+            Statics.KINOFS_URL + "/load/40",
+            Statics.KINOFS_URL + "/load/48"};
+    private final String[] sortKinoFSYear = {"2018",
+            "2017",
+            "2016",
+            "2015",
+            "2014",
+            "2013",
+            "2012",
+            "2011",
+            "2010",
+            "2009",
+            "2008"};
+    private final String[] sortKinoFSYearUrl = {Statics.KINOFS_URL + "/load/72",
+            Statics.KINOFS_URL + "/load/50",
+            Statics.KINOFS_URL + "/load/20",
+            Statics.KINOFS_URL + "/load/21",
+            Statics.KINOFS_URL + "/load/32",
+            Statics.KINOFS_URL + "/load/33",
+            Statics.KINOFS_URL + "/load/34",
+            Statics.KINOFS_URL + "/load/35",
+            Statics.KINOFS_URL + "/load/36",
+            Statics.KINOFS_URL + "/load/37",
+            Statics.KINOFS_URL + "/load/38"};
+    private final String[] sortKinoFS = {"по умолчанию",
+            "по дате",
+            "по алфавиту",
+            "по рейтингу",
+            "по просмотрам",
+            "по комментариям"};
+    private final String[] sortKinoFSID = {"0",
+            "2",
+            "3",
+            "6",
+            "12",
+            "8"};
     private final String[] cKoshara = {"CAMRIP / TS",
             "WEBRIP / WEB-DL",
             "HDRIP / BDRIP",
@@ -460,6 +565,8 @@ public class ItemCatalogUrls {
             return Statics.KOSHARA_URL + "/index.php?do=search&subaction=search&story=%EC%F3%EB%FC%F2%F4%E8%EB%FC%EC";
         if (catalog.equals("amcet"))
             return Statics.AMCET_URL + "/cartoon/";
+        if (catalog.equals("kinofs"))
+            return Statics.KINOFS_URL + "/load/multfilmy/41";
 
         else return null;
     }
@@ -469,6 +576,8 @@ public class ItemCatalogUrls {
             return Statics.KOSHARA_URL + "/nerufilm/";
         if (catalog.equals("amcet"))
             return Statics.AMCET_URL + "/films/";
+        if (catalog.equals("kinofs"))
+            return Statics.KINOFS_URL + "/load/filmy/1";
 
         else return null;
     }
@@ -478,6 +587,8 @@ public class ItemCatalogUrls {
             return Statics.KOSHARA_URL + "/serial/";
         if (catalog.equals("amcet"))
             return Statics.AMCET_URL + "/series/";
+        if (catalog.equals("kinofs"))
+            return Statics.KINOFS_URL + "/load/serialy/22";
         else return null;
     }
 
@@ -486,6 +597,14 @@ public class ItemCatalogUrls {
             return Statics.KOSHARA_URL + "/index.php?do=search&subaction=search&story=%EC%F3%EB%FC%F2%F4%E8%EB%FC%EC";
         if (catalog.equals("amcet"))
             return Statics.AMCET_URL + "/anime/";
+        if (catalog.equals("kinofs"))
+            return Statics.KINOFS_URL + "/load/anime/49";
+        else return null;
+    }
+
+    public String tv(String catalog) {
+        if (catalog.equals("kinofs"))
+            return Statics.KINOFS_URL + "/load/47";
         else return null;
     }
 
@@ -496,6 +615,8 @@ public class ItemCatalogUrls {
             return cAmcet;
         if (catalog.equals("animevost"))
             return cAnimevost;
+        if (catalog.equals("kinofs"))
+            return cKinoFS;
         else return null;
     }
 
@@ -508,6 +629,32 @@ public class ItemCatalogUrls {
             return cAmcetID;
         if (catalog.equals("animevost"))
             return cAnimevostUrl;
+        if (catalog.equals("kinofs"))
+            return cKinoFSUrl;
+        else return null;
+    }
+
+    public String[] getGenreF(String catalog) {
+        if (catalog.equals("kinofs"))
+            return cfKinoFS;
+        else return null;
+    }
+
+    public String[] getGenreFUrl(String catalog) {
+        if (catalog.equals("kinofs"))
+            return cfKinoFSUrl;
+        else return null;
+    }
+
+    public String[] getGenreS(String catalog) {
+        if (catalog.equals("kinofs"))
+            return csKinoFS;
+        else return null;
+    }
+
+    public String[] getGenreSUrl(String catalog) {
+        if (catalog.equals("kinofs"))
+            return csKinoFSUrl;
         else return null;
     }
 
@@ -516,6 +663,8 @@ public class ItemCatalogUrls {
             return sortAmcet;
         if (catalog.equals("animevost"))
             return sortAnivost;
+        if (catalog.equals("kinofs"))
+            return sortKinoFS;
         else return null;
     }
 
@@ -524,6 +673,8 @@ public class ItemCatalogUrls {
             return sortAmcetID;
         if (catalog.equals("animevost"))
             return sortAnivostUrl;
+        if (catalog.equals("kinofs"))
+            return sortKinoFSID;
         else return null;
     }
 
@@ -532,6 +683,14 @@ public class ItemCatalogUrls {
             return sortAmcetYear;
         if (catalog.equals("animevost"))
             return sortAnimevostYear;
+        if (catalog.equals("kinofs"))
+            return sortKinoFSYear;
+        else return null;
+    }
+
+    public String[] getYearURL(String catalog) {
+        if (catalog.equals("kinofs"))
+            return sortKinoFSYearUrl;
         else return null;
     }
 

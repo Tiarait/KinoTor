@@ -3,6 +3,7 @@ package com.kinotor.tiar.kinotor.parser.torrents;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskLocationCallback;
 
 import org.jsoup.Jsoup;
@@ -56,13 +57,14 @@ public class FreerutorUrl  extends AsyncTask<Void, Void, Void> {
     private void getTorrent(Document data) {
         if (data != null) {
             torrent = data.select("a[href^='/engine/download.php']").attr("href");
-            torrent = torrent.startsWith("http://") ? torrent : "http://freerutor.me" + torrent;
+            torrent = torrent.startsWith("http://") ? torrent : Statics.FREERUTOR_URL + torrent;
         }
     }
 
     private Document Getdata(String url) {
         try {
-            Document htmlDoc = Jsoup.connect(url).followRedirects(false).referrer("http://freerutor.me/")
+            Document htmlDoc = Jsoup.connect(url).followRedirects(false).referrer(Statics.FREERUTOR_URL)
+                    .validateTLSCertificates(false)
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
                     .ignoreContentType(true)
                     .get();

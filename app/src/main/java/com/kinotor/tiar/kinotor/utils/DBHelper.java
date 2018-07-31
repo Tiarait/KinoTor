@@ -257,6 +257,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 item.setImg(cursor.getString(imgColIndex));
                 item.setUrl(cursor.getString(linkColIndex));
                 item.setVoice(cursor.getString(voiceColIndex));
+                item.setGenre("error");
+                item.setRating("error");
                 item.setQuality(cursor.getString(qualityColIndex));
                 item.setSeason(Integer.parseInt(cursor.getString(seasonColIndex)));
                 item.setSeries(Integer.parseInt(cursor.getString(seriesColIndex)));

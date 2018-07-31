@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.kinotor.tiar.kinotor.R;
 import com.kinotor.tiar.kinotor.items.ItemTorrent;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.parser.GetLocation;
 import com.kinotor.tiar.kinotor.parser.torrents.FreerutorLocation;
 import com.kinotor.tiar.kinotor.parser.torrents.FreerutorUrl;
@@ -106,32 +107,32 @@ public class AdapterTorrents extends RecyclerView.Adapter<AdapterTorrents.ViewHo
         holder.size.setTextSize(sizetext);
 
 
-        holder.name.setFocusable(true);
+        holder.mView.setFocusable(true);
 //        holder.name.setFocusableInTouchMode(true);
-        holder.name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        holder.mView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!view.isSelected()) {
                     holder.mView.setBackgroundColor(view.getResources().getColor(R.color.colorAccent));
-                    holder.name.setTextColor(view.getResources().getColor(R.color.colorBlack));
-                    holder.desc.setTextColor(view.getResources().getColor(R.color.colorBlack));
-                    holder.size.setTextColor(view.getResources().getColor(R.color.colorBlack));
-                    holder.download.setColorFilter(view.getResources().getColor(R.color.colorBlack));
-                    holder.magnet.setColorFilter(view.getResources().getColor(R.color.colorBlack));
-                    holder.icon.setColorFilter(view.getResources().getColor(R.color.colorBlack));
-                    holder.sid.setTextColor(view.getResources().getColor(R.color.colorBlack));
-                    holder.lich.setTextColor(view.getResources().getColor(R.color.colorBlack));
+                    //holder.name.setTextColor(view.getResources().getColor(R.color.colorBlack));
+                    holder.desc.setTextColor(view.getResources().getColor(R.color.colorWhite));
+                    holder.size.setTextColor(view.getResources().getColor(R.color.colorWhite));
+                    //holder.download.setColorFilter(view.getResources().getColor(R.color.colorBlack));
+                    //holder.magnet.setColorFilter(view.getResources().getColor(R.color.colorBlack));
+                    //holder.icon.setColorFilter(view.getResources().getColor(R.color.colorBlack));
+                    //holder.sid.setTextColor(view.getResources().getColor(R.color.colorBlack));
+                    //holder.lich.setTextColor(view.getResources().getColor(R.color.colorBlack));
                 }
                 else {
                     holder.mView.setBackgroundColor(view.getResources().getColor(R.color.colorPrimaryLight));
-                    holder.name.setTextColor(view.getResources().getColor(R.color.colorWhite));
-                    holder.desc.setTextColor(view.getResources().getColor(R.color.colorWhite));
-                    holder.size.setTextColor(view.getResources().getColor(R.color.colorWhite));
-                    holder.sid.setTextColor(view.getResources().getColor(R.color.colorWhite));
-                    holder.lich.setTextColor(view.getResources().getColor(R.color.colorWhite));
-                    holder.download.clearColorFilter();
-                    holder.magnet.clearColorFilter();
-                    holder.icon.clearColorFilter();
+                    //holder.name.setTextColor(view.getResources().getColor(R.color.colorWhite));
+                    holder.desc.setTextColor(view.getResources().getColor(R.color.colorDarkWhite));
+                    holder.size.setTextColor(view.getResources().getColor(R.color.colorDarkWhite));
+                    //holder.sid.setTextColor(view.getResources().getColor(R.color.colorWhite));
+                    //holder.lich.setTextColor(view.getResources().getColor(R.color.colorWhite));
+                    //holder.download.clearColorFilter();
+                    //holder.magnet.clearColorFilter();
+                    //holder.icon.clearColorFilter();
                 }
                 view.setSelected(b);
             }
@@ -155,12 +156,12 @@ public class AdapterTorrents extends RecyclerView.Adapter<AdapterTorrents.ViewHo
                     context.startActivity(Intent.createChooser(intent, "Скачать с помощью.."));
             }
         });
-        holder.name.setOnClickListener(new View.OnClickListener() {
+        holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("torrent", "onClick: " + item.getTorTitle(0));
                 Log.d("torrent", "onClick: " + item.getTorUrl(0));
-                if (item.getTorUrl(cur).contains("freerutor.me")) {
+                if (item.getTorUrl(cur).contains(Statics.FREERUTOR_URL)) {
                     FreerutorUrl getTor = new FreerutorUrl(item.getTorUrl(cur), "play", new OnTaskLocationCallback() {
                         @Override
                         public void OnCompleted(String location) {
@@ -186,9 +187,17 @@ public class AdapterTorrents extends RecyclerView.Adapter<AdapterTorrents.ViewHo
     private void startIntent(Uri uri) {
         if (uri.toString().contains("magnet") || uri.toString().contains("rutracker") ||
                 uri.toString().contains("underverse") || uri.toString().contains("kzal-tv")) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(uri);
-            context.startActivity(intent);
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(uri);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("", uri.toString());
+                if (clipboard != null) clipboard.setPrimaryClip(clip);
+                Toast.makeText(context, "Не найдено подходящего приложения! Ссылка скопирована",
+                        Toast.LENGTH_LONG).show();
+            }
         } else {
             try {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -206,7 +215,7 @@ public class AdapterTorrents extends RecyclerView.Adapter<AdapterTorrents.ViewHo
         Log.d("adaptertorrent", "ClickMagnet: " + cur);
         String url = item.getTorMagnet(cur).replace("'", "")
                 .replace("}", "");
-        if (url.startsWith("http://freerutor.me/")){
+        if (url.startsWith(Statics.FREERUTOR_URL)){
             FreerutorUrl getMagnet = new FreerutorUrl(url, "magnet", new OnTaskLocationCallback() {
                 @Override
                 public void OnCompleted(String location) {

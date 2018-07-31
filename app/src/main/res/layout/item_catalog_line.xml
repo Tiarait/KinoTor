@@ -40,10 +40,21 @@
                     android:gravity="center_vertical"
                     android:text="@string/loading"
                     android:ellipsize="end"
-                    android:textSize="19sp"
+                    android:textSize="18sp"
                     android:layout_marginLeft="160dp"
                     android:textColor="@color/colorWhite"
                     android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/genre"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/loading"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="160dp"
+                    android:textColor="@color/colorDarkWhite" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,6 +69,7 @@
                     android:paddingRight="2dp"
                     android:paddingLeft="3dp"
                     android:layout_marginLeft="160dp"
+                    android:textSize="15sp"
                     android:lines="1"
                     android:textStyle="bold"
                     android:textColor="@color/colorDarkWhite" />
@@ -69,9 +81,29 @@
                     android:paddingRight="2dp"
                     android:paddingLeft="3dp"
                     android:layout_marginLeft="160dp"
+                    android:textSize="15sp"
                     android:lines="1"
                     android:textStyle="bold"
                     android:textColor="@color/colorDarkWhite" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|left"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loading"
+                    android:paddingRight="2dp"
+                    android:paddingLeft="3dp"
+                    android:layout_marginLeft="160dp"
+                    android:textSize="15sp"
+                    android:lines="1"
+                    android:textStyle="bold"
+                    android:background="@color/colorOrange"
+                    android:textColor="@color/colorPrimaryDark" />
             </LinearLayout>
 
         </RelativeLayout>

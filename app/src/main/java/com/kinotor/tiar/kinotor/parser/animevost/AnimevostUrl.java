@@ -7,6 +7,8 @@ import com.kinotor.tiar.kinotor.utils.OnTaskUrlCallback;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
@@ -91,8 +93,22 @@ public class AnimevostUrl extends AsyncTask<Void, Void, Void> {
                     u.add(url1);
                 }
             }
-        }  else {
-            Log.d(TAG, "ParseHdgoMp4: видео недоступно");
+        } else if (doc.body().html().contains("knpki")){
+            Log.d(TAG, "ParseAVMp4: видео недоступно");
+            Elements allLink = doc.select("a");
+            for (Element link : allLink) {
+                if (link.attr("href").endsWith(".mp4")){
+                    if (link.attr("href").contains("/720/")){
+                        q.add("720 (mp4)");
+                        u.add(link.attr("href"));
+                    } else {
+                        q.add("480 (mp4)");
+                        u.add(link.attr("href"));
+                    }
+                }
+            }
+        } else {
+            Log.d(TAG, "ParseAVMp4: видео недоступно");
             q.add("видео недоступно");
             u.add("error");
         }

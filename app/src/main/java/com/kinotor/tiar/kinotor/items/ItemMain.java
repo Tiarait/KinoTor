@@ -24,7 +24,7 @@ public class ItemMain {
     public static class Item {
         public final int id;
         public final String name;
-        public final String details;
+        final String details;
 
         public Item(int id, String name, String details) {
             this.id = id;

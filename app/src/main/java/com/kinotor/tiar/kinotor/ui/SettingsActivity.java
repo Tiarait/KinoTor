@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.kinotor.tiar.kinotor.R;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.updater.Update;
 import com.kinotor.tiar.kinotor.utils.AppCompatPreferenceActivity;
 
@@ -119,6 +120,24 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+            final Preference btn_pb24 = findPreference("pb24");
+            btn_pb24.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    copiedText(String.valueOf(btn_pb24.getTitle()));
+                    return true;
+                }
+            });
+
+            final Preference btn_qiwi = findPreference("qiwi");
+            btn_qiwi.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    copiedText(String.valueOf(btn_qiwi.getTitle()));
+                    return true;
+                }
+            });
+
             final Preference btn_wmr = findPreference("wmr");
             btn_wmr.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -206,14 +225,27 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             setHasOptionsMenu(true);
 
             SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            EditTextPreference kosharaUrl = (EditTextPreference) findPreference("koshara_url");
-            kosharaUrl.setSummary("http://koshara." + preference.getString("koshara_url", "co"));
-            EditTextPreference coldfilmUrl = (EditTextPreference) findPreference("coldfilm_url");
-            coldfilmUrl.setSummary("http://coldfilm." + preference.getString("coldfilm_url", "info"));
-            EditTextPreference animevostUrl = (EditTextPreference) findPreference("animevost_url");
-            animevostUrl.setSummary("http://animevost." + preference.getString("animevost_url", "org"));
-            EditTextPreference amcetUrl = (EditTextPreference) findPreference("amcet_url");
-            amcetUrl.setSummary("https://amcet." + preference.getString("amcet_url", "net"));
+
+            EditTextPreference kosharaUrl = (EditTextPreference) findPreference("koshara_furl");
+            kosharaUrl.setSummary(preference.getString("koshara_furl", Statics.KOSHARA_URL));
+            EditTextPreference coldfilmUrl = (EditTextPreference) findPreference("coldfilm_furl");
+            coldfilmUrl.setSummary(preference.getString("coldfilm_furl", Statics.COLDFILM_URL));
+            EditTextPreference animevostUrl = (EditTextPreference) findPreference("animevost_furl");
+            animevostUrl.setSummary(preference.getString("animevost_furl", Statics.ANIMEVOST_URL));
+            EditTextPreference amcetUrl = (EditTextPreference) findPreference("amcet_furl");
+            amcetUrl.setSummary(preference.getString("amcet_furl", Statics.AMCET_URL));
+            EditTextPreference kinofsUrl = (EditTextPreference) findPreference("kinofs_furl");
+            kinofsUrl.setSummary(preference.getString("kinofs_furl", Statics.KINOFS_URL));
+
+            EditTextPreference kinoshaUrl = (EditTextPreference) findPreference("kinosha_furl");
+            kinoshaUrl.setSummary(preference.getString("kinosha_furl", Statics.KINOSHA_URL));
+            EditTextPreference kinomaniaUrl = (EditTextPreference) findPreference("kinomania_furl");
+            kinomaniaUrl.setSummary(preference.getString("kinomania_furl", Statics.KINOMANIA_URL));
+
+            EditTextPreference freerutorUrl = (EditTextPreference) findPreference("freerutor_furl");
+            freerutorUrl.setSummary(preference.getString("freerutor_furl", Statics.FREERUTOR_URL));
+            EditTextPreference zooqleUrl = (EditTextPreference) findPreference("zooqle_furl");
+            zooqleUrl.setSummary(preference.getString("zooqle_furl", Statics.ZOOQLE_URL));
         }
 
         @Override

@@ -4,19 +4,53 @@
         android:title="Каталоги">
         <EditTextPreference
             android:title="Coldfilm"
-            android:key="coldfilm_url"
-            android:defaultValue="info"/>
+            android:key="coldfilm_furl"
+            android:defaultValue="http://coldfilm.cc"/>
         <EditTextPreference
             android:title="Animevost"
-            android:key="animevost_url"
-            android:defaultValue="org"/>
+            android:key="animevost_furl"
+            android:defaultValue="http://animevost.org"/>
         <EditTextPreference
             android:title="Amcet"
-            android:key="amcet_url"
-            android:defaultValue="net"/>
+            android:key="amcet_furl"
+            android:defaultValue="https://amcet.net"/>
         <EditTextPreference
             android:title="Koshara"
-            android:key="koshara_url"
-            android:defaultValue="co"/>
+            android:key="koshara_furl"
+            android:defaultValue="http://koshara.net"/>
+        <EditTextPreference
+            android:title="KinoFS"
+            android:key="kinofs_furl"
+            android:defaultValue="http://kino-fs.ucoz.net"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Видео">
+        <ListPreference
+            android:title="@string/pref_title_moonwalk"
+            android:entries="@array/pref_list_moonwalk"
+            android:entryValues="@array/pref_values_moonwalk"
+            android:key="moonwalk_furl"
+            android:defaultValue="http://smartportaltv.ru/20/4.php?url="
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <EditTextPreference
+            android:title="Kinosha"
+            android:key="kinosha_furl"
+            android:defaultValue="http://kinosha.su"/>
+        <EditTextPreference
+            android:title="Kinomania"
+            android:key="kinomania_furl"
+            android:defaultValue="http://www.kinomania.ru"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Торренты">
+        <EditTextPreference
+            android:title="Freerutor"
+            android:key="freerutor_furl"
+            android:defaultValue="https://kinopad.club"/>
+        <EditTextPreference
+            android:title="Zooqle"
+            android:key="zooqle_furl"
+            android:defaultValue="https://zooqle.unblocked.vet"/>
     </PreferenceCategory>
 </PreferenceScreen>

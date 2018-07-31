@@ -1,8 +1,10 @@
 package com.kinotor.tiar.kinotor.ui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,8 +17,11 @@ import android.widget.Toast;
 
 import com.kinotor.tiar.kinotor.R;
 import com.kinotor.tiar.kinotor.items.ItemHtml;
+import com.kinotor.tiar.kinotor.items.ItemMain;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.parser.ParserAmcet;
 import com.kinotor.tiar.kinotor.parser.ParserHtml;
+import com.kinotor.tiar.kinotor.parser.ParserKinoFS;
 import com.kinotor.tiar.kinotor.parser.animevost.ParserAnimevost;
 import com.kinotor.tiar.kinotor.utils.AdapterCatalog;
 import com.kinotor.tiar.kinotor.utils.OnTaskCallback;
@@ -28,7 +33,7 @@ import static android.content.ContentValues.TAG;
 import static com.kinotor.tiar.kinotor.items.ItemMain.cur_url;
 
 public class MainCatalogFragment extends Fragment {
-    private String url = "null";
+    private String curl = "null";
     private String category = "фильмы";
     RecyclerView rv_catalog;
     private RelativeLayout pb;
@@ -40,7 +45,7 @@ public class MainCatalogFragment extends Fragment {
     }
 
     public MainCatalogFragment(String url, String category) {
-        this.url = url;
+        this.curl = url;
         this.category = category;
     }
 
@@ -68,7 +73,9 @@ public class MainCatalogFragment extends Fragment {
                 dB = "catalog";
                 break;
         }
-        rv_catalog.setLayoutManager(new GridLayoutManager(context, new Utils().calculateGrid(getContext(), 175)));
+
+        rv_catalog.setLayoutManager(new GridLayoutManager(context,
+                new Utils().calculateGrid(getContext())));
         AdapterCatalog adapter = new AdapterCatalog(context, dB) {
             @Override
             public void load() {
@@ -81,7 +88,7 @@ public class MainCatalogFragment extends Fragment {
         };
         rv_catalog.setAdapter(adapter);
 
-        if (dB.equals("catalog") && !url.equals("null")) {
+        if (dB.equals("catalog") && !curl.equals("null")) {
             onPage(context);
         }
         return rootView;
@@ -91,7 +98,7 @@ public class MainCatalogFragment extends Fragment {
         ParserHtml parserHtml;
         String url;
         pb.setVisibility(View.VISIBLE);
-        if (cur_url.contains("koshara")) {
+        if (Statics.CATALOG.contains("koshara")) {
             if (category.equals("Мультфильмы")) url = cur_url + "&search_start=" + cur_page;
             else if (category.contains("Поиск")) url = cur_url + "&search_start=" + cur_page + "/";
             else url = cur_url + "page/" + cur_page + "/";
@@ -103,7 +110,7 @@ public class MainCatalogFragment extends Fragment {
                         }
                     });
             parserHtml.execute();
-        } else if (cur_url.contains("coldfilm")){
+        } else if (Statics.CATALOG.contains("coldfilm")){
             if (category.contains("Поиск")) url = cur_url + "&m=news&t=0&p=" + cur_page;
             else url = cur_url + "?page" + cur_page;
             parserHtml = new ParserHtml(url, itemsCat, itemPathCat,
@@ -114,11 +121,11 @@ public class MainCatalogFragment extends Fragment {
                         }
                     });
             parserHtml.execute();
-        } else if (cur_url.contains("amcet")) {
+        } else if (Statics.CATALOG.contains("amcet")) {
             ParserAmcet parserAmcet;
-            if (category.contains("ПоискАктер")) url = cur_url + "page/" + cur_page + "/";
-            else if (category.contains("Поиск")) url = cur_url + "'page'" + cur_page;
-            else url = cur_url + "page/" + cur_page + "/";
+            if (category.contains("ПоискАктер")) url = curl + "page/" + cur_page + "/";
+            else if (category.contains("Поиск")) url = curl + "&search_start=" + cur_page;
+            else url = curl + "page/" + cur_page + "/";
             parserAmcet = new ParserAmcet(url, itemsCat, itemPathCat,
                         new OnTaskCallback() {
                             @Override
@@ -127,7 +134,7 @@ public class MainCatalogFragment extends Fragment {
                             }
                         });
             parserAmcet.execute();
-        } else if (cur_url.contains("animevost")){
+        } else if (Statics.CATALOG.contains("animevost")){
             ParserAnimevost parserAnimevost;
             if (category.contains("Поиск")) url = cur_url + "'page'" + cur_page;
             else url = cur_url + "page/" + cur_page + "/";
@@ -139,25 +146,53 @@ public class MainCatalogFragment extends Fragment {
                         }
                     });
             parserAnimevost.execute();
-        }
+        } else if (Statics.CATALOG.contains("kinofs")) {
+            ParserKinoFS parserKinoFS;
+            if (curl.contains("top_100") && cur_page == 1) url = curl;
+            else url = curl + "-" + cur_page;
 
-        Toast.makeText(context,
-                "стр. " + String.valueOf(cur_page),
-                Toast.LENGTH_SHORT).show();
+            if (!ItemMain.xs_value.equals("") && !ItemMain.xs_value.equals("0"))
+                url = url +"-" + ItemMain.xs_value.trim();
+            parserKinoFS = new ParserKinoFS(url, itemsCat, itemPathCat,
+                    new OnTaskCallback() {
+                        @Override
+                        public void OnCompleted(ArrayList<ItemHtml> items, ItemHtml itempath) {
+                            updateRv(items, itempath);
+                        }
+                    });
+            parserKinoFS.execute();
+        }
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
+        if (preference.getBoolean("show_pages", false)) {
+            Toast.makeText(context,
+                    "стр. " + String.valueOf(cur_page),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateRv(ArrayList<ItemHtml> items, ItemHtml itempath) {
         pb.setVisibility(View.GONE);
         itemPathCat = itempath;
         itemsCat = items;
-        ((AdapterCatalog) rv_catalog.getAdapter()).setHtmlItems(items);
-        rv_catalog.getRecycledViewPool().clear();
-        rv_catalog.getAdapter().notifyItemChanged(0);
+        if (category.contains("Поиск") ||
+                (!ItemMain.xs_value.equals("") && !ItemMain.xs_value.equals("0"))) {
+            if (itemsCat != Statics.itemsPrevCat) {
+                Statics.itemsPrevCat = itemsCat;
+                ((AdapterCatalog) rv_catalog.getAdapter()).setHtmlItems(items);
+                rv_catalog.getRecycledViewPool().clear();
+                rv_catalog.getAdapter().notifyItemChanged(0);
+            }
+        } else {
+            Statics.itemsPrevCat = itemsCat;
+            ((AdapterCatalog) rv_catalog.getAdapter()).setHtmlItems(items);
+            rv_catalog.getRecycledViewPool().clear();
+            rv_catalog.getAdapter().notifyItemChanged(0);
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        rv_catalog.setLayoutManager(new GridLayoutManager(getContext(), new Utils().calculateGrid(getContext(), 175)));
+        rv_catalog.setLayoutManager(new GridLayoutManager(getContext(), new Utils().calculateGrid(getContext())));
     }
 }

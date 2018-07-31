@@ -1,4 +1,4 @@
-package com.kinotor.tiar.kinotor.parser.moonwalk;
+package com.kinotor.tiar.kinotor.parser.video.moonwalk;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -17,26 +17,19 @@ import static android.content.ContentValues.TAG;
  * Created by Tiar on 02.2018.
  */
 
-public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
-    private String id, id_trans;
+public class MoonwalkSeries extends AsyncTask<Void, Void, Void> {
+    private String id, id_trans, cur_season;
     private final String TOKEN = "997e626ac4d9ce453e6c920785db8f45";
     private ItemVideo items;
     private OnTaskVideoCallback callback;
 
-    public MoonwalkSeason(String id, String id_trans, OnTaskVideoCallback callback) {
+    public MoonwalkSeries(String id, String id_trans, String season, OnTaskVideoCallback callback) {
         this.id = id;
+        this.cur_season = season;
         this.id_trans = id_trans;
         this.callback = callback;
 
         items = new ItemVideo();
-    }
-
-
-    @Override
-    protected Void doInBackground(Void... voids) {
-        if (id.contains("serial\":")) getSeson(id);
-        else parse(GetData(id, id_trans));
-        return null;
     }
 
     @Override
@@ -44,14 +37,22 @@ public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
         callback.OnCompleted(items);
     }
 
-    private void parse(Document doc) {
-        if (doc != null) getSeson(doc.body().text());
+    @Override
+    protected Void doInBackground(Void... voids) {
+        if (id.contains("serial\":")) getSeries(id);
+        else parse(GetData(id, id_trans));
+        return null;
     }
 
-    private void getSeson(String doc) {
+    private void parse(Document doc) {
+        if (doc != null) getSeries(doc.body().text());
+    }
+
+    private void getSeries(String doc) {
         if (doc != null) {
-            String[] array = doc.split(",\"description")[0].split("\\{\"season_");
-            String season = "error", episode = "error", translator = "error";
+            String episode = "error", translator = "error", url = "error";
+
+            int cur_s = Integer.parseInt(cur_season.trim());
 
             if (doc.contains("title_ru\":\""))
                 episode = doc.split("title_ru\":\"")[1].split("\",")[0];
@@ -61,37 +62,51 @@ public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
                 translator = doc.split("translator\":\"")[1].split("\",")[0];
             else if (doc.contains("translator\": \""))
                 translator = doc.split("translator\": \"")[1].split("\",")[0];
-
-            items.setTitle("season back");
+            items.setTitle("series back");
             items.setType("moonwalk");
             items.setToken(TOKEN);
-            items.setId(doc);
-            items.setUrl(doc);
             items.setId_trans(id_trans);
-            items.setSeason(season);
-            items.setEpisode(episode);
+            items.setId(doc);
+            items.setSeason(cur_season);
+            items.setUrl(url);
+            items.setEpisode(episode.replace("[", "").trim());
             items.setTranslator(translator);
 
-            //i = 0 - description season
+            String iframe_url = "error";
+            if (doc.contains("iframe_url\":\""))
+                iframe_url = doc.split("iframe_url\":\"")[1].split("\",")[0];
+
+            String[] array = doc.split("\\{\"season_");
+            //если колво сезонов меньше последнего сезона
             for (int i = 1; i < array.length; i ++){
-                season = array[i].split("number\":")[1].split(",")[0].trim();
-                if (array[i].contains("episodes_count"))
-                    episode = array[i].split("episodes_count\":")[1].split(",")[0].trim();
-                if (array[i].contains("episodes\":[0")) {
-                    try{
-                        episode = Integer.parseInt(episode) - 1 +"";
-                    } catch (Exception o){
-                        episode = episode;
-                    }
-                }
-                items.setTitle("season");
+                String numb = array[i].split("number\":")[1].split(",")[0].trim();
+                if (numb.equals(cur_season))
+                    cur_s = i;
+            }
+            //разные форматы hdgo и moonwalk
+            String series = "";
+            if (array[cur_s].contains("episodes\":["))
+                series = array[cur_s].split("episodes\":\\[")[1].split("\\]")[0];
+            else if (array[cur_s].contains("episodes\": ["))
+                series = array[cur_s].split("episodes\": \\[")[1].split("\\]")[0];
+            String[] series_arr = series.split(",");
+            //построение списка
+            for (int i = 0; i < series_arr.length; i ++){
+                if (array[cur_s].contains("episodes\":[0"))
+                    items.setEpisode(String.valueOf(i));
+                else items.setEpisode(series_arr[i].trim());
+                if (series_arr[i].contains("\""))
+                    series_arr[i] = series_arr[i].replaceAll("\"", "");
+                if (!series_arr[i].contains("http://"))
+                    series_arr[i] = iframe_url + "?episode=" + series_arr[i] + "&season=" + cur_season;
+                url = series_arr[i];
+                items.setTitle("series");
                 items.setType("moonwalk");
                 items.setToken(TOKEN);
-                items.setId(doc);
-                items.setUrl(doc);
                 items.setId_trans(id_trans);
-                items.setSeason(season);
-                items.setEpisode(episode);
+                items.setId(doc);
+                items.setSeason(cur_season);
+                items.setUrl(url);
                 items.setTranslator(translator);
             }
         }

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.kinotor.tiar.kinotor.items.ItemHtml;
 import com.kinotor.tiar.kinotor.items.ItemTorrent;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskTorrentCallback;
 
 import org.jsoup.Jsoup;
@@ -37,7 +38,7 @@ public class Freerutor extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        FreeRutorMe(getData("http://freerutor.me/"));
+        FreeRutorMe(getData(Statics.FREERUTOR_URL + "/?do=search&subaction=search&story=" + item.getTitle(0)));
         return null;
     }
 
@@ -55,7 +56,7 @@ public class Freerutor extends AsyncTask<Void, Void, Void> {
                         String sid = entry.select(".frsl_s").text().trim();
                         Log.d(TAG, "FreeRutorMe: "+ item.getTitle(0) + "|" + name + " " + sid);
                         if (name.toLowerCase().contains(item.getTitle(0).toLowerCase())
-                                && !sid.equals("0") && !sid.equals("1")) {
+                                && !sid.equals("0")) {
                             torrent.setTorTitle(entry.select(".titlelast a").attr("title"));
                             torrent.setTorSize(entry.select(".frs.fr_bor.fr_borleft").text());
                             torrent.setTorSid(sid);
@@ -72,16 +73,14 @@ public class Freerutor extends AsyncTask<Void, Void, Void> {
 
     private Document getData(String url) {
         try {
-            Document htmlDoc = Jsoup.connect(url)
-                        .data("do", "search")
-                        .data("subaction", "search")
-                        .data("story", item.getTitle(0))
-                        .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
-                        .timeout(10000).ignoreContentType(true).post();
-            Log.d(TAG, "Getdata: FreeRutorMe " + url + " | " + item.getTitle(0));
+            Document htmlDoc = Jsoup.connect(url.replace(" ", "%20"))
+                    .validateTLSCertificates(false)
+                    .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
+                    .timeout(10000).ignoreContentType(true).get();
+            Log.d(TAG, "Getdata: FreeRutorMe " + url);
             return htmlDoc;
         } catch (Exception e) {
-            Log.d(TAG, "Getdata: FreeRutorMe error " + url + " | " + item.getTitle(0));
+            Log.d(TAG, "Getdata: FreeRutorMe error " + url);
             e.printStackTrace();
             return null;
         }

@@ -1,13 +1,16 @@
-package com.kinotor.tiar.kinotor.parser.moonwalk;
+package com.kinotor.tiar.kinotor.parser.video.moonwalk;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskUrlCallback;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
@@ -34,7 +37,7 @@ public class MoonwalkUrl extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        getHtml(GetData(url + "&type=mp4"));
+        getHtml(GetData(url));
         return null;
     }
 
@@ -95,7 +98,9 @@ public class MoonwalkUrl extends AsyncTask<Void, Void, Void> {
 
     private Document GetData(String url){
         try {
-            Document htmlDoc = Jsoup.connect("http://smartportaltv.ru/20/4.php?url=" + checkUrl(url))
+            //http://wonky.lostcut.net/moonwalk.php?url=
+            //http://smartportaltv.ru/20/4.php?url=
+            Document htmlDoc = Jsoup.connect(Statics.MOONWALK_URL + checkUrl(url) + "&type=mp4")
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
                     .referrer("http://moonwalk.cc")
                     .timeout(5000).ignoreContentType(true).get();
@@ -111,6 +116,12 @@ public class MoonwalkUrl extends AsyncTask<Void, Void, Void> {
     private String checkUrl(String url) {
         url = url.replaceAll("\"", "");
         if (!url.contains("http://")) url = url.contains("//")?"http:" + url:"http://" + url;
-        return url;
+        try {
+            return URLEncoder.encode(url, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return url.replace(":", "%3A").replace(":", "%2F")
+                    .replace("?", "%3F").replace("=", "%3D")
+                    .replace("&", "%26");
+        }
     }
 }

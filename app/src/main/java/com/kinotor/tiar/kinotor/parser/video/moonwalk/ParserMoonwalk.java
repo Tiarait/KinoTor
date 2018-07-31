@@ -1,4 +1,4 @@
-package com.kinotor.tiar.kinotor.parser.moonwalk;
+package com.kinotor.tiar.kinotor.parser.video.moonwalk;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -128,24 +128,25 @@ public class ParserMoonwalk extends AsyncTask<Void, Void, Void> {
 
                     if (anArray.contains("category\":\"anime") && itempath.getType(0).contains("anime"))
                         type_m = this.type;
-                    if (anArray.contains("category\":\"anime") && !itempath.getType(0).contains("anime"))
-                        type_m = "error";
 
                     if (anArray.contains("iframe_url"))
                         url = anArray.split("iframe_url\":\"")[1].split("\"")[0];
 
+                    String y = year_m;
 
                     Log.d(TAG, "AllList: " + this.type + "/" + type_m);
+                    if (tit && en_title && year_n.equals(year_m))
+                        this.type = type_m;
                     if (this.type.contains(type_m)) {
                         if (season.equals("error")) items.setTitle("catalog video");
                         else items.setTitle("catalog serial");
-                        items.setType(title_m + q + "\nmoonwalk");
+                        items.setType(title_m + " " + y + q + "\nmoonwalk");
                         items.setToken(TOKEN);
                         items.setId_trans(id_trans);
                         items.setId(id);
                         items.setUrl(url);
-                        items.setSeason(season);
-                        items.setEpisode(episode);
+                        items.setSeason(season.replace("[", "").trim());
+                        items.setEpisode(episode.replace("[", "").trim());
                         items.setTranslator(translator);
                         Log.d("AllList", "Moonwalk: " + translator + " add " + year_m);
                     }

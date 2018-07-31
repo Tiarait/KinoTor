@@ -21,6 +21,11 @@
                 android:checkable="true"
                 android:checked="true"
                 android:title="Аниме" />
+            <item
+                android:id="@+id/tv"
+                android:checkable="true"
+                android:checked="true"
+                android:title="ТВ Передачи" />
         </menu>
     </item>
     <item

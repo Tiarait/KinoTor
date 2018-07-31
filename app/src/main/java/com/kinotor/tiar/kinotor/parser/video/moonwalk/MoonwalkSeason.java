@@ -1,4 +1,4 @@
-package com.kinotor.tiar.kinotor.parser.moonwalk;
+package com.kinotor.tiar.kinotor.parser.video.moonwalk;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -17,19 +17,26 @@ import static android.content.ContentValues.TAG;
  * Created by Tiar on 02.2018.
  */
 
-public class MoonwalkSeries extends AsyncTask<Void, Void, Void> {
-    private String id, id_trans, cur_season;
+public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
+    private String id, id_trans;
     private final String TOKEN = "997e626ac4d9ce453e6c920785db8f45";
     private ItemVideo items;
     private OnTaskVideoCallback callback;
 
-    public MoonwalkSeries(String id, String id_trans, String season, OnTaskVideoCallback callback) {
+    public MoonwalkSeason(String id, String id_trans, OnTaskVideoCallback callback) {
         this.id = id;
-        this.cur_season = season;
         this.id_trans = id_trans;
         this.callback = callback;
 
         items = new ItemVideo();
+    }
+
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+        if (id.contains("serial\":")) getSeson(id);
+        else parse(GetData(id, id_trans));
+        return null;
     }
 
     @Override
@@ -37,22 +44,14 @@ public class MoonwalkSeries extends AsyncTask<Void, Void, Void> {
         callback.OnCompleted(items);
     }
 
-    @Override
-    protected Void doInBackground(Void... voids) {
-        if (id.contains("serial\":")) getSeries(id);
-        else parse(GetData(id, id_trans));
-        return null;
-    }
-
     private void parse(Document doc) {
-        if (doc != null) getSeries(doc.body().text());
+        if (doc != null) getSeson(doc.body().text());
     }
 
-    private void getSeries(String doc) {
+    private void getSeson(String doc) {
         if (doc != null) {
-            String episode = "error", translator = "error", url = "error";
-
-            int cur_s = Integer.parseInt(cur_season.trim());
+            String[] array = doc.split(",\"description")[0].split("\\{\"season_");
+            String season = "error", episode = "error", translator = "error";
 
             if (doc.contains("title_ru\":\""))
                 episode = doc.split("title_ru\":\"")[1].split("\",")[0];
@@ -62,52 +61,40 @@ public class MoonwalkSeries extends AsyncTask<Void, Void, Void> {
                 translator = doc.split("translator\":\"")[1].split("\",")[0];
             else if (doc.contains("translator\": \""))
                 translator = doc.split("translator\": \"")[1].split("\",")[0];
-            items.setTitle("series back");
+
+            items.setTitle("season back");
             items.setType("moonwalk");
             items.setToken(TOKEN);
+            items.setId(doc.trim());
+            items.setUrl(doc.trim());
             items.setId_trans(id_trans);
-            items.setId(doc);
-            items.setSeason(cur_season);
-            items.setUrl(url);
-            items.setEpisode(episode);
-            items.setTranslator(translator);
+            items.setSeason(season.replace("[", "").trim());
+            items.setEpisode(episode.replace("[", "").trim());
+            items.setTranslator(translator.trim());
 
-            String iframe_url = "error";
-            if (doc.contains("iframe_url\":\""))
-                iframe_url = doc.split("iframe_url\":\"")[1].split("\",")[0];
-
-            String[] array = doc.split("\\{\"season_");
-            //если колво сезонов меньше последнего сезона
+            //i = 0 - description season
             for (int i = 1; i < array.length; i ++){
-                String numb = array[i].split("number\":")[1].split(",")[0].trim();
-                if (numb.equals(cur_season))
-                    cur_s = i;
-            }
-            //разные форматы hdgo и moonwalk
-            String series = "";
-            if (array[cur_s].contains("episodes\":["))
-                series = array[cur_s].split("episodes\":\\[")[1].split("\\]")[0];
-            else if (array[cur_s].contains("episodes\": ["))
-                series = array[cur_s].split("episodes\": \\[")[1].split("\\]")[0];
-            String[] series_arr = series.split(",");
-            //построение списка
-            for (int i = 0; i < series_arr.length; i ++){
-                if (series_arr[i].contains("\""))
-                    series_arr[i] = series_arr[i].replaceAll("\"", "");
-                if (!series_arr[i].contains("http://"))
-                    series_arr[i] = iframe_url + "?episode=" + series_arr[i] + "&season=" + cur_season;
-                url = series_arr[i];
-                items.setTitle("series");
+                season = array[i].split("number\":")[1].split(",")[0].trim();
+                if (array[i].contains("episodes_count"))
+                    episode = array[i].split("episodes_count\":")[1].split(",")[0].trim();
+                if (array[i].contains("episodes\":")) {
+                    episode = array[i].split("episodes\":")[1].split("\\]")[0];
+                    episode = episode.split(",")[episode.split(",").length - 1].trim();
+                }
+                if (array[i].contains("episodes\":[0")) {
+                    try{
+                        episode = Integer.parseInt(episode) - 1 +"";
+                    } catch (Exception ignored){}
+                }
+                items.setTitle("season");
                 items.setType("moonwalk");
                 items.setToken(TOKEN);
+                items.setId(doc.trim());
+                items.setUrl(doc.trim());
                 items.setId_trans(id_trans);
-                items.setId(doc);
-                items.setSeason(cur_season);
-                items.setUrl(url);
-                if (array[cur_s].contains("episodes\":[0"))
-                    items.setEpisode(String.valueOf(i));
-                else items.setEpisode(String.valueOf(i + 1));
-                items.setTranslator(translator);
+                items.setSeason(season.replace("[", "").trim());
+                items.setEpisode(episode.replace("[", "").trim());
+                items.setTranslator(translator.trim());
             }
         }
     }

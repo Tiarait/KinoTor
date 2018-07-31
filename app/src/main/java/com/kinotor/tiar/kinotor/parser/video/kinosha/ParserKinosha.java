@@ -1,10 +1,11 @@
-package com.kinotor.tiar.kinotor.parser.kinosha;
+package com.kinotor.tiar.kinotor.parser.video.kinosha;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.kinotor.tiar.kinotor.items.ItemHtml;
 import com.kinotor.tiar.kinotor.items.ItemVideo;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskVideoCallback;
 import com.kinotor.tiar.kinotor.utils.Utils;
 
@@ -48,17 +49,22 @@ public class ParserKinosha extends AsyncTask<Void, Void, Void> {
 
     private void ParseHtml(Document data) {
         if (data != null) {
-            String title_m = "error", url = "error", season = "error", episode = "error",
-                    translator = "error", id = "error", id_trans = "error", type_m = "error";
             if (data.html().contains("id=\"dle-content\"")) {
                 Elements allEntries = data.select(".item");
                 for (Element entry : allEntries) {
+                    String title_m = "error", url = "error", season = "error", episode = "error",
+                            translator = "error", id = "error", year = "", type_m = "error";
+
                     if (entry.html().contains("class=\"title\"")) {
                         title_m = entry.select(".title").first().text().trim();
-                        if (title_m.contains(" ("))
+                        if (title_m.contains(" (")) {
+                            year = title_m.split(" \\(")[1].split("\\)")[0].trim();
                             title_m = title_m.split(" \\(")[0].trim();
+                        }
                         url = entry.select(".title").first().attr("href");
-                        id = url.split("su/")[1].split("-")[0];
+                        if (url.contains("/") && url.contains("-"))
+                            id = url.split("/")[url.split("/").length-1].split("-")[0];
+                        else id = "0";
                     }
                     if (entry.html().contains("class=\"serial-info\"")) {
                         season = entry.select(".se").text().split(" ")[0];
@@ -84,7 +90,7 @@ public class ParserKinosha extends AsyncTask<Void, Void, Void> {
                     if (this.type.contains(type_m) && tit) {
                         if (type_m.equals("movie")) items.setTitle("catalog video");
                         else items.setTitle("catalog serial");
-                        items.setType(title_m + q + "\nkinosha");
+                        items.setType(title_m + " " + year + q + "\nkinosha");
                         items.setToken("");
                         items.setId_trans("");
                         items.setId(id);
@@ -104,7 +110,7 @@ public class ParserKinosha extends AsyncTask<Void, Void, Void> {
         String n = s.trim().replace("\u00a0", "%20").trim();
         n = n.trim().replace(" ", "%20");
 
-        String url = "http://kinosha.su/search/f:" + n;
+        String url = Statics.KINOSHA_URL + "/search/f:" + n;
         try {
             Document htmlDoc = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")

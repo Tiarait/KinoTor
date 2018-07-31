@@ -78,7 +78,8 @@ public class AnimevostSeries extends AsyncTask<Void, Void, Void> {
                 if (item.season.size() > 0)
                     items.setSeason(String.valueOf(item.getSeason(0)));
                 else items.setSeason("0");
-                items.setEpisode(series[i].contains(" ") ? series[i].split(" ")[0] : series[i].split(":")[0]);
+                items.setEpisode(series[i].contains(" ") ? series[i].split(" ")[0].trim() :
+                        series[i].split(":")[0].trim());
                 items.setTranslator("AnimeVost");
             }
         } else {
@@ -93,7 +94,7 @@ public class AnimevostSeries extends AsyncTask<Void, Void, Void> {
             if (item.season.size() > 0)
                 items.setSeason(String.valueOf(item.getSeason(0)));
             else items.setSeason("0");
-            items.setEpisode(all.split(":")[0]);
+            items.setEpisode(all.split(":")[0].trim());
             items.setTranslator("AnimeVost");
         }
     }
@@ -114,7 +115,7 @@ public class AnimevostSeries extends AsyncTask<Void, Void, Void> {
             if (item.season.size() > 0)
                 items.setSeason(String.valueOf(item.getSeason(0)));
             else items.setSeason("0");
-            items.setEpisode(l_ep);
+            items.setEpisode(l_ep.trim());
             items.setTranslator("AnimeVost");
             Log.d(TAG, "site animevost.org: add");
         } else {

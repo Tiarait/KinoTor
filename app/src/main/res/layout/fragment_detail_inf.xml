@@ -238,6 +238,7 @@
                  />
         </LinearLayout>
         <TextView
+            android:id="@+id/preimgT"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -246,6 +247,7 @@
             android:textColor="@color/colorDarkWhite"
             android:text="Изображения"/>
         <LinearLayout
+            android:id="@+id/preimgV"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:orientation="horizontal">

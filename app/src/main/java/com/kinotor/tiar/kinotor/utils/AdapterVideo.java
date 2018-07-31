@@ -18,21 +18,19 @@ import com.kinotor.tiar.kinotor.items.ItemHtml;
 import com.kinotor.tiar.kinotor.items.ItemVideo;
 import com.kinotor.tiar.kinotor.parser.animevost.AnimevostSeries;
 import com.kinotor.tiar.kinotor.parser.animevost.AnimevostUrl;
-import com.kinotor.tiar.kinotor.parser.hdgo.HdgoIframe;
-import com.kinotor.tiar.kinotor.parser.hdgo.HdgoSeason;
-import com.kinotor.tiar.kinotor.parser.hdgo.HdgoSeries;
-import com.kinotor.tiar.kinotor.parser.hdgo.HdgoUrl;
-import com.kinotor.tiar.kinotor.parser.hdgo.ParserHdgo;
-import com.kinotor.tiar.kinotor.parser.kinosha.KinoshaList;
-import com.kinotor.tiar.kinotor.parser.kinosha.ParserKinosha;
-import com.kinotor.tiar.kinotor.parser.moonwalk.MoonwalkSeason;
-import com.kinotor.tiar.kinotor.parser.moonwalk.MoonwalkSeries;
-import com.kinotor.tiar.kinotor.parser.moonwalk.MoonwalkUrl;
-import com.kinotor.tiar.kinotor.parser.moonwalk.ParserMoonwalk;
-import com.kinotor.tiar.kinotor.parser.onlainfilm.OnlainfilmList;
-import com.kinotor.tiar.kinotor.parser.onlainfilm.ParserOnlainfilm;
-import com.kinotor.tiar.kinotor.parser.trailer.ParserTrailer;
-import com.kinotor.tiar.kinotor.parser.trailer.TrailerUrl;
+import com.kinotor.tiar.kinotor.parser.video.hdgo.HdgoIframe;
+import com.kinotor.tiar.kinotor.parser.video.hdgo.HdgoSeason;
+import com.kinotor.tiar.kinotor.parser.video.hdgo.HdgoSeries;
+import com.kinotor.tiar.kinotor.parser.video.hdgo.HdgoUrl;
+import com.kinotor.tiar.kinotor.parser.video.hdgo.ParserHdgo;
+import com.kinotor.tiar.kinotor.parser.video.kinosha.KinoshaList;
+import com.kinotor.tiar.kinotor.parser.video.kinosha.ParserKinosha;
+import com.kinotor.tiar.kinotor.parser.video.moonwalk.MoonwalkSeason;
+import com.kinotor.tiar.kinotor.parser.video.moonwalk.MoonwalkSeries;
+import com.kinotor.tiar.kinotor.parser.video.moonwalk.MoonwalkUrl;
+import com.kinotor.tiar.kinotor.parser.video.moonwalk.ParserMoonwalk;
+import com.kinotor.tiar.kinotor.parser.video.trailer.ParserTrailer;
+import com.kinotor.tiar.kinotor.parser.video.trailer.TrailerUrl;
 import com.kinotor.tiar.kinotor.ui.DetailActivity;
 
 import java.util.Arrays;
@@ -80,12 +78,12 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
         if (items.getTitle(cur).contains(CATALOG)) {
             holder.name.setText(items.getTranslator(cur));
             holder.desc.setText(items.getType(cur));
-            if (!items.getSeason(cur).contains(ERROR)) {
+            if (!items.getSeason(cur).trim().contains(ERROR)) {
                 if (dbHelper.getRepeatWatch(1, item.getTitle(0), items.getTranslator(cur), "", ""))
                     holder.icon.setImageResource(R.drawable.ic_folder_view);
                 else holder.icon.setImageResource(R.drawable.ic_folder);
                 holder.size.setVisibility(View.VISIBLE);
-                holder.size.setText("s" + items.getSeason(cur) + "e" + items.getEpisode(cur));
+                holder.size.setText("s" + items.getSeason(cur).trim() + "e" + items.getEpisode(cur).trim());
                 holder.download.setVisibility(View.GONE);
             } else {
                 if (dbHelper.getRepeatWatch(1, item.getTitle(0), items.getTranslator(cur), "", ""))
@@ -104,11 +102,11 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 holder.icon.setImageResource(R.drawable.ic_back_arrow);
             } else {
                 if (dbHelper.getRepeatWatch(2, item.getTitle(0), items.getTranslator(cur),
-                        items.getSeason(cur), ""))
+                        items.getSeason(cur).trim(), ""))
                     holder.icon.setImageResource(R.drawable.ic_folder_view);
                 else holder.icon.setImageResource(R.drawable.ic_folder);
-                holder.name.setText(items.getSeason(cur) + " сезон");
-                holder.size.setText(items.getEpisode(cur) + seriesPatteg(items.getEpisode(cur)));
+                holder.name.setText(items.getSeason(cur).trim() + " сезон");
+                holder.size.setText(items.getEpisode(cur).trim() + seriesPatteg(items.getEpisode(cur).trim()));
             }
         } else if (items.getTitle(cur).contains(SERIES)) {
             if (items.getTitle(cur).contains(BACK)){
@@ -116,15 +114,15 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 holder.size.setVisibility(View.VISIBLE);
                 holder.desc.setVisibility(View.VISIBLE);
                 holder.size.setText(items.getType(cur));
-                holder.name.setText(items.getSeason(cur) + " сезон");
+                holder.name.setText(items.getSeason(cur).trim() + " сезон");
                 holder.desc.setText(items.getTranslator(cur).contains(ERROR) ? "Неизвестный" : items.getTranslator(cur));
                 holder.icon.setImageResource(R.drawable.ic_back_arrow);
             } else {
                 if (dbHelper.getRepeatWatch(3, item.getTitle(0), items.getTranslator(cur),
-                        items.getSeason(cur), items.getEpisode(cur)))
+                        items.getSeason(cur).trim(), items.getEpisode(cur).trim()))
                     holder.icon.setImageResource(R.drawable.ic_mp4_file_view);
                 else holder.icon.setImageResource(R.drawable.ic_mp4_file);
-                holder.name.setText(items.getEpisode(cur) + " серия");
+                holder.name.setText(items.getEpisode(cur).trim() + " серия");
                 holder.download.setVisibility(View.VISIBLE);
                 holder.desc.setVisibility(View.GONE);
                 holder.size.setVisibility(View.GONE);
@@ -133,7 +131,7 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
             holder.download.setVisibility(View.GONE);
             holder.size.setVisibility(View.VISIBLE);
             holder.desc.setVisibility(View.VISIBLE);
-            holder.size.setText(items.getSeason(cur) + " сезон");
+            holder.size.setText(items.getSeason(cur).trim() + " сезон");
             holder.name.setText(items.getTranslator(cur).contains(ERROR) ? "Неизвестный" : items.getTranslator(cur));
             holder.desc.setText(items.getType(cur));
             holder.icon.setImageResource(R.drawable.ic_back_arrow);
@@ -142,7 +140,7 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
             holder.desc.setVisibility(View.VISIBLE);
 
         //text size
-        holder.name.setTextSize(sizetext + 4);
+        holder.name.setTextSize(sizetext + 2);
         holder.desc.setTextSize(sizetext);
         holder.size.setTextSize(sizetext);
 
@@ -157,25 +155,27 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 view.setSelected(b);
             }
         });
-        holder.name.setFocusable(true);
-        holder.name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        holder.mView.setFocusable(true);
+        if (position == 0) holder.mView.requestFocus();
+        holder.mView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                Log.d("qwe", "onFocusChange: " + holder.name.getText());
                 if (!view.isSelected()) {
                     holder.mView.setBackgroundColor(view.getResources().getColor(R.color.colorAccent));
-                    holder.name.setTextColor(view.getResources().getColor(R.color.colorBlack));
-                    holder.desc.setTextColor(view.getResources().getColor(R.color.colorBlack));
-                    holder.size.setTextColor(view.getResources().getColor(R.color.colorBlack));
-                    holder.download.setColorFilter(view.getResources().getColor(R.color.colorBlack));
-                    holder.icon.setColorFilter(view.getResources().getColor(R.color.colorBlack));
+                    //holder.name.setTextColor(view.getResources().getColor(R.color.colorBlack));
+                    holder.desc.setTextColor(view.getResources().getColor(R.color.colorWhite));
+                    holder.size.setTextColor(view.getResources().getColor(R.color.colorWhite));
+                    //holder.download.setColorFilter(view.getResources().getColor(R.color.colorBlack));
+                    //holder.icon.setColorFilter(view.getResources().getColor(R.color.colorBlack));
                 }
                 else {
                     holder.mView.setBackgroundColor(view.getResources().getColor(R.color.colorPrimaryLight));
-                    holder.name.setTextColor(view.getResources().getColor(R.color.colorWhite));
-                    holder.desc.setTextColor(view.getResources().getColor(R.color.colorWhite));
-                    holder.size.setTextColor(view.getResources().getColor(R.color.colorWhite));
-                    holder.download.clearColorFilter();
-                    holder.icon.clearColorFilter();
+                    //holder.name.setTextColor(view.getResources().getColor(R.color.colorWhite));
+                    holder.desc.setTextColor(view.getResources().getColor(R.color.colorDarkWhite));
+                    holder.size.setTextColor(view.getResources().getColor(R.color.colorDarkWhite));
+                    //holder.download.clearColorFilter();
+                    //holder.icon.clearColorFilter();
                 }
                 view.setSelected(b);
             }
@@ -184,12 +184,6 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
             @Override
             public void onClick(View view) {
                 getUrl(cur, false);
-            }
-        });
-        holder.name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clickPlay(cur);
             }
         });
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -201,7 +195,10 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
     }
 
     private String seriesPatteg(String season) {
-        int s = season.contains(ERROR) ? 0 : Integer.parseInt(season.trim());
+        String str = season.replace("[", "").replace("]", "")
+                .replace("{", "").replace("}", "")
+                .replace("(", "").replace(")", "");
+        int s = str.contains(ERROR) ? 0 : Integer.parseInt(str.trim());
         String series = " серий";
         if (s == 1 || s == 21 || s == 31 || s == 41 || s == 51) series = " серия";
         if ((s > 1 && s < 5) || (s > 21 && s < 25) || (s > 31 && s < 35)
@@ -213,7 +210,7 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
         pb.setVisibility(View.VISIBLE);
         Log.d(TAG, "Click play: " + items.getTitle(cur));
         if (items.getTitle(cur).contains(CATALOG)) {
-            if (!items.getSeason(cur).contains(ERROR)) {
+            if (!items.getSeason(cur).trim().contains(ERROR)) {
                 if (items.getId(cur).contains("site")) getSiteIframe(cur);
                 else getSeason(cur);
             } else getUrl(cur, true);
@@ -229,24 +226,14 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
     private void getUrl(final int cur, final boolean play) {
         pb.setVisibility(View.VISIBLE);
         if (items.url.size() > 0) {
-            Log.d(TAG, "getUrl: " + items.getType(cur) + "|" + items.getUrl(cur));
+            Log.d(TAG, "getUrl: " + items.getType(cur) + "|" + items.getUrl(cur) + "|" + items.getId(cur));
             if (items.getType(cur).contains("kinosha")) {
-                KinoshaList getMp4 = new KinoshaList(items.getUrl(cur), items.getSeason(cur),
-                        items.getEpisode(cur), new OnTaskUrlCallback() {
+                KinoshaList getMp4 = new KinoshaList(items.getUrl(cur), items.getSeason(cur).trim(),
+                        items.getEpisode(cur).trim(), new OnTaskUrlCallback() {
                     @Override
                     public void OnCompleted(String[] quality, String[] url) {
-                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
-                                items.getEpisode(cur), play);
-                    }
-                }, true);
-                getMp4.execute();
-            } else if (items.getType(cur).contains("onlainfilm")) {
-                OnlainfilmList getMp4 = new OnlainfilmList(items.getUrl(cur), items.getSeason(cur),
-                        items.getEpisode(cur), new OnTaskUrlCallback() {
-                    @Override
-                    public void OnCompleted(String[] quality, String[] url) {
-                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
-                                items.getEpisode(cur), play);
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur).trim(),
+                                items.getEpisode(cur).trim(), play);
                     }
                 }, true);
                 getMp4.execute();
@@ -254,8 +241,8 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 MoonwalkUrl getMp4 = new MoonwalkUrl(items.getUrl(cur), new OnTaskUrlCallback() {
                     @Override
                     public void OnCompleted(String[] quality, String[] url) {
-                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
-                                items.getEpisode(cur), play);
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur).trim(),
+                                items.getEpisode(cur).trim(), play);
                     }
                 });
                 getMp4.execute();
@@ -263,8 +250,8 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 HdgoUrl getMp4 = new HdgoUrl(items.getUrl(cur), new OnTaskUrlCallback() {
                     @Override
                     public void OnCompleted(String[] quality, String[] url) {
-                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
-                                items.getEpisode(cur), play);
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur).trim(),
+                                items.getEpisode(cur).trim(), play);
                     }
                 });
                 getMp4.execute();
@@ -272,8 +259,8 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 AnimevostUrl getMp4 = new AnimevostUrl(items.getUrlSite(cur), new OnTaskUrlCallback() {
                     @Override
                     public void OnCompleted(String[] quality, String[] url) {
-                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
-                                items.getEpisode(cur), play);
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur).trim(),
+                                items.getEpisode(cur).trim(), play);
                     }
                 });
                 getMp4.execute();
@@ -282,8 +269,8 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 TrailerUrl getMp4 = new TrailerUrl(items.getUrl(cur), new OnTaskUrlCallback() {
                     @Override
                     public void OnCompleted(String[] quality, String[] url) {
-                        play(quality, url, items.getTranslator(cur), items.getSeason(cur),
-                                items.getEpisode(cur), play);
+                        play(quality, url, items.getTranslator(cur), items.getSeason(cur).trim(),
+                                items.getEpisode(cur).trim(), play);
                     }
                 });
                 getMp4.execute();
@@ -318,14 +305,6 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 }
             }, true, items.getTranslator(cur));
             getSeason.execute();
-        } else if (items.getType(cur).contains("onlainfilm")) {
-            OnlainfilmList getSeason = new OnlainfilmList(items.getUrl(cur), new OnTaskVideoCallback() {
-                @Override
-                public void OnCompleted(ItemVideo items) {
-                    reload(items);
-                }
-            }, true, items.getTranslator(cur));
-            getSeason.execute();
         }
     }
 
@@ -353,7 +332,7 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
     private void getSeries (final int cur) {
         if (items.getType(cur).contains("moonwalk")) {
             MoonwalkSeries getSeries = new MoonwalkSeries(items.getId(cur), items.getId_trans(cur),
-                    items.getSeason(cur), new OnTaskVideoCallback() {
+                    items.getSeason(cur).trim(), new OnTaskVideoCallback() {
                 @Override
                 public void OnCompleted(ItemVideo items) {
                     reload(items);
@@ -362,7 +341,7 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
             getSeries.execute();
         } else if (items.getType(cur).contains("hdgo")) {
             HdgoSeries getSeries = new HdgoSeries(items.getId(cur),
-                    items.getSeason(cur), new OnTaskVideoCallback() {
+                    items.getSeason(cur).trim(), new OnTaskVideoCallback() {
                 @Override
                 public void OnCompleted(ItemVideo items) {
                     reload(items);
@@ -375,15 +354,7 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 public void OnCompleted(ItemVideo items) {
                     reload(items);
                 }
-            }, true, items.getTranslator(cur),items.getSeason(cur));
-            getSeason.execute();
-        } else if (items.getType(cur).contains("onlainfilm")) {
-            OnlainfilmList getSeason = new OnlainfilmList(items.getUrl(cur), new OnTaskVideoCallback() {
-                @Override
-                public void OnCompleted(ItemVideo items) {
-                    reload(items);
-                }
-            }, true, items.getTranslator(cur),items.getSeason(cur));
+            }, true, items.getTranslator(cur),items.getSeason(cur).trim());
             getSeason.execute();
         }
     }
@@ -411,7 +382,8 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 }
             });
             getIframe.execute();
-        } else if (DetailActivity.url.contains("animevost")){
+        }
+        if (DetailActivity.url.contains("animevost")){
             AnimevostSeries getList = new AnimevostSeries(item, true, new OnTaskVideoCallback() {
                 @Override
                 public void OnCompleted(ItemVideo items) {
@@ -425,15 +397,6 @@ public abstract class AdapterVideo extends RecyclerView.Adapter<AdapterVideo.Vie
                 @Override
                 public void OnCompleted(ItemVideo items) {
                     update(items, "kinosha");
-                }
-            });
-            getList.execute();
-        }
-        if (pref_base.contains("onlainfilm")){
-            ParserOnlainfilm getList = new ParserOnlainfilm(item, new OnTaskVideoCallback() {
-                @Override
-                public void OnCompleted(ItemVideo items) {
-                    update(items, "onlainfilm");
                 }
             });
             getList.execute();

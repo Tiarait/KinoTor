@@ -1,10 +1,11 @@
-package com.kinotor.tiar.kinotor.parser.trailer;
+package com.kinotor.tiar.kinotor.parser.video.trailer;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.kinotor.tiar.kinotor.items.ItemHtml;
 import com.kinotor.tiar.kinotor.items.ItemVideo;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskVideoCallback;
 
 import org.jsoup.Jsoup;
@@ -54,7 +55,7 @@ public class ParserTrailer extends AsyncTask<Void, Void, Void> {
                     title = entry.select(".name").first().text().trim()
                             .replaceAll("\\u00a0", "")
                             .replace("'", "");
-                    url = "http://www.kinomania.ru" +
+                    url = Statics.KINOMANIA_URL +
                             entry.select(".name a").attr("href").trim();
                 }
                 if (entry.html().contains("name__eng"))
@@ -106,7 +107,7 @@ public class ParserTrailer extends AsyncTask<Void, Void, Void> {
 
     private Document getData(String title){
         if (title.startsWith("The ")) title = title.replace("The ", "");
-        String url = "http://www.kinomania.ru/search?q=" + title.replace(" ", "%20")
+        String url = Statics.KINOMANIA_URL + "/search?q=" + title.replace(" ", "%20")
                 .replace("\u00a0", "%20");
         try {
             Document htmlDoc = Jsoup.connect(url)

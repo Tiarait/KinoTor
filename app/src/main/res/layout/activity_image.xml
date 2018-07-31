@@ -14,7 +14,7 @@
     <ImageView
         android:id="@+id/img"
         android:src="@drawable/error"
-        android:background="@color/colorGrey"
+        android:background="@color/colorGreyGone"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -13,8 +13,36 @@
         android:title="Скопировать..."
         android:onClick="onActionCopy"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_search"
+        android:title="Поиск">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/menuSearchActor"
+                    android:onClick="onSearchActor"
+                    android:title="По актерам"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuSearchGoogle"
+                    android:onClick="onSearchGoogle"
+                    android:title="Google"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuSearchYoutube"
+                    android:onClick="onSearchYoutube"
+                    android:title="YouTube"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
     <item android:id="@+id/action_web"
         android:title="В браузере"
         android:onClick="onActionWeb"
+        app:showAsAction="never"/>
+    <item android:id="@+id/action_no_hist"
+        android:checkable="true"
+        android:title="Не заносить в историю"
+        android:enabled="false"
         app:showAsAction="never"/>
 </menu>

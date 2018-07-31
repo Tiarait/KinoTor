@@ -25,6 +25,7 @@
             android:background="@color/colorPrimaryLight"
             android:singleLine="true"
             android:maxLines="1"
+            android:textColor="@color/colorWhite"
             android:inputType="text"
             android:textSize="22sp"
             android:padding="8dp"/>

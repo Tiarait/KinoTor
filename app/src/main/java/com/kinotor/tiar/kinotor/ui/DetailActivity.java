@@ -28,8 +28,10 @@ import android.widget.Toast;
 
 import com.kinotor.tiar.kinotor.R;
 import com.kinotor.tiar.kinotor.items.ItemHtml;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.parser.ParserAmcet;
 import com.kinotor.tiar.kinotor.parser.ParserHtml;
+import com.kinotor.tiar.kinotor.parser.ParserKinoFS;
 import com.kinotor.tiar.kinotor.parser.animevost.ParserAnimevost;
 import com.kinotor.tiar.kinotor.utils.DBHelper;
 import com.kinotor.tiar.kinotor.utils.OnTaskCallback;
@@ -37,7 +39,10 @@ import com.kinotor.tiar.kinotor.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DetailActivity extends AppCompatActivity {
     private DBHelper dbHelper;
@@ -73,9 +78,9 @@ public class DetailActivity extends AppCompatActivity {
         if (bundle != null) {
             if (bundle.getString("Url") != null) {
                 if (bundle.getString("Url").contains("http:")) {
-                    toolbar.setSubtitle(bundle.getString("Url").split("http://")[1].split("/")[0]);
+                    toolbar.setSubtitle(bundle.getString("Url").split("http://")[1].split("\\.")[0]);
                 } else if (bundle.getString("Url").contains("https:"))
-                    toolbar.setSubtitle(bundle.getString("Url").split("https://")[1].split("/")[0]);
+                    toolbar.setSubtitle(bundle.getString("Url").split("https://")[1].split("\\.")[0]);
             }
             url_poster = bundle.getString("Img");
             title = bundle.getString("Title");
@@ -94,10 +99,12 @@ public class DetailActivity extends AppCompatActivity {
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setFocusable(true);
-        mViewPager.requestFocus();
+        //mViewPager.requestFocus();
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setFocusable(true);
+        tabLayout.requestFocus();
 
         getItem(mViewPager, mSectionsPagerAdapter);
     }
@@ -121,6 +128,15 @@ public class DetailActivity extends AppCompatActivity {
                         }
                     });
             parserAnimevost.execute();
+        } else if (url.contains("kino-fs")) {
+            ParserKinoFS parserKinoFS = new ParserKinoFS(url, null, new ItemHtml(),
+                    new OnTaskCallback() {
+                        @Override
+                        public void OnCompleted(ArrayList<ItemHtml> items, ItemHtml itempath) {
+                            taskDone(mViewPager, mSectionsPagerAdapter, itempath);
+                        }
+                    });
+            parserKinoFS.execute();
         } else {
             ParserHtml parserHtml = new ParserHtml(url, null, new ItemHtml(),
                     new OnTaskCallback() {
@@ -134,8 +150,9 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void taskDone(ViewPager mViewPager, SectionsPagerAdapter mSectionsPagerAdapter, ItemHtml itempath) {
-        if (itempath != null) {
-            Log.d("DetailActivity", "taskDone: " + itempath.getTitle(0) + " " + itempath.getType(0));
+        Log.d("qwe", "taskDone: " + itempath.title.size());
+        if (itempath != null && itempath.title.size() > 0) {
+            Log.d("DetailActivity", "taskDone: " + itempath.title.size());
             pb.setVisibility(View.GONE);
             try {
                 itempath.setSeason(Integer.parseInt(season));
@@ -144,9 +161,15 @@ public class DetailActivity extends AppCompatActivity {
             }
             this.itempath = itempath;
             addToDB("history");
+
+            Set<String> pref_base = PreferenceManager.getDefaultSharedPreferences(this)
+                    .getStringSet("display_detail_tab", new HashSet<>(Arrays.asList("vid_tab", "tor_tab")));
+
             mSectionsPagerAdapter.addFragment(new DetailInfo(itempath), "Информация");
-            mSectionsPagerAdapter.addFragment(new DetailVideo(itempath), "Видео");
-            mSectionsPagerAdapter.addFragment(new DetailTorrents(itempath), "Торренты");
+            if (pref_base.contains("vid_tab"))
+                mSectionsPagerAdapter.addFragment(new DetailVideo(itempath), "Видео");
+            if (pref_base.contains("tor_tab"))
+                mSectionsPagerAdapter.addFragment(new DetailTorrents(itempath), "Торренты");
             mViewPager.getAdapter().notifyDataSetChanged();
             setInfo();
         } else getItem(mViewPager, mSectionsPagerAdapter);
@@ -238,6 +261,9 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail, menu);
         MenuItem fav = menu.findItem(R.id.fav);
+        MenuItem actorSearch = menu.findItem(R.id.menuSearchActor);
+        actorSearch.setVisible(Statics.CATALOG.contains("amcet") ||
+                Statics.CATALOG.contains("koshra") || Statics.CATALOG.contains("kinofs"));
         if (dbHelper.getRepeat("favor", title))
             fav.setIcon(R.drawable.ic_menu_fav);
         return super.onCreateOptionsMenu(menu);
@@ -250,7 +276,9 @@ public class DetailActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.fav:
-                addToDBbtn(item);
+                if (itempath != null && itempath.title.size() > 0) {
+                    addToDBbtn(item);
+                }
                 break;
             case R.id.action_refresh:
                 Intent intent = getIntent();
@@ -267,7 +295,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void onActionCopy(MenuItem item) {
-        if (itempath != null) {
+        if (itempath != null && itempath.title.size() > 0) {
             final String[] ctg_list = {
                     "Название",
                     "Режисер",
@@ -309,6 +337,39 @@ public class DetailActivity extends AppCompatActivity {
         intent.setData(Uri.parse(url));
         startActivity(intent);
     }
+    public void onSearchActor(MenuItem item) {
+        if (itempath != null && itempath.title.size() > 0) {
+            final String[] actor = itempath.getActors(0).trim().replace(", ", ",")
+                    .split(",");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, 2);
+            builder.setTitle("Выберите актера").setItems(actor, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(DetailActivity.this, MainCatalogActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("Type", "actor");
+                    intent.putExtra("Query", actor[i].trim());
+                    DetailActivity.this.startActivity(intent);
+                }
+            });
+            builder.create().show();
+        }
+    }
+    public void onSearchGoogle(MenuItem item) {
+        String url = "https://www.google.com.ua/search?q=" +
+                getTitle().toString().replace(" ", "+") + " смотреть онлайн";
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+    }
+    public void onSearchYoutube(MenuItem item) {
+        String url =  "https://www.youtube.com/results?search_query=" +
+                getTitle().toString().replace(" ", "+");
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+    }
+
 
     /**
      * that returns a fragment corresponding to

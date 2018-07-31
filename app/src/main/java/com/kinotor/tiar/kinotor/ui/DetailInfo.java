@@ -17,8 +17,10 @@ import android.widget.TextView;
 
 import com.kinotor.tiar.kinotor.R;
 import com.kinotor.tiar.kinotor.items.ItemHtml;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.parser.ParserAmcet;
 import com.kinotor.tiar.kinotor.parser.ParserHtml;
+import com.kinotor.tiar.kinotor.parser.ParserKinoFS;
 import com.kinotor.tiar.kinotor.parser.animevost.ParserAnimevost;
 import com.kinotor.tiar.kinotor.utils.AdapterMore;
 import com.kinotor.tiar.kinotor.utils.OnTaskCallback;
@@ -162,6 +164,7 @@ public class DetailInfo extends Fragment {
                 }
             } else title_desc.setVisibility(View.GONE);
 
+            Log.d("qwe", "setInfo: "+item.getImg(0));
             Picasso.with(rootView.getContext())
                     .load(item.getImg(0))
                     .into(poster);
@@ -174,6 +177,12 @@ public class DetailInfo extends Fragment {
             rv_catalog.getRecycledViewPool().clear();
             rv_catalog.getAdapter().notifyItemChanged(0);
 
+            if (DetailActivity.url.contains(Statics.KINOFS_URL)) {
+                TextView preimgT = rootView.findViewById(R.id.preimgT);
+                preimgT.setVisibility(View.GONE);
+                LinearLayout preimgL = rootView.findViewById(R.id.preimgV);
+                preimgL.setVisibility(View.GONE);
+            }
             final String[] preimg = {"http://leeford.in/wp-content/uploads/2017/09/image-not-found.jpg"
                     , "http://leeford.in/wp-content/uploads/2017/09/image-not-found.jpg"
                     , "http://leeford.in/wp-content/uploads/2017/09/image-not-found.jpg"};
@@ -231,6 +240,15 @@ public class DetailInfo extends Fragment {
                             }
                         });
                 parserAmcet.execute();
+            } else if (DetailActivity.url.contains("kino-fs")) {
+                ParserKinoFS parserKinoFS = new ParserKinoFS(DetailActivity.url, null, new ItemHtml(),
+                        new OnTaskCallback() {
+                            @Override
+                            public void OnCompleted(ArrayList<ItemHtml> items, ItemHtml itempath) {
+                                taskDone(itempath, rootView);
+                            }
+                        });
+                parserKinoFS.execute();
             } else if (DetailActivity.url.contains("animevost")) {
                 ParserAnimevost parserAnimevost = new ParserAnimevost(DetailActivity.url, null, new ItemHtml(),
                         new OnTaskCallback() {

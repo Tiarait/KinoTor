@@ -32,6 +32,7 @@
             <include layout="@layout/pb"/>
         </LinearLayout>
         <TextView
+            android:id="@+id/vid_pb_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

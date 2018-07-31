@@ -1,13 +1,18 @@
 <resources>
     <string name="app_name">KinoTor</string>
-    <string name="app_version">версия : 0.4</string>
+    <string name="app_version">версия : 0.46</string>
     <string name="loading"> Загрузка... </string>
     <string name="title_item_detail"> Загрузка... </string>
 
 
     <string name="update_t">Доступно обновление приложения - желаете обновиться?</string>
-    <string name="update_d">Если вы согласны - вы будете перенаправлены к скачиванию APK файла,
-        который затем нужно будет открыть.</string>
+    <string name="update_d">Если вы согласны - apk файл будет загружен на ваше устройство.</string>
+    <!--<string name="update_d">Если вы согласны - вы будете перенаправлены на форум 4pda, где сможете скачать последнюю версию.</string>-->
+    <!--<string name="update_d">Если вы согласны - вы будете перенаправлены к скачиванию APK файла,-->
+        <!--который затем нужно будет открыть.</string>-->
+
+    <string name="search_hint">Поиск видео</string>
+    <string name="search_label">Что искать?</string>
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -29,17 +34,86 @@
         <item>2</item>
     </string-array>
 
+    <string name="pref_title_moonwalk">Moonwalk</string>
+    <string-array name="pref_list_moonwalk">
+        <item>Источник 1</item>
+        <item>Источник 2</item>
+    </string-array>
+    <string-array name="pref_values_moonwalk">
+        <item>http://wonky.lostcut.net/moonwalk.php?url=</item>
+        <item>http://smartportaltv.ru/20/4.php?url=</item>
+    </string-array>
+
+    <string name="pref_title_grid_count">Сетка</string>
+    <string name="pref_desc_grid_count">Кол-во фильмов в ряд.</string>
+    <string-array name="pref_list_grid_count">
+        <item>По умолч.</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="pref_values_grid_count">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <string name="pref_title_display_content">Отображать</string>
+    <string name="pref_desc_display_content">Отображаемый контент в каталоге.</string>
+    <string-array name="pref_list_display_content">
+        <item>Название</item>
+        <item>Год</item>
+        <item>Постер</item>
+        <item>Качество</item>
+        <item>Рейтинг</item>
+        <item>Жанр</item>
+        <item>Доп. поле</item>
+    </string-array>
+    <string-array name="pref_values_display_content">
+        <item>title</item>
+        <item>year</item>
+        <item>poster</item>
+        <item>quality</item>
+        <item>rating</item>
+        <item>genre</item>
+        <item>extra</item>
+    </string-array>
+
+    <string name="pref_title_display_detail_tab">Вкладки</string>
+    <string name="pref_desc_display_detail_tab">Отображаемые вкладки в фильмах.</string>
+    <string-array name="pref_list_display_detail_tab">
+        <item>Видео</item>
+        <item>Торренты</item>
+    </string-array>
+    <string-array name="pref_values_display_detail_tab">
+        <item>vid_tab</item>
+        <item>tor_tab</item>
+    </string-array>
+
     <string name="pref_title_base_video">Видео</string>
     <string name="pref_desc_base_video">Используемые бд для поиска mp4.</string>
     <string-array name="pref_list_base_video">
-        <item>onlainfilm</item>
         <item>kinomania</item>
         <item>kinosha</item>
         <item>moonwalk</item>
         <item>hdgo</item>
     </string-array>
     <string-array name="pref_def_base_video">
-        <item>onlainfilm</item>
         <item>kinomania</item>
         <item>moonwalk</item>
         <item>hdgo</item>
@@ -50,6 +124,7 @@
     <string-array name="pref_list_base_catalog">
         <item>amcet</item>
         <item>koshara</item>
+        <item>kinofs</item>
     </string-array>
 
     <string name="pref_title_base_tparser">Торенты</string>
@@ -61,6 +136,7 @@
         <item>rutracker.org</item>
         <item>underverse.me</item>
         <item>kinozal.tv</item>
+        <item>nnmclub.to</item>
     </string-array>
     <string-array name="pref_def_base_tparser">
         <item>zooqle.com</item>

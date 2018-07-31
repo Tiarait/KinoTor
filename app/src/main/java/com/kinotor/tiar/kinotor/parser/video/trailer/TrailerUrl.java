@@ -1,8 +1,9 @@
-package com.kinotor.tiar.kinotor.parser.trailer;
+package com.kinotor.tiar.kinotor.parser.video.trailer;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskUrlCallback;
 
 import org.jsoup.Jsoup;
@@ -47,7 +48,7 @@ public class TrailerUrl extends AsyncTask<Void, Void, Void> {
                 Elements allEntries = data.select(".dop-download-item");
                 for (Element entry : allEntries) {
                     Element a = entry.select("a").last();
-                    String url = "http://www.kinomania.ru" + a.attr("href");
+                    String url = Statics.KINOMANIA_URL + a.attr("href");
                     q.add(a.text().replace("HD", "").trim() + " (mp4)");
                     u.add(url);
                 }

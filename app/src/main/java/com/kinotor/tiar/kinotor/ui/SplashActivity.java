@@ -28,8 +28,8 @@ public class SplashActivity extends AppCompatActivity {
 
     private void onPlay() {
         l = false;
-        TextView splash_title = (TextView) findViewById(R.id.splash_title);
-        TextView splash_subtitle = (TextView) findViewById(R.id.splash_subtitle);
+        TextView splash_title = findViewById(R.id.splash_title);
+        TextView splash_subtitle = findViewById(R.id.splash_subtitle);
         Animation splash = AnimationUtils.loadAnimation(this, R.anim.splash);
 
         splash_title.startAnimation(splash);

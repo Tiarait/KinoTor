@@ -1,4 +1,4 @@
-package com.kinotor.tiar.kinotor.parser.hdgo;
+package com.kinotor.tiar.kinotor.parser.video.hdgo;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -141,21 +141,6 @@ public class HdgoUrl extends AsyncTask<Void, Void, Void> {
             return null;
         }
     }
-
-//    private String getLocation (String url) {
-//        try {
-//            Document htmlDoc = Jsoup.connect(checkUrl(url))
-//                    .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
-//                    .referrer("http://hdgo.cc")
-//                    .timeout(5000).ignoreContentType(true).get();
-//            Log.d(TAG, "GetHdgoLocation: connected to " + checkUrl(url));
-//            return htmlDoc.location();
-//        } catch (Exception e) {
-//            Log.d(TAG, "GetHdgoLocation: connected false to " + checkUrl(url));
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
 
     private String checkUrl(String url) {
         url = url.replaceAll(" ", "").replaceAll("\n", "").replaceAll("\r", "");

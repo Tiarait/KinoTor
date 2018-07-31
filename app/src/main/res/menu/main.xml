@@ -7,6 +7,7 @@
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
     <item android:id="@+id/action_category"
+        android:orderInCategory="10"
         android:title="Категории"
         app:showAsAction="never">
     </item>
@@ -17,7 +18,7 @@
     </item>
     <item
         android:id="@+id/action_catalog"
-        android:orderInCategory="1"
+        android:orderInCategory="20"
         android:title="Каталог">
         <menu>
             <group>
@@ -32,6 +33,12 @@
                     android:onClick="onSelectCatalog"
                     android:checkable="true"
                     android:title="Koshara"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuСatalogKinoFS"
+                    android:onClick="onSelectCatalog"
+                    android:checkable="true"
+                    android:title="KinoFS"
                     app:showAsAction="never" />
             </group>
         </menu>
@@ -56,7 +63,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sort"
-        android:orderInCategory="2"
+        android:orderInCategory="30"
         android:title="Сортировать">
         <menu>
             <group>
@@ -93,6 +100,7 @@
         android:visible="false"
         android:id="@+id/action_actor_search"
         android:onClick="onActorSearch"
+        android:orderInCategory="1"
         android:title="Поиск по актерам"
         app:showAsAction="never" />
 </menu>

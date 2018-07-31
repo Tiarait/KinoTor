@@ -18,7 +18,8 @@ public class ItemHtml {
     public ArrayList<Integer> season = new ArrayList<>();
     public ArrayList<Integer> series = new ArrayList<>();
     ArrayList<String> country = new ArrayList<>();
-    ArrayList<String> genre = new ArrayList<>();
+    public ArrayList<String> genre = new ArrayList<>();
+    public ArrayList<String> rating = new ArrayList<>();
     ArrayList<String> director = new ArrayList<>();
     ArrayList<String> actors = new ArrayList<>();
     ArrayList<String> time = new ArrayList<>();
@@ -83,6 +84,9 @@ public class ItemHtml {
     }
     public String getGenre(int i) {
         return genre.get(i);
+    }
+    public String getRating(int i) {
+        return rating.get(i);
     }
     public String getDirector(int i) {
         return director.get(i);
@@ -168,6 +172,9 @@ public class ItemHtml {
     }
     public void setGenre(String i) {
         this.genre.add(i);
+    }
+    public void setRating(String i) {
+        this.rating.add(i);
     }
     public void setDirector(String i) {
         this.director.add(i);

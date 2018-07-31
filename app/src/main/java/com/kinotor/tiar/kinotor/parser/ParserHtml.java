@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.kinotor.tiar.kinotor.items.ItemHtml;
-import com.kinotor.tiar.kinotor.items.ItemMain;
 import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskCallback;
 
@@ -52,7 +51,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
 //            if (itemDetail == null) itemDetail = new ItemDetail();
             String title = "error parsing", url_entry = "error parsing", img = "error parsing",
                     date = "error parsing", description = "error parsing", voice = "error parsing",
-                    quality = "error parsing";
+                    quality = "error parsing", rating = "error parsing";
             String name = "error", year = "error parsing", country = "error parsing", genre = "error parsing",
                     time = "error parsing", quality_t = "error parsing", translator = "error parsing",
                     director = "error parsing", actors = "error parsing", description_t = "error parsing",
@@ -61,7 +60,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
             String moretitle = "error", moreurl = "error", moreimg = "error", moreseason = "0",
                     moreseries = "0", morequality = "error";
             String season = "", series = "0";
-            if (url.contains(Statics.KOSHARA_URL)) {
+            if (url.contains("koshara")) {
                 //main page
                 if (!data.html().contains("full-article")) {
                     Elements allEntries = data.select(".movie-item");
@@ -108,16 +107,22 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                             description = entry.select(".movie-text").first().text();
                         if (entry.html().contains("movie-series"))
                             voice = entry.select(".movie-series").first().text();
+                        if (entry.html().contains("ratingminus"))
+                            rating = entry.select(".ratingminus").text();
+                        else if (entry.html().contains("ratingplus"))
+                            rating = entry.select(".ratingplus").text();
 
                         if (quality.contains("WEB-DLRip"))
                             quality = "WEB-DLRip";
+                        if (quality.contains("HDTV"))
+                            quality = "HDTV";
                         if (description.contains("Описание: "))
                             description = description.replace("Описание: ", "");
 
                         description = description.split("1400Mb")[0].split("2100Mb")[0];
 
                         items.add(AddItem(itempath, title, url_entry, img, date,
-                                description + "...", voice, quality, season, series));
+                                description + "...", voice, rating, quality, season, series));
                     }
                     //search
                     Elements allSearch = data.select(".sres-wrap");
@@ -135,12 +140,15 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                         if (search.html().contains("sres-desc"))
                             description = search.select(".sres-desc").first().text();
 
+                        if (description.contains("Качество: "))
+                            quality = description.split("Качество: ")[1].split(" ")[0];
+
 
                         date = date.split(",")[0];
                         description = description.split("1400Mb")[0].split("2100Mb")[0];
 
                         items.add(AddItem(itempath, title, url_entry, img, date,
-                                description + "...", voice, quality, season, series));
+                                description + "...", voice, rating, quality, season, series));
                     }
                 }
                 //video page
@@ -181,6 +189,11 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                         actors = details.select(".m-info").first().text().split("В Ролях:")[1].split("Время:")[0];
                         time = details.select(".m-info").first().text().split("Время:")[1].trim();
                     }
+                    if (details.html().contains("ratingminus"))
+                        rating = details.select(".ratingminus").text();
+                    else if (details.html().contains("ratingplus"))
+                        rating = details.select(".ratingplus").text();
+
                     if (details.html().contains("m-desc"))
                         description_t = details.select(".m-desc").first().text().split("1400Mb")[0].split("2100Mb")[0];
 
@@ -259,6 +272,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                     itempath.setSubTitle(subname);
                     itempath.setQuality(quality_t);
                     itempath.setVoice(translator.trim());
+                    itempath.setRating(rating.trim());
                     itempath.setDescription(description_t);
                     itempath.setDate(year);
                     itempath.setCountry(country);
@@ -302,6 +316,9 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                     }
                     if (data.html().contains("kino-desc full-text"))
                         img = Statics.COLDFILM_URL + data.select(".kino-desc.full-text img").attr("src");
+                    if (data.html().contains("k-rate-full"))
+                        rating = data.select(".k-rate-full ul").attr("title");
+                    rating = rating.replace("Рейтинг: ", "");
                     translator = "ColdFilm";
                     quality_t = "HD";
                     description_t = "Перевод: Профессиональный многоголосый закадровый - ColdFilm";
@@ -358,6 +375,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                     itempath.setImg(img);
                     itempath.setQuality(quality_t);
                     itempath.setVoice(translator.trim());
+                    itempath.setRating(rating.trim());
                     itempath.setDescription(description_t);
                     itempath.setDate(year);
                     itempath.setCountry(country);
@@ -409,7 +427,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
 
                             if (!title.contains("error"))
                                 items.add(AddItem(itempath, title, url_entry, img, date,
-                                        description + "...", voice, quality, season, series));
+                                        description + "...", voice, rating, quality, season, series));
                         }
                     }
                     //main page
@@ -438,6 +456,10 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
                             if (!img.contains("://"))
                                 img = Statics.COLDFILM_URL + img;
                         }
+                        if (entry.html().contains("u-star-rating-20"))
+                            rating = entry.select(".u-star-rating-20").attr("title");
+                        else rating = "error";
+                        rating = rating.replace("Рейтинг: ", "");
                         if (entry.html().contains("kino-date"))
                             date = entry.select(".kino-date").first().text();
                         if (entry.html().contains("kino-desc"))
@@ -447,7 +469,7 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
 
                         if (!title.contains("error"))
                             items.add(AddItem(itempath, title, url_entry, img, date,
-                                    description + "...", voice, quality, season, series));
+                                    description + "...", voice, rating, quality, season, series));
                     }
                 }
             }
@@ -455,13 +477,15 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
     }
 
     private ItemHtml AddItem (ItemHtml htmlItem, String title, String url, String img, String date, String description,
-                              String voice, String quality, String season, String series){
+                              String voice, String rating, String quality, String season, String series){
         htmlItem.setTitle(title);
         htmlItem.setUrl(url);
         htmlItem.setImg(img);
         htmlItem.setDate(date);
         htmlItem.setDescription(description);
         htmlItem.setVoice(voice.trim());
+        htmlItem.setRating(rating.trim());
+        htmlItem.setGenre("error");
         htmlItem.setQuality(quality);
         try {
             if (TextUtils.isDigitsOnly(season)) htmlItem.setSeason(Integer.parseInt(season));
@@ -481,13 +505,13 @@ public class ParserHtml extends AsyncTask<Void, Void, Void> {
             Log.d("mydebug","get connected to " + url);
             Document htmlDoc;
             String ref = "";
-            if (ItemMain.cur_url.contains(Statics.KOSHARA_URL) || url.contains(Statics.KOSHARA_URL))
+            if (url.contains(Statics.KOSHARA_URL))
                 ref = Statics.KOSHARA_URL;
-            if (ItemMain.cur_url.contains(Statics.COLDFILM_URL) || url.contains(Statics.COLDFILM_URL))
+            else if (url.contains(Statics.COLDFILM_URL))
                 ref = Statics.COLDFILM_URL;
             htmlDoc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
-                    .timeout(10000).ignoreContentType(true).referrer(ref).get();
+                    .timeout(15000).ignoreContentType(true).referrer(ref).get();
             Log.d("mydebug","get connected to " + url);
             return htmlDoc;
         } catch (Exception e) {

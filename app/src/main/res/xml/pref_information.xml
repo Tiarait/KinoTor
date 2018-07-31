@@ -20,18 +20,35 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Поддержка приложения">
-        <Preference
-            android:key="wmr"
-            android:title="R353353790048"
-            android:summary="webmoney рубли"/>
-        <Preference
-            android:key="wmu"
-            android:title="U787643357009"
-            android:summary="webmoney гривны"/>
-        <Preference
-            android:key="wmz"
-            android:title="Z337989915257"
-            android:summary="webmoney доллары"/>
     </PreferenceCategory>
+        <PreferenceCategory
+            android:title="Privat(Visa)">
+            <Preference
+                android:key="pb24"
+                android:title="4149439106940491"
+                android:summary="приват банк (Украина)"/>
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="Qiwi">
+            <Preference
+                android:key="qiwi"
+                android:title="+380933398172"
+                android:summary="not for call)"/>
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="WebMoney">
+            <Preference
+                android:key="wmr"
+                android:title="R353353790048"
+                android:summary="webmoney рубли"/>
+            <Preference
+                android:key="wmu"
+                android:title="U787643357009"
+                android:summary="webmoney гривны"/>
+            <Preference
+                android:key="wmz"
+                android:title="Z337989915257"
+                android:summary="webmoney доллары"/>
+        </PreferenceCategory>
 
 </PreferenceScreen>

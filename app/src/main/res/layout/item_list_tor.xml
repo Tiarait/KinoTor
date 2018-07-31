@@ -76,7 +76,7 @@
                     android:id="@+id/desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/text_margin"
+                    android:paddingLeft="10dp"
                     android:paddingBottom="10dp"
                     android:text="@string/loading"
                     android:textColor="@color/colorDarkWhite"

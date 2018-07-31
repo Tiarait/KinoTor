@@ -11,7 +11,30 @@
             android:defaultValue="2"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
-        <CheckBoxPreference
+        <ListPreference
+            android:title="@string/pref_title_grid_count"
+            android:entries="@array/pref_list_grid_count"
+            android:entryValues="@array/pref_values_grid_count"
+            android:summary="@string/pref_desc_grid_count"
+            android:key="grid_count"
+            android:defaultValue="0"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <MultiSelectListPreference
+            android:title="@string/pref_title_display_content"
+            android:entries="@array/pref_list_display_content"
+            android:defaultValue="@array/pref_values_display_content"
+            android:entryValues="@array/pref_values_display_content"
+            android:summary="@string/pref_desc_display_content"
+            android:key="display_content" />
+        <MultiSelectListPreference
+            android:title="@string/pref_title_display_detail_tab"
+            android:entries="@array/pref_list_display_detail_tab"
+            android:defaultValue="@array/pref_values_display_detail_tab"
+            android:entryValues="@array/pref_values_display_detail_tab"
+            android:summary="@string/pref_desc_display_detail_tab"
+            android:key="display_detail_tab" />
+        <SwitchPreference
             android:defaultValue="false"
             android:key="fullscreen"
             android:summary="@string/pref_desc_fullscreen"
@@ -20,8 +43,12 @@
             android:title="Боковое меню"
             android:key="side_menu"
             android:defaultValue="true"
-            android:summaryOn="Меню закрепленно."
-            android:summaryOff="Закрепить меню?(для больших экранов)"/>
+            android:summary="Закрепить меню(для больших экранов)"/>
+        <SwitchPreference
+            android:title="Страницы в каталоге"
+            android:key="show_pages"
+            android:defaultValue="false"
+            android:summary="Отображать текущую страницу при загрузки в каталогу"/>
         <ListPreference
             android:title="@string/pref_title_text_size_main"
             android:entries="@array/pref_list_text_size"

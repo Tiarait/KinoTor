@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardview"
-        android:layout_width="175dp"
-        android:layout_height="295dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center"
         app:cardCornerRadius="0dp"
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true">
+        <!--android:layout_width="175dp"-->
+        <!--android:layout_height="295dp"-->
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/imgPoster"
@@ -46,12 +48,28 @@
                     android:textColor="@color/colorWhite"
                     android:background="@color/colorPrimaryDark"
                     android:textStyle="bold" />
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end">
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right">
+                        <TextView
+                            android:id="@+id/quality"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/loading"
+                            android:paddingRight="2dp"
+                            android:paddingLeft="3dp"
+                            android:lines="1"
+                            android:textStyle="bold"
+                            android:textSize="17sp"
+                            android:background="@color/colorAccentDark"
+                            android:textColor="@color/colorWhite" />
+                    </LinearLayout>
                     <TextView
-                        android:id="@+id/quality"
+                        android:id="@+id/rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/loading"
@@ -60,14 +78,26 @@
                         android:lines="1"
                         android:textStyle="bold"
                         android:textSize="17sp"
-                        android:background="@color/colorAccentDark"
-                        android:textColor="@color/colorWhite" />
-                </LinearLayout>
+                        android:background="@color/colorOrange"
+                        android:textColor="@color/colorPrimaryDark" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:orientation="vertical"
                     android:gravity="bottom">
+
+                    <TextView
+                        android:id="@+id/genre"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="3dp"
+                        android:gravity="center"
+                        android:text="@string/loading"
+                        android:background="@color/colorDarkGrey"
+                        android:textColor="@color/colorWhite" />
 
                     <TextView
                         android:id="@+id/voice"
@@ -89,4 +119,4 @@
         <include layout="@layout/selected" />
     </android.support.v7.widget.CardView>
 
-</LinearLayout>
+</RelativeLayout>

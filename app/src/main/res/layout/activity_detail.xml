@@ -28,6 +28,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="?android:attr/actionBarSize"
         android:background="@color/colorPrimaryDark"
+        app:tabBackground="@drawable/item_select"
         app:tabSelectedTextColor="@color/colorAccent"
         app:tabTextColor="@color/colorDarkWhite" />
 

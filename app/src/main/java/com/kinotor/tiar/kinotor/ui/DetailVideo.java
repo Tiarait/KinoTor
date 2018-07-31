@@ -1,5 +1,7 @@
 package com.kinotor.tiar.kinotor.ui;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
@@ -10,6 +12,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kinotor.tiar.kinotor.R;
@@ -26,14 +30,14 @@ import com.kinotor.tiar.kinotor.items.ItemVideo;
 import com.kinotor.tiar.kinotor.parser.GetLocation;
 import com.kinotor.tiar.kinotor.parser.ParserAmcet;
 import com.kinotor.tiar.kinotor.parser.ParserHtml;
+import com.kinotor.tiar.kinotor.parser.ParserKinoFS;
 import com.kinotor.tiar.kinotor.parser.animevost.AnimevostSeries;
 import com.kinotor.tiar.kinotor.parser.animevost.ParserAnimevost;
-import com.kinotor.tiar.kinotor.parser.hdgo.HdgoIframe;
-import com.kinotor.tiar.kinotor.parser.hdgo.ParserHdgo;
-import com.kinotor.tiar.kinotor.parser.kinosha.ParserKinosha;
-import com.kinotor.tiar.kinotor.parser.moonwalk.ParserMoonwalk;
-import com.kinotor.tiar.kinotor.parser.onlainfilm.ParserOnlainfilm;
-import com.kinotor.tiar.kinotor.parser.trailer.ParserTrailer;
+import com.kinotor.tiar.kinotor.parser.video.hdgo.HdgoIframe;
+import com.kinotor.tiar.kinotor.parser.video.hdgo.ParserHdgo;
+import com.kinotor.tiar.kinotor.parser.video.kinosha.ParserKinosha;
+import com.kinotor.tiar.kinotor.parser.video.moonwalk.ParserMoonwalk;
+import com.kinotor.tiar.kinotor.parser.video.trailer.ParserTrailer;
 import com.kinotor.tiar.kinotor.utils.AdapterVideo;
 import com.kinotor.tiar.kinotor.utils.DBHelper;
 import com.kinotor.tiar.kinotor.utils.OnTaskCallback;
@@ -53,7 +57,9 @@ public class DetailVideo extends Fragment {
     private ItemHtml item;
     private RecyclerView rv;
     private LinearLayout pb;
-    private String[] vidBaseArr = {"hdgo", "moonwalk", "kinomania", "onlainfilm"};
+    private TextView pbText;
+    private Set<String> pref_base;
+    private String[] vidBaseArr = {"hdgo", "moonwalk", "kinomania"};
     private String vidBase = Arrays.toString(vidBaseArr);
 
     public DetailVideo() {
@@ -74,6 +80,7 @@ public class DetailVideo extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detail_vid, container, false);
         pb = view.findViewById(R.id.vid_pb);
+        pbText = view.findViewById(R.id.vid_pb_text);
         rv = view.findViewById(R.id.vid_item_list);
         rv.setLayoutManager(new GridLayoutManager(getContext(), 1));
         if (item != null)
@@ -88,6 +95,15 @@ public class DetailVideo extends Fragment {
                             }
                         });
                 parserAmcet.execute();
+            }  else if (DetailActivity.url.contains("kino-fs")) {
+                ParserKinoFS parserKinoFS = new ParserKinoFS(DetailActivity.url, null, new ItemHtml(),
+                        new OnTaskCallback() {
+                            @Override
+                            public void OnCompleted(ArrayList<ItemHtml> items, ItemHtml itempath) {
+                                setVideo(itempath);
+                            }
+                        });
+                parserKinoFS.execute();
             } else if (DetailActivity.url.contains("animevost")) {
                 ParserAnimevost parserAnimevost = new ParserAnimevost(DetailActivity.url, null, new ItemHtml(),
                         new OnTaskCallback() {
@@ -126,34 +142,38 @@ public class DetailVideo extends Fragment {
             @Override
             public void play(final String[] quality, final String[] url, final String translator, final String s, final String e, final boolean play) {
                 pb.setVisibility(View.GONE);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), 2);
-                builder.setTitle("Выберите качество").setItems(quality, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Log.d("DetailVideo", "onClick: " + url.toString());
-                        if (url[i].contains("cdn") || url[i].contains("[hdgo]")) {
-                            if (url[i].contains("[hdgo]"))
-                                url[i] = url[i].replace("[hdgo]", "");
-                            pb.setVisibility(View.VISIBLE);
-                            final int j = i;
-                            GetLocation click = new GetLocation(url[i], new OnTaskLocationCallback() {
-                                @Override
-                                public void OnCompleted(String location) {
-                                    videoIntent(quality[j], location, translator, s, e, play);
-                                }
-                            });
-                            click.execute();
-                        } else videoIntent(quality[i], url[i], translator, s, e, play);
-                    }
-                });
-                builder.create().show();
+                if (getContext() != null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), 2);
+                    builder.setTitle("Выберите качество").setItems(quality, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Log.d("DetailVideo", "onClick: " + url.toString());
+                            if (url[i].contains("cdn") || url[i].contains("[hdgo]")) {
+                                if (url[i].contains("[hdgo]"))
+                                    url[i] = url[i].replace("[hdgo]", "");
+                                pb.setVisibility(View.VISIBLE);
+                                final int j = i;
+                                GetLocation click = new GetLocation(url[i], new OnTaskLocationCallback() {
+                                    @Override
+                                    public void OnCompleted(String location) {
+                                        videoIntent(quality[j], location, translator, s, e, play);
+                                    }
+                                });
+                                click.execute();
+                            } else videoIntent(quality[i], url[i], translator, s, e, play);
+                        }
+                    });
+                    builder.create().show();
+                }
             }
         });
         HashSet<String> def = new HashSet<>(Arrays.asList(vidBaseArr));
-        Set<String> pref_base = PreferenceManager.getDefaultSharedPreferences(getContext())
+        pref_base = PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getStringSet("base_video", def);
         vidBaseArr = pref_base.toArray(new String[pref_base.size()]);
         vidBase = pref_base.toString();
+
+        pbText.setText("Поиск: " + "0 из " + pref_base.size());
 
         if (pref_base.contains("kinomania")) {
             ParserTrailer parserTrailer = new ParserTrailer(item, new OnTaskVideoCallback() {
@@ -190,16 +210,6 @@ public class DetailVideo extends Fragment {
                 @Override
                 public void OnCompleted(ItemVideo items) {
                     itemAddRv(items, "kinosha");
-                }
-            });
-            getList.execute();
-        }
-        if (pref_base.contains("onlainfilm")){
-            pb.setVisibility(View.VISIBLE);
-            ParserOnlainfilm getList = new ParserOnlainfilm(item, new OnTaskVideoCallback() {
-                @Override
-                public void OnCompleted(ItemVideo items) {
-                    itemAddRv(items, "onlainfilm");
                 }
             });
             getList.execute();
@@ -274,16 +284,24 @@ public class DetailVideo extends Fragment {
             //flag for if you want to show notification in status or not
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-            request.setDestinationInExternalPublicDir("/Download/KinoTor/",
-                    nameOfFile);
-            DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-            if (downloadManager != null) {
-                downloadManager.enqueue(request);
-                Toast.makeText(getContext(),
-                        "Загрузка начата...",
-                        Toast.LENGTH_SHORT).show();
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((Activity) getContext(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                return;
+            } else {
+                // Location permission has been granted, continue as usual.
+                request.setDestinationInExternalPublicDir("/Download/KinoTor/",
+                        nameOfFile);
+                DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+                if (downloadManager != null) {
+                    downloadManager.enqueue(request);
+                    Toast.makeText(getContext(),
+                            "Загрузка начата...",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                Log.d("download", title + "|" + url);
             }
-            Log.d("download", title + "|" + url);
         }
 
         DBHelper dbHelper = new DBHelper(getContext());
@@ -305,12 +323,19 @@ public class DetailVideo extends Fragment {
     }
 
     private void itemAddRv(ItemVideo items, String source) {
-        vidBase = vidBase.replace(source, "");
+        vidBase = vidBase.replace(source, "").replace(" ", "")
+                .replace(",,", "").replace("[", "")
+                .replace("]", "").trim();
+        if (vidBase.startsWith(",")) vidBase = vidBase.substring(1);
+        if (vidBase.endsWith(",")) vidBase = vidBase.substring(0, vidBase.length()-1);
+        pbText.setText("Поиск: " + (pref_base.size() - vidBase.split(",").length) +
+                " из " + pref_base.size());
         if (vidBase.contains("hdgo") || vidBase.contains("moonwalk") || vidBase.contains("kinosha")
-                || vidBase.contains("kinomania") || vidBase.contains("onlainfilm")) {
+                || vidBase.contains("kinomania") || vidBase.contains("kinokiwi")) {
             pb.setVisibility(View.VISIBLE);
         } else {
             pb.setVisibility(View.GONE);
+            pbText.setText("Подождите...");
             vidBase = Arrays.toString(vidBaseArr);
         }
         ((AdapterVideo) rv.getAdapter()).addItems(items);

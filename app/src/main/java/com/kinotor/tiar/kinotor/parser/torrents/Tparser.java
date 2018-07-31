@@ -47,10 +47,10 @@ public class Tparser extends AsyncTask<Void, Void, Void> {
             parser(Getdata("http://js5.tparser.org/js5/9.tor.php?callback=one&jsonpx=" + title));
         if (base.contains("kinozal.tv"))
             parser(Getdata("http://js5.tparser.org/js5/10.tor.php?callback=one&jsonpx=" + title));
-
+        if (base.contains("nnmclub.to"))
+            parser(Getdata("http://js2.tparser.org/js2/4.tor.php?callback=one&jsonpx=" + title));
         //thepiratebay.org
 //        parser(Getdata("http://js4.tparser.org/js4/8.tor.php?callback=one&jsonpx=" + title));
-//        parser(Getdata("http://js2.tparser.org/js2/4.tor.php?callback=one&jsonpx=" + title));
 
         return null;
     }
@@ -72,7 +72,7 @@ public class Tparser extends AsyncTask<Void, Void, Void> {
                                 aList.split("d':'")[1].split("',")[0];
                         String content = aList.split("link':'")[1].split("'")[0]
                                 .split("://")[1].split("/")[0];
-                        String name = aList.split("name':'")[1].split("'")[0];
+                        String name = aList.split("name':'")[1].split("',")[0];
                         String sid = aList.split("s':'")[1].split("'")[0].trim();
 
                         if (link.contains("kinozal.tv")) {
@@ -116,10 +116,10 @@ public class Tparser extends AsyncTask<Void, Void, Void> {
             Document htmlDoc = Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
                         .timeout(10000).ignoreContentType(true).get();
-            Log.d(TAG, "Getdata: parser " + url + " | " + title);
+            Log.d(TAG, "Getdata: parser " + url);
             return htmlDoc;
         } catch (Exception e) {
-            Log.d(TAG, "Getdata: parser error " + url + " | " + title);
+            Log.d(TAG, "Getdata: parser error " + url);
             e.printStackTrace();
             return null;
         }

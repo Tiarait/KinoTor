@@ -52,7 +52,7 @@ public class ParserAmcet extends AsyncTask<Void, Void, Void> {
     private void ParseHtml(Document data) {
         if (data != null) {
             String title = "error parsing", url_entry = "error parsing", img = "error parsing",
-                    quality = "error parsing";
+                    quality = "error parsing", rating = "error parsing";
             String name = "error", subname = "error", year = "error parsing", country = "error parsing",
                     genre = "error parsing", time = "error parsing", translator = "error parsing",
                     director = "error parsing", actors = "error parsing", description_t = "error parsing",
@@ -72,6 +72,8 @@ public class ParserAmcet extends AsyncTask<Void, Void, Void> {
                         if (url.contains("page/"))
                             url_entry = entry.select(".short_header a").first().attr("href");
                         else url_entry = entry.select("a").first().attr("href");
+                        if (url.contains("http://cameleo.xyz"))
+                            url_entry = Statics.AMCET_URL + "/" + url_entry.split("/")[url_entry.split("/").length-1];
                     }
 
                     if (entry.html().contains("serieslabel")) {
@@ -88,14 +90,32 @@ public class ParserAmcet extends AsyncTask<Void, Void, Void> {
                     if (entry.html().contains("img src")) {
                         img = Statics.AMCET_URL + entry.select("img").first().attr("src");
                     }
+                    if (entry.html().contains("short_info")) {
+                        genre = entry.select(".short_info").text().trim();
+                    }
+                    if (entry.html().contains("imdb")) {
+                        rating = entry.select(".imdb").text().trim();
+                        if (rating.contains("0.000") && entry.html().contains(".kinopoisk"))
+                            rating = entry.select(".kinopoisk").text().trim();
+                    } else if (entry.html().contains(".kinopoisk"))
+                        rating = entry.select(".kinopoisk").text().trim();
+                    else rating = "error";
+                    if (rating.contains("0.000")) rating = "0.00";
 
                     itempath.setTitle(title);
                     itempath.setImg(img);
                     itempath.setUrl(url_entry);
                     itempath.setQuality(quality);
+                    itempath.setRating(rating);
                     itempath.setVoice(translator);
-                    itempath.setSeason(Integer.parseInt(season.replace(" ", "")));
-                    itempath.setSeries(Integer.parseInt(series.replace(" ", "")));
+                    itempath.setGenre(genre);
+                    try {
+                        itempath.setSeason(Integer.parseInt(season.replace(" ", "")));
+                        itempath.setSeries(Integer.parseInt(series.replace(" ", "")));
+                    } catch (Exception e) {
+                        itempath.setSeason(0);
+                        itempath.setSeries(0);
+                    }
                     items.add(itempath);
                 }
             } else {
@@ -178,6 +198,14 @@ public class ParserAmcet extends AsyncTask<Void, Void, Void> {
                                 .split(" сезон ")[1].split(" сер")[0];
                     }
                 }
+                if (data.html().contains("imdb rki")) {
+                    rating = data.select(".imdb.rki").text().trim();
+                    if (rating.contains("0.000") && data.html().contains(".kinopoisk.rki"))
+                        rating = data.select(".kinopoisk.rki").text().trim();
+                } else if (data.html().contains(".kinopoisk.rki"))
+                    rating = data.select(".kinopoisk.rki").text().trim();
+                else rating = "error";
+                if (rating.contains("0.000")) rating = "0.00";
 
                 itempath.setUrl(url);
                 itempath.setTitle(name);
@@ -185,6 +213,7 @@ public class ParserAmcet extends AsyncTask<Void, Void, Void> {
                 itempath.setSubTitle(subname);
                 itempath.setQuality(quality);
                 itempath.setVoice(translator);
+                itempath.setRating(rating);
                 itempath.setDescription(description_t);
                 itempath.setDate(year);
                 itempath.setCountry(country);
@@ -212,32 +241,40 @@ public class ParserAmcet extends AsyncTask<Void, Void, Void> {
     }
 
     private Document Getdata(String url) {
-        try {
-            Document htmlDoc;
-            if (url.contains("page/") || url.contains(".html"))
-                htmlDoc = Jsoup.connect(url)
-                        .data("xsort", "1")
-                        .data("xs_field", ItemMain.xs_field)
-                        .data("xs_value", ItemMain.xs_value)
-                        .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
-                        .timeout(10000).ignoreContentType(true).post();
-            else
-                htmlDoc = Jsoup.connect(url.split("'page'")[0])
-                        .data("do", "search")
-                        .data("subaction", "search")
-                        .data("search_start", url.split("'page'")[1])
-                        .data("result_from", "1")
-                        .data("story", ItemMain.xs_search.replace("-", " "))
-                        .data("titleonly", "3")
-                        .referrer(Statics.AMCET_URL + "/films/")
-                        .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
-                        .timeout(10000).ignoreContentType(true).post();
-            Log.d(TAG, "Getdata: get connected to " + url);
-            return htmlDoc;
-        } catch (Exception e) {
-            Log.d(TAG, "Getdata: connected false to " + url);
-            e.printStackTrace();
+        if (url.startsWith("11https://sim-sim.appspot.com")) {
+            //Getdata(getLocation(url));
             return null;
+        } else {
+            try {
+                Document htmlDoc;
+                if (url.contains("http://cameleo.xyz/r?url="))
+                    url = "http://cameleo.xyz/r?url=" +
+                            url.split("r\\?url=")[1].replace("/","%2F");
+                if (url.contains("page") || url.contains(".html")) {
+                    htmlDoc = Jsoup.connect(url)
+                            .header("Content-Language", "en-US")
+                            .data("xsort", "1")
+                            .data("xs_field", ItemMain.xs_field)
+                            .data("xs_value", ItemMain.xs_value)
+                            .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
+                            .timeout(10000).ignoreContentType(true).post();
+                    Log.d(TAG, "GetdataAmcet: get connected to 1");
+                } else {
+                    htmlDoc = Jsoup.connect(url + "&titleonly=3")
+                            .header("Content-Language", "en-US")
+                            .referrer(Statics.AMCET_URL + "/films/")
+                            .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
+                            .timeout(10000).ignoreContentType(true).get();
+                    Log.d(TAG, "GetdataAmcet: get connected to 2");
+                }
+                Log.d(TAG, "GetdataAmcet: get connected to " + url);
+                Log.d(TAG, "GetdataAmcet: get connected to " + htmlDoc.location());
+                return htmlDoc;
+            } catch (Exception e) {
+                Log.d(TAG, "GetdataAmcet: connected false to " + url);
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 }

@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.kinotor.tiar.kinotor.R;
 import com.kinotor.tiar.kinotor.items.ItemHtml;
 import com.kinotor.tiar.kinotor.items.ItemTorrent;
 import com.kinotor.tiar.kinotor.parser.ParserAmcet;
 import com.kinotor.tiar.kinotor.parser.ParserHtml;
+import com.kinotor.tiar.kinotor.parser.ParserKinoFS;
 import com.kinotor.tiar.kinotor.parser.animevost.ParserAnimevost;
 import com.kinotor.tiar.kinotor.parser.torrents.Freerutor;
 import com.kinotor.tiar.kinotor.parser.torrents.Tparser;
@@ -35,6 +37,8 @@ public class DetailTorrents extends Fragment {
     private ItemHtml item;
     private RecyclerView rv;
     private LinearLayout pb;
+    private TextView pbText;
+    private Set<String> pref_base;
     private String[] torBaseArr = {"zooqle.com", "underverse.me", "kinozal.tv"};
     private String torBase = Arrays.toString(torBaseArr);
 
@@ -56,7 +60,7 @@ public class DetailTorrents extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_tor, container, false);
         pb = view.findViewById(R.id.tor_pb);
-        //pbText = view.findViewById(R.id.pb_text);
+        pbText = view.findViewById(R.id.pb_text);
         rv = view.findViewById(R.id.tor_item_list);
         rv.setLayoutManager(new GridLayoutManager(getContext(), 1));
         if (item != null)
@@ -71,6 +75,15 @@ public class DetailTorrents extends Fragment {
                             }
                         });
                 parserAmcet.execute();
+            } else if (DetailActivity.url.contains("kino-fs")) {
+                ParserKinoFS parserKinoFS = new ParserKinoFS(DetailActivity.url, null, new ItemHtml(),
+                        new OnTaskCallback() {
+                            @Override
+                            public void OnCompleted(ArrayList<ItemHtml> items, ItemHtml itempath) {
+                                setTorrents(itempath);
+                            }
+                        });
+                parserKinoFS.execute();
             } else if (DetailActivity.url.contains("animevost")) {
                 ParserAnimevost parserAnimevost = new ParserAnimevost(DetailActivity.url, null, new ItemHtml(),
                         new OnTaskCallback() {
@@ -102,9 +115,11 @@ public class DetailTorrents extends Fragment {
         rv.setAdapter(new AdapterTorrents(getContext(), torrent));
 
         HashSet<String> def = new HashSet<>(Arrays.asList(torBaseArr));
-        Set<String> pref_base = PreferenceManager.getDefaultSharedPreferences(getContext())
+        pref_base = PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getStringSet("base_tparser", def);
         torBase = pref_base.toString();
+
+        pbText.setText("Поиск: " + "0 из " + pref_base.size());
         if (pref_base.contains("zooqle.com")) {
             pb.setVisibility(View.VISIBLE);
             Zooqle zooqle = new Zooqle(item, new OnTaskTorrentCallback() {
@@ -121,6 +136,16 @@ public class DetailTorrents extends Fragment {
                 @Override
                 public void OnCompleted(ItemTorrent item) {
                     itemAddRv(item, "rutor.info");
+                }
+            });
+            tparser.execute();
+        }
+        if (pref_base.contains("nnmclub.to")) {
+            pb.setVisibility(View.VISIBLE);
+            Tparser tparser = new Tparser(item, "nnmclub.to", new OnTaskTorrentCallback() {
+                @Override
+                public void OnCompleted(ItemTorrent item) {
+                    itemAddRv(item, "nnmclub.to");
                 }
             });
             tparser.execute();
@@ -169,13 +194,22 @@ public class DetailTorrents extends Fragment {
             pb.setVisibility(View.GONE);
     }
     private void itemAddRv(ItemTorrent items, String source) {
-        torBase = torBase.replace(source, "");
+        torBase = torBase.replace(source, "").replace(" ", "")
+                .replace(",,", "").replace("[", "")
+                .replace("]", "").trim();
+        if (torBase.startsWith(",")) torBase = torBase.substring(1);
+        if (torBase.endsWith(",")) torBase = torBase.substring(0, torBase.length()-1);
+        pbText.setText("Поиск: " + (pref_base.size() - torBase.split(",").length) +
+                " из " + pref_base.size());
         if (torBase.contains("rutor.info") || torBase.contains("zooqle.com") ||
                 torBase.contains("rutracker.org") || torBase.contains("underverse.me")
-                || torBase.contains("kinozal.tv") || torBase.contains("freerutor.me")) {
+                || torBase.contains("kinozal.tv") || torBase.contains("freerutor.me")
+                || torBase.contains("nnmclub.to")) {
             pb.setVisibility(View.VISIBLE);
-        } else pb.setVisibility(View.GONE);
-        pb.setVisibility(View.GONE);
+        } else {
+            pb.setVisibility(View.GONE);
+            pbText.setText("Подождите...");
+        }
         ((AdapterTorrents) rv.getAdapter()).addItems(items);
         rv.getAdapter().notifyDataSetChanged();
     }

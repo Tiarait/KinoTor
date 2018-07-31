@@ -51,7 +51,6 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
 
     private Toolbar toolbar;
     private static String subtitle = "Фильмы", catalog;
-    private boolean first_start = true;
     boolean doubleBackToExitPressedOnce = false;
     private Utils utils;
     private ItemCatalogUrls catalogUrls;
@@ -67,12 +66,21 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
         animevost = preference.getBoolean("animevost_menu", false);
         exit = preference.getBoolean("exit", false);
         side_menu = preference.getBoolean("side_menu", true);
-        catalog = preference.getString("catalog", "amcet");
+        catalog = preference.getString("catalog", "kinofs");
 
-        Statics.KOSHARA_URL = "http://koshara." + preference.getString("koshara_url", "co");
-        Statics.COLDFILM_URL = "http://coldfilm." + preference.getString("coldfilm_url", "info");
-        Statics.ANIMEVOST_URL = "http://animevost." + preference.getString("animevost_url", "org");
-        Statics.AMCET_URL = "https://amcet." + preference.getString("amcet_url", "net");
+        //catalog
+        Statics.KOSHARA_URL = preference.getString("koshara_furl", Statics.KOSHARA_URL);
+        Statics.COLDFILM_URL = preference.getString("coldfilm_furl", Statics.COLDFILM_URL);
+        Statics.ANIMEVOST_URL = preference.getString("animevost_furl", Statics.ANIMEVOST_URL);
+        Statics.AMCET_URL = preference.getString("amcet_furl", Statics.AMCET_URL);
+        Statics.KINOFS_URL = preference.getString("kinofs_furl", Statics.KINOFS_URL);
+        //video
+        Statics.KINOSHA_URL = preference.getString("kinosha_furl", Statics.KINOSHA_URL);
+        Statics.KINOMANIA_URL = preference.getString("kinomania_furl", Statics.KINOMANIA_URL);
+        Statics.MOONWALK_URL = preference.getString("moonwalk_furl", Statics.MOONWALK_URL);
+        //torrent
+        Statics.ZOOQLE_URL = preference.getString("zooqle_furl", Statics.ZOOQLE_URL);
+        Statics.FREERUTOR_URL = preference.getString("freerutor_furl", Statics.FREERUTOR_URL);
 
         if (preference.getBoolean("fullscreen", false)) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -96,20 +104,25 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
         catalogUrls = new ItemCatalogUrls();
         utils = new Utils();
 
-        if (first_start){
+        if (Statics.firsStart){
+            boolean upd_in_start = preference.getBoolean("auto_update", true);
+            if (upd_in_start) {
+                Update updator = new Update(this);
+                updator.execute();
+            }
             subtitle = preference.getString("start_category", "Фильмы");
-            setCurURL();
-            first_start = false;
+            Statics.firsStart = false;
         }
 
         refreshBar();
+        setCurURL();
 
-        boolean upd_in_start = preference.getBoolean("auto_update", true);
-        if (upd_in_start) {
-            Update updator = new Update(this);
-            updator.execute();
-        }
-        OnPage(ItemMain.cur_url, subtitle);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            if (bundle.getString("Type") != null && bundle.getString("Query") != null) {
+                searchActor(bundle.getString("Query"));
+            } else OnPage(ItemMain.cur_url, subtitle);
+        } else OnPage(ItemMain.cur_url, subtitle);
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
@@ -121,7 +134,8 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
             menu_item.addItem(new ItemMain.Item(0, "Фильмы", catalogUrls.film(catalog)));
             menu_item.addItem(new ItemMain.Item(1, "Сериалы", catalogUrls.serial(catalog)));
             menu_item.addItem(new ItemMain.Item(2, "Мультфильмы", catalogUrls.mult(catalog)));
-            if (catalog.equals("amcet")) menu_item.addItem(new ItemMain.Item(3, "Аниме", catalogUrls.anime(catalog)));
+            if (!catalog.equals("koshara")) menu_item.addItem(new ItemMain.Item(3, "Аниме", catalogUrls.anime(catalog)));
+            if (catalog.equals("kinofs")) menu_item.addItem(new ItemMain.Item(3, "ТВ Передачи", catalogUrls.tv(catalog)));
             menu_item.addItem(new ItemMain.Item(4, "...", ""));
             menu_item.addItem(new ItemMain.Item(5, "Избранное", "http:// /"));
             menu_item.addItem(new ItemMain.Item(6, "История", "http:// /"));
@@ -173,22 +187,39 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
     }
 
     private void setCurURL(){
-        if (subtitle.equals("Coldfilm")) ItemMain.cur_url = Statics.COLDFILM_URL + "/news/";
-        if (subtitle.equals("AnimeVost")) ItemMain.cur_url = Statics.ANIMEVOST_URL + "/";
-        if (subtitle.equals("Фильмы")) ItemMain.cur_url = catalogUrls.film(catalog);
-        if (subtitle.equals("Сериалы")) ItemMain.cur_url = catalogUrls.serial(catalog);
-        if (subtitle.equals("Мультфильмы")) ItemMain.cur_url = catalogUrls.mult(catalog);
-        if (subtitle.equals("Аниме")) ItemMain.cur_url = catalogUrls.anime(catalog);
+        switch (subtitle) {
+            case "Coldfilm":
+                ItemMain.cur_url = Statics.COLDFILM_URL + "/news/";
+                Statics.CATALOG = "coldfilm";
+                break;
+            case "AnimeVost":
+                ItemMain.cur_url = Statics.ANIMEVOST_URL + "/";
+                Statics.CATALOG = "animevost";
+                break;
+            default:
+                Statics.CATALOG = catalog;
+                if (subtitle.equals("Фильмы") || getTitle().equals("Фильмы"))
+                    ItemMain.cur_url = catalogUrls.film(catalog);
+                if (subtitle.equals("Сериалы") || getTitle().equals("Сериалы"))
+                    ItemMain.cur_url = catalogUrls.serial(catalog);
+                if (subtitle.equals("Мультфильмы") || getTitle().equals("Мультфильмы"))
+                    ItemMain.cur_url = catalogUrls.mult(catalog);
+                if (subtitle.equals("Аниме") || getTitle().equals("Аниме"))
+                    ItemMain.cur_url = catalogUrls.anime(catalog);
+                if (subtitle.equals("ТВ Передачи") || getTitle().equals("ТВ Передачи"))
+                    ItemMain.cur_url = catalogUrls.tv(catalog);
+                break;
+        }
     }
 
     public void setTitle() {
-        toolbar.setTitle(subtitle);
+        toolbar.setTitle(subtitle.replace("Актер", ""));
         toolbar.setSubtitle(catalog);
-        if (ItemMain.cur_url.contains("coldfilm")) {
+        if (Statics.CATALOG.contains("coldfilm")) {
             setTitle("ColdFilm");
             toolbar.setSubtitle("coldfilm");
         }
-        if (ItemMain.cur_url.contains("animevost")) {
+        if (Statics.CATALOG.contains("animevost")) {
             setTitle("AnimeVost");
             toolbar.setSubtitle("animevost");
         }
@@ -202,18 +233,22 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
             ItemMain.cur_url = url;
             subtitle = category;
 
+            setCurURL();
             invalidateOptionsMenu();
             onAttachedToWindow();
 
             ItemMain.cur_items = 0;
 
-            if (subtitle.contains("Поиск:")) {
+            if (subtitle.contains("Поиск:") || subtitle.contains("ПоискАктер:")) {
                 Log.d("Main", "OnPage: " + category + " " + url);
                 if (catalog.contains("amcet")) ItemMain.cur_url = Statics.AMCET_URL;
                 else if (catalog.contains("koshara")) ItemMain.cur_url = Statics.KOSHARA_URL;
-                else if (ItemMain.cur_url.contains("coldfim")) ItemMain.cur_url = Statics.COLDFILM_URL;
-                else if (ItemMain.cur_url.contains("animevost")) ItemMain.cur_url = Statics.ANIMEVOST_URL;
-                searchGo(subtitle.split("Поиск: ")[1].trim());
+                else if (catalog.contains("kinofs")) ItemMain.cur_url = Statics.KINOFS_URL;
+                else if (Statics.CATALOG.contains("coldfim")) ItemMain.cur_url = Statics.COLDFILM_URL;
+                else if (Statics.CATALOG.contains("animevost")) ItemMain.cur_url = Statics.ANIMEVOST_URL;
+                if (subtitle.contains("Актер"))
+                    searchActor(subtitle.split(": ")[1].trim());
+                else searchGo(subtitle.split(": ")[1].trim());
             } else {
                 Log.d("Main", "OnPage: " + category + " " + url);
                 MainCatalogFragment fragment = new MainCatalogFragment(url, category);
@@ -234,6 +269,7 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
         int id = item.getItemId();
         ItemMain.xs_value = "";
         if (id == R.id.films) {
+            subtitle = "Фильмы";
             OnPage(catalogUrls.film(catalog), "Фильмы");
         } else if (id == R.id.serials) {
             OnPage(catalogUrls.serial(catalog), "Сериалы");
@@ -241,6 +277,8 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
             OnPage(catalogUrls.mult(catalog), "Мультфильмы");
         } else if (id == R.id.anime) {
             OnPage(catalogUrls.anime(catalog), "Аниме");
+        } else if (id == R.id.tv) {
+            OnPage(catalogUrls.tv(catalog), "ТВ Передачи");
         } else if (id == R.id.favor) {
             OnPage("http:// /", "Избранное");
         } else if (id == R.id.history) {
@@ -269,9 +307,10 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
         if (!animevost) navigationView.getMenu().findItem(R.id.animevost).setVisible(false);
         else navigationView.getMenu().findItem(R.id.animevost).setVisible(true);
         if (!exit) navigationView.getMenu().findItem(R.id.exit).setVisible(false);
-        if (!catalog.equals("amcet")) navigationView.getMenu().findItem(R.id.anime).setVisible(false);
+        if (catalog.equals("koshara")) navigationView.getMenu().findItem(R.id.anime).setVisible(false);
         else navigationView.getMenu().findItem(R.id.anime).setVisible(true);
-
+        if (!catalog.equals("kinofs")) navigationView.getMenu().findItem(R.id.tv).setVisible(false);
+        else navigationView.getMenu().findItem(R.id.tv).setVisible(true);
 
         if (subtitle.equals("Coldfilm"))
             navigationView.getMenu().findItem(R.id.coldfilm).setChecked(true);
@@ -297,6 +336,10 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
             navigationView.getMenu().findItem(R.id.anime).setChecked(true);
         else navigationView.getMenu().findItem(R.id.anime).setChecked(false);
 
+        if (subtitle.equals("ТВ Передачи"))
+            navigationView.getMenu().findItem(R.id.tv).setChecked(true);
+        else navigationView.getMenu().findItem(R.id.tv).setChecked(false);
+
         if (subtitle.equals("Сериалы"))
             navigationView.getMenu().findItem(R.id.serials).setChecked(true);
         else navigationView.getMenu().findItem(R.id.serials).setChecked(false);
@@ -311,34 +354,43 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
+
         MenuItem menuSort = menu.findItem(R.id.action_sort);
+        MenuItem menuSortGenre = menu.findItem(R.id.menuSortOrderCategory);
+        MenuItem menuSortCountry = menu.findItem(R.id.menuSortOrderCountry);
+        MenuItem menuSortYear = menu.findItem(R.id.menuSortOrderYear);
+
         MenuItem menuCategory = menu.findItem(R.id.action_category);
         MenuItem amcet = menu.findItem(R.id.menuСatalogAmcet);
+        MenuItem kinofs = menu.findItem(R.id.menuСatalogKinoFS);
         MenuItem koshara = menu.findItem(R.id.menuСatalogKoshara);
         MenuItem dbSave = menu.findItem(R.id.action_db_save);
         MenuItem dbDel = menu.findItem(R.id.action_db_del);
         MenuItem dbRest = menu.findItem(R.id.action_db_restore);
         MenuItem menuCatalog = menu.findItem(R.id.action_catalog);
-        MenuItem menuSortCountry = menu.findItem(R.id.menuSortOrderCountry);
         MenuItem menuSearchActor = menu.findItem(R.id.action_actor_search);
 
-        menuSort.setVisible(catalog.equals("amcet"));
+        menuSort.setVisible(!catalog.equals("koshra"));
         amcet.setChecked(catalog.equals("amcet"));
-        amcet.setEnabled(catalog.equals("amcet"));
-        koshara.setChecked(catalog.equals("amcet"));
+        amcet.setEnabled(!catalog.equals("amcet"));
+        koshara.setChecked(catalog.equals("koshara"));
+        koshara.setEnabled(!catalog.equals("koshara"));
+        kinofs.setChecked(catalog.equals("kinofs"));
+        kinofs.setEnabled(!catalog.equals("kinofs"));
 
         dbSave.setVisible(subtitle.equals("История") || subtitle.equals("Избранное"));
         dbDel.setVisible(subtitle.equals("История") || subtitle.equals("Избранное"));
         dbRest.setVisible(subtitle.equals("История") || subtitle.equals("Избранное"));
 
-        menuSearchActor.setVisible(ItemMain.cur_url.contains("amcet"));
+        menuSearchActor.setVisible(Statics.CATALOG.contains("amcet") ||
+                Statics.CATALOG.contains("koshara") || Statics.CATALOG.contains("kinofs"));
 
-        if (ItemMain.cur_url.contains("coldfilm") || subtitle.equals("Избранное") ||
+        if (Statics.CATALOG.contains("coldfilm") || subtitle.equals("Избранное") ||
                 subtitle.equals("История")) {
             menuSort.setVisible(false);
             menuCategory.setVisible(false);
             menuCatalog.setVisible(false);
-        } else if (ItemMain.cur_url.contains("animevost")) {
+        } else if (Statics.CATALOG.contains("animevost")) {
             menuSort.setVisible(true);
             menuSortCountry.setVisible(false);
             menuCategory.setVisible(false);
@@ -347,6 +399,18 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
             menuCatalog.setVisible(true);
             menuSortCountry.setVisible(true);
         }
+
+        if (Statics.CATALOG.contains("kinofs")) {
+            menuSortCountry.setVisible(false);
+            if (subtitle.equals("Фильмы")){
+                menuSortYear.setVisible(true);
+                menuSortGenre.setVisible(true);
+            } else {
+                menuSortYear.setVisible(false);
+                menuSortGenre.setVisible(false);
+            }
+        }
+
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -361,6 +425,12 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
                 return false;
             }
         });
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("qwe", "onClick: search");
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -370,7 +440,7 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
         ItemMain.cur_items = 0;
         ItemMain.xs_value = "";
 
-        if (ItemMain.cur_url.contains("koshara"))
+        if (Statics.CATALOG.contains("koshara"))
             try {
                 query = URLEncoder.encode(query, "windows-1251");
             } catch (UnsupportedEncodingException e) {
@@ -380,13 +450,15 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
         View recyclerView = findViewById(R.id.item_list);
         setupRecyclerView((RecyclerView) recyclerView);
 
-        if (ItemMain.cur_url.contains("koshara"))
+        if (Statics.CATALOG.contains("koshara"))
             ItemMain.cur_url = Statics.KOSHARA_URL + "/index.php?do=search&subaction=search&titleonly=3&story=" + query;
-        if (ItemMain.cur_url.contains("coldfilm"))
+        if (Statics.CATALOG.contains("coldfilm"))
             ItemMain.cur_url = Statics.COLDFILM_URL + "/search/?q=" + query;
-        if (ItemMain.cur_url.contains("amcet"))
-            ItemMain.xs_search = query;
-        if (ItemMain.cur_url.contains("animevost"))
+        if (Statics.CATALOG.contains("kinofs"))
+            ItemMain.cur_url = Statics.KINOFS_URL + "/search/" + query + "/";
+        if (Statics.CATALOG.contains("amcet"))
+            ItemMain.cur_url = Statics.AMCET_URL + "/?subaction=search&do=search&story=" + query;
+        if (Statics.CATALOG.contains("animevost"))
             ItemMain.xs_search = query;
 
         MainCatalogFragment fragment = new MainCatalogFragment(ItemMain.cur_url, "Поиск");
@@ -408,6 +480,8 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ItemMain.xs_value = "";
+                        subtitle =  ctg_list[i];
+                        setCurURL();
                         OnPage(url_list[i], ctg_list[i]);
                     }
                 });
@@ -472,12 +546,22 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
     }
 
     public void onSortOrderList(MenuItem item) {
-        if (ItemMain.cur_url.contains("animevost")){
+        if (Statics.CATALOG.contains("animevost")){
             AlertDialog.Builder builder = new AlertDialog.Builder(this, 2);
             builder.setTitle("Выберите тип").setItems(catalogUrls.getSortName("animevost"), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     OnPage(catalogUrls.getSortUrl("animevost")[i], subtitle);
+                }
+            });
+            builder.create().show();
+        } else if (Statics.CATALOG.contains("kinofs")){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, 2);
+            builder.setTitle("Выберите тип").setItems(catalogUrls.getSortName("kinofs"), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ItemMain.xs_value = catalogUrls.getSortUrl("kinofs")[i];
+                    OnPage(ItemMain.cur_url, subtitle);
                 }
             });
             builder.create().show();
@@ -496,7 +580,7 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
     }
 
     public void onSortOrderGenre(MenuItem item) {
-        if (ItemMain.cur_url.contains("animevost")){
+        if (Statics.CATALOG.contains("animevost")){
             AlertDialog.Builder builder = new AlertDialog.Builder(this, 2);
             builder.setTitle("Выберите жанр").setItems(catalogUrls.getGenre("animevost"), new DialogInterface.OnClickListener() {
                 @Override
@@ -505,6 +589,27 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
                 }
             });
             builder.create().show();
+        } else if (Statics.CATALOG.contains("kinofs")){
+            if (subtitle.equals("Сериалы")) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, 2);
+                builder.setTitle("Выберите жанр").setItems(catalogUrls.getGenreS("kinofs"), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        OnPage(catalogUrls.getGenreSUrl("kinofs")[i], subtitle);
+                    }
+                });
+                builder.create().show();
+            }
+            if (subtitle.equals("Фильмы")) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, 2);
+                builder.setTitle("Выберите жанр").setItems(catalogUrls.getGenreF("kinofs"), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        OnPage(catalogUrls.getGenreFUrl("kinofs")[i], subtitle);
+                    }
+                });
+                builder.create().show();
+            }
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, 2);
             builder.setTitle("Выберите жанр").setItems(catalogUrls.getGenre("amcet"), new DialogInterface.OnClickListener() {
@@ -520,12 +625,21 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
     }
 
     public void onSortOrderYear(MenuItem item) {
-        if (ItemMain.cur_url.contains("animevost")){
+        if (Statics.CATALOG.contains("animevost")){
             AlertDialog.Builder builder = new AlertDialog.Builder(this, 2);
             builder.setTitle("Выберите год").setItems(catalogUrls.getYear("animevost"), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     OnPage(Statics.ANIMEVOST_URL + "/god/" + catalogUrls.getYear("animevost")[i] + "/", subtitle);
+                }
+            });
+            builder.create().show();
+        } else if (Statics.CATALOG.contains("kinofs")){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, 2);
+            builder.setTitle("Выберите год").setItems(catalogUrls.getYear("kinofs"), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    OnPage(catalogUrls.getYearURL("kinofs")[i], subtitle);
                 }
             });
             builder.create().show();
@@ -561,7 +675,9 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
         SharedPreferences.Editor editor = preference.edit();
         if (item.getTitle().equals("Amcet"))
             editor.putString("catalog", "amcet");
-        else editor.putString("catalog", "koshara");
+        else if (item.getTitle().equals("Koshara"))
+            editor.putString("catalog", "koshara");
+        else editor.putString("catalog", "kinofs");
         editor.apply();
 
         catalog = preference.getString("catalog", "amcet");
@@ -574,25 +690,30 @@ public class MainCatalogActivity extends AppCompatActivity implements Navigation
     }
 
     public void onActorSearch(MenuItem item) {
-        DialogFragment search = new DialogSearch() {
-            @Override
-            public void ok(String s) {
-                subtitle = "Поиск: " + s;
-                onAttachedToWindow();
-                ItemMain.cur_items = 0;
-                ItemMain.xs_value = "";
-
-                if (ItemMain.cur_url.contains("amcet"))
-                    ItemMain.cur_url = "https://amcet.net/xfsearch/actors/" + s.replace(" ", "+") + "/";
-
-                MainCatalogFragment fragment = new MainCatalogFragment(ItemMain.cur_url, "ПоискАктер");
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.item_detail_container, fragment)
-                        .commit();
-                setTitle();
-            }
-        };
+        DialogFragment search = new DialogSearch();
         search.show(this.getFragmentManager(), subtitle);
+    }
+
+    private void searchActor(String actor) {
+        subtitle = "ПоискАктер: " + actor;
+        onAttachedToWindow();
+        ItemMain.cur_items = 0;
+        ItemMain.xs_value = "";
+        if (Statics.CATALOG.contains("koshara")) {
+            try { actor = URLEncoder.encode(actor, "windows-1251"); }
+            catch (UnsupportedEncodingException ignored) { }
+            ItemMain.cur_url = Statics.KOSHARA_URL + "/index.php?do=search&subaction=search&story=" + actor;
+        } else if (Statics.CATALOG.contains("amcet"))
+            ItemMain.cur_url = Statics.AMCET_URL + "/xfsearch/actors/" +
+                    actor.replace(" ", "+") + "/";
+        else if (Statics.CATALOG.contains("kinofs"))
+            ItemMain.cur_url = Statics.KINOFS_URL + "/search/" +
+                    actor.replace(" ", "%20") + "/";
+        MainCatalogFragment fragment = new MainCatalogFragment(ItemMain.cur_url, "ПоискАктер");
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.item_detail_container, fragment)
+                .commit();
+        setTitle();
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.kinotor.tiar.kinotor.items.ItemHtml;
 import com.kinotor.tiar.kinotor.items.ItemTorrent;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskTorrentCallback;
 
 import org.jsoup.Jsoup;
@@ -76,7 +77,7 @@ public class Zooqle extends AsyncTask<Void, Void, Void> {
                             && check) {
 //                        Log.d(TAG, "Zooqle add: "+ name + " " + magnet);
                         torrent.setTorTitle(name);
-                        torrent.setTorUrl(url.replace("zooqle.com", "zooqle.unblocked.mx"));
+                        torrent.setTorUrl(url.replace("zooqle.com", Statics.ZOOQLE_URL.split("//")[1]));
                         torrent.setTorSize(size.trim());
                         torrent.setTorMagnet(magnet);
                         torrent.setTorSid(sid.trim());
@@ -108,6 +109,8 @@ public class Zooqle extends AsyncTask<Void, Void, Void> {
     }
 
     private Document Getdata(String title, int pg) {
+        title = title.replace("1-2", "2").replace("2-3", "3")
+                .replace("3-4", "4");
         try {
             title = URLEncoder.encode(title, "utf-8");
         } catch (UnsupportedEncodingException e) {
@@ -122,7 +125,7 @@ public class Zooqle extends AsyncTask<Void, Void, Void> {
         if (item.getType(0).contains("anime"))
             category = category + "%2CAnime";
 
-        String url = "https://zooqle.unblocked.mx/search?pg="+pg+"&q=" + title + "+category%3A" + category + "&s=dt&fmt=rss";
+        String url = Statics.ZOOQLE_URL + "/search?pg="+pg+"&q=" + title + "+category%3A" + category + "&s=dt&fmt=rss";
         try {
             Document htmlDoc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")

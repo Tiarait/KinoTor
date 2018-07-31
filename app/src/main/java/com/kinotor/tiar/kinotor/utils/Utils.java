@@ -3,12 +3,16 @@ package com.kinotor.tiar.kinotor.utils;
 import android.app.Activity;
 import android.app.UiModeManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
+
+import com.kinotor.tiar.kinotor.items.Statics;
 
 import static android.content.Context.UI_MODE_SERVICE;
 
@@ -36,21 +40,105 @@ public class Utils {
                     >= Configuration.SCREENLAYOUT_SIZE_LARGE)
                     || context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEVISION)
                     || context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LEANBACK);
-        }
+    }
 
-        public int calculateGrid(Context context, int width) {
+    private int calcGrid(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("side_menu", true)
                 && context.getResources().getConfiguration().orientation == 2 && isTablet(context))
             dpWidth -= 230;
-        if (PreferenceManager.getDefaultSharedPreferences(context).getString("grid_catalog", "2").equals("2"))
-            return (int) (dpWidth / width);
-        else return 1;
+        return  (int)dpWidth / Statics.CATALOG_W;
     }
 
+    public int calculateGrid(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int r = calcGrid(context);
+        if (preferences.getString("grid_catalog", "2").equals("2") &&
+                preferences.getString("grid_count", "0").equals("0"))
+            return r;
+        else if (preferences.getString("grid_catalog", "2").equals("1")) {
+            return 1;
+        }
+        else return Integer.parseInt(preferences.getString("grid_count", "0"));
+    }
+
+    public float calculateScale(Context context, int count) {
+        if (PreferenceManager.getDefaultSharedPreferences(context).getString("grid_count", "0").equals("0") ||
+                count == calcGrid(context)) {
+            return 1;
+        } else {
+            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("side_menu", true)
+                    && context.getResources().getConfiguration().orientation == 2 && isTablet(context))
+                dpWidth -= 230;
+            if (PreferenceManager.getDefaultSharedPreferences(context).getString("grid_catalog", "2").equals("2")) {
+                int newWidth = (int) (dpWidth / count);
+                return ((float) newWidth / (float) Statics.CATALOG_W);
+            } else return 1;
+        }
+    }
+
+    public float pixelToDp(float px, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public float dpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public String unicodeToString(String uni){
+        StringBuilder tt = new StringBuilder();
+        String[] parts = uni.replace("\\", "/").split("/");
+        for(String x:parts){
+            if (x.startsWith("u")) {
+                String k = "";
+                if (x.trim().contains(" ")){
+                    k = x.split(" ")[1];
+                    x = x.split(" ")[0].trim();
+                } else if (x.trim().contains("-")){
+                    k = "-";
+                    x = x.replace("-", "");
+                } else if (x.trim().contains(":")){
+                    k = ":";
+                    x = x.replace(":", "");
+                } else if (x.trim().contains(".")){
+                    k = ".";
+                    x = x.replace(".", "");
+                } else if (x.trim().contains(",")){
+                    k = ":";
+                    x = x.replace(",", "");
+                }  else if (x.trim().contains("'")){
+                    k = "'";
+                    x = x.replace("'", "");
+                }
+                String s = x.replace("u", "").trim();
+                try {
+                    int hexVal = Integer.parseInt(s, 16);
+                    tt.append((char) hexVal);
+                } catch (Exception e){
+                    tt.append(s);
+                }
+
+                if (!k.isEmpty()) {
+                    tt.append(" ");
+                    tt.append(k);
+                }
+            } else tt.append(" ");
+            if (x.contains(" "))
+                tt.append(" ");
+        }
+        return tt.toString().replace(" -", "-").trim();
+    }
+
+
     public boolean trueTitle(String t_m, String t_n) {
-        boolean tit = tit = ("." + t_m + ".").contains("." + t_n + ".") ||
+        boolean tit = ("." + t_m + ".").contains("." + t_n + ".") ||
                 ("." + t_m + ",").contains("." + t_n + ",") ||
                 ("." + t_m + " ").contains("." + t_n + " ") ||
                 ("." + t_m + ":").contains("." + t_n + ":") ||

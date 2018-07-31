@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.kinotor.tiar.kinotor.R;
 import com.kinotor.tiar.kinotor.items.ItemHtml;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.ui.DetailActivity;
 import com.squareup.picasso.Picasso;
 
@@ -33,22 +34,22 @@ public class AdapterMore extends RecyclerView.Adapter<AdapterMore.CatalogViewHol
     @Override
     public AdapterMore.CatalogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_catalog, parent, false);
+
+        RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) view.getLayoutParams();
+        Utils utils = new Utils();
+        lp.height = (int) (utils.dpToPixel(Statics.CATALOG_H, context));
+        lp.width = (int) (utils.dpToPixel(Statics.CATALOG_W, context));
+        view.setLayoutParams(lp);
+
         return new AdapterMore.CatalogViewHolder(view);
     }
 
-    private void updateSelect(View view) {
-        if (!view.isSelected()) {
-            view.setBackgroundColor(view.getResources().getColor(R.color.colorAccent));
-        }
-        else {
-            view.setBackgroundColor(view.getResources().getColor(R.color.colorGone));
-        }
-    }
-
     @Override
-    public void onBindViewHolder(AdapterMore.CatalogViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+    public void onBindViewHolder(final AdapterMore.CatalogViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         holder.title.setText(items.getMoreTitle(position));
         holder.quality.setText(items.getMoreQu(position));
+        holder.rating.setVisibility(View.GONE);
+        holder.genre.setVisibility(View.GONE);
 
         if (items.getMoreVoice(position).contains("error"))
             holder.voice.setVisibility(View.GONE);
@@ -74,7 +75,14 @@ public class AdapterMore extends RecyclerView.Adapter<AdapterMore.CatalogViewHol
             @Override
             public void onFocusChange(View view, boolean b) {
                 Log.d(TAG, "onFocusChange: "+ position);
-                updateSelect(view);
+                if (!view.isSelected()) {
+                    view.setBackgroundColor(view.getResources().getColor(R.color.colorAccent));
+                    holder.title.setBackgroundColor(view.getResources().getColor(R.color.colorAccent));
+                }
+                else {
+                    view.setBackgroundColor(view.getResources().getColor(R.color.colorGone));
+                    holder.title.setBackgroundColor(view.getResources().getColor(R.color.colorPrimary));
+                }
                 view.setSelected(b);
             }
         });
@@ -109,7 +117,7 @@ public class AdapterMore extends RecyclerView.Adapter<AdapterMore.CatalogViewHol
     }
 
     class CatalogViewHolder extends RecyclerView.ViewHolder {
-        TextView title, quality, voice;
+        TextView title, quality, voice, rating, genre;
         ImageView poster;
         CardView cardView;
 
@@ -117,7 +125,9 @@ public class AdapterMore extends RecyclerView.Adapter<AdapterMore.CatalogViewHol
             super(itemView);
             title = itemView.findViewById(R.id.title);
             quality = itemView.findViewById(R.id.quality);
+            rating = itemView.findViewById(R.id.rating);
             voice = itemView.findViewById(R.id.voice);
+            genre = itemView.findViewById(R.id.genre);
             poster = itemView.findViewById(R.id.imgPoster);
             cardView = itemView.findViewById(R.id.cardview);
         }

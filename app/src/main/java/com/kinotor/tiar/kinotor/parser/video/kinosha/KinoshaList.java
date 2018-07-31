@@ -1,4 +1,4 @@
-package com.kinotor.tiar.kinotor.parser.kinosha;
+package com.kinotor.tiar.kinotor.parser.video.kinosha;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -84,13 +84,13 @@ public class KinoshaList extends AsyncTask<Void, Void, Void> {
     }
 
     private String getQulity(String q) {
-        if (q.contains("360.mp4") || q.contains(".360.")) {
+        if (q.contains("360.mp4") || q.contains(".360.") || q.contains("_360_")) {
             return "360 (mp4)";
-        } else if (q.contains("480.mp4") || q.contains(".480.") || q.contains(".400p.")) {
+        } else if (q.contains("480.mp4") || q.contains(".480.") || q.contains("_400_")) {
             return "480 (mp4)";
-        } else if (q.contains("720.mp4") || q.contains(".720.")) {
+        } else if (q.contains("720.mp4") || q.contains(".720.") || q.contains("_720_")) {
             return "720 (mp4)";
-        } else if (q.contains("1080.mp4") || q.contains(".1080.")) {
+        } else if (q.contains("1080.mp4") || q.contains(".1080.") || q.contains("_1080_")) {
             return "1080 (mp4)";
         } else return "... (mp4)";
     }
@@ -273,8 +273,8 @@ public class KinoshaList extends AsyncTask<Void, Void, Void> {
 
     private Document GetData(String s){
         String u = s;
-        if (u.contains("kinosha.su"))
-            u = s.split("su/")[1].split("-")[0];
+        if (u.contains("kinosha") && u.contains("/") && u.contains("-"))
+            u = s.split("/")[s.split("/").length-1].split("-")[0];
         try {
             Document htmlDoc = Jsoup.connect("http://api.kinosha.su/getplay?pl_type=movie&key%5Bid%5D=" + u)
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")

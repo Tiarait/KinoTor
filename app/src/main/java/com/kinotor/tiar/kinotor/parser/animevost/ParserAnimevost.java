@@ -51,7 +51,7 @@ public class ParserAnimevost extends AsyncTask<Void, Void, Void> {
     private void ParseHtml(Document data) {
         if (data != null) {
             String title = "error parsing", url_entry = "error parsing", img = "error parsing",
-                    quality = "error parsing";
+                    quality = "error parsing", rating = "error parsing";
             String subname = "error", year = "error parsing", country = "error parsing",
                     genre = "error parsing", time = "error parsing", translator = "error parsing",
                     director = "error parsing", actors = "error parsing", description = "error parsing",
@@ -100,21 +100,33 @@ public class ParserAnimevost extends AsyncTask<Void, Void, Void> {
                         series = "0";
                     }
 
+                    if (entry.html().contains("current-rating"))
+                        rating = entry.select(".current-rating").text().trim();
+
                     if (entry.html().contains("shortstoryContent")) {
                         if (entry.select(".shortstoryContent").text().contains("Год выхода:") &&
-                                entry.select(".shortstoryContent").text().contains("Жанр"))
+                                entry.select(".shortstoryContent").text().contains("Жанр:")) {
                             title = title.trim() + " (" + entry.select(".shortstoryContent").text()
                                     .split("Год выхода:")[1].split("Жанр")[0].trim() + ")";
+                            genre = entry.select(".shortstoryContent").text()
+                                    .split("Жанр:")[1].trim();
+                            if (genre.contains("Тип:")) genre = genre.split("Тип:")[0].trim();
+                        }
                     }
                     if (!series.trim().equals("Трейлер") && !series.trim().equals("Анонс") &&
                             !series.trim().equals("Тизер") && !series.trim().equals("Скоро")) {
+                        series = series.replace("OVA", "")
+                                .replace("ONA", "").replace(" ", "");
+                        if (series.isEmpty()) series = "1";
                         itempath.setTitle(title);
                         itempath.setImg(img);
                         itempath.setUrl(url_entry);
                         itempath.setQuality(quality);
                         itempath.setVoice(translator);
+                        itempath.setRating(rating);
+                        itempath.setGenre(genre);
                         itempath.setSeason(Integer.parseInt(season.replace(" ", "")));
-                        itempath.setSeries(Integer.parseInt(series.replace(" ", "")));
+                        itempath.setSeries(Integer.parseInt(series));
                         items.add(itempath);
                     }
                 }
@@ -185,6 +197,9 @@ public class ParserAnimevost extends AsyncTask<Void, Void, Void> {
                 else if (iframe.endsWith("}")) iframe = iframe.split("\\}")[0];
                 iframe = iframe.replace("\"", "");
 
+                if (data.html().contains("current-rating"))
+                    rating = data.select(".current-rating").text().trim();
+
                 Elements allImg = data.select(".skrin img");
                 for (Element preimg : allImg) {
                     itempath.setPreImg(Statics.ANIMEVOST_URL + preimg.attr("src"));
@@ -202,6 +217,7 @@ public class ParserAnimevost extends AsyncTask<Void, Void, Void> {
                 itempath.setImg(img);
                 itempath.setQuality("HD");
                 itempath.setVoice("AnimeVost");
+                itempath.setRating(rating);
                 itempath.setDescription(description);
                 itempath.setDate(year);
                 itempath.setCountry(country);
