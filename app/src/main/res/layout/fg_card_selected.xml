@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_gravity="center"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/card_focused"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minHeight="350dp">
+        <include layout="@layout/fg_eye_green"/>
+    </RelativeLayout>
+
+</LinearLayout>

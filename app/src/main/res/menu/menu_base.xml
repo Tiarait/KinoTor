@@ -1,0 +1,73 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_settings"
+        android:title="Настройки"
+        app:showAsAction="always"
+        android:onClick="onSetting"
+        android:icon="@drawable/ic_menu_settings">
+    </item>
+    <item
+        android:id="@+id/action_act"
+        android:orderInCategory="20"
+        android:title="База">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/action_db_save"
+                    android:onClick="onDBsave"
+                    android:title="Сохранить"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_db_send"
+                    android:onClick="onDBsend"
+                    android:title="Отправить"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_db_del"
+                    android:onClick="onDBdel"
+                    android:title="Очистить"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_db_restore"
+                    android:onClick="onDBrest"
+                    android:title="Восстановить"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_show"
+        android:orderInCategory="40"
+        android:title="Отобразить">
+        <menu>
+            <group
+                android:checkableBehavior="single">
+                <item
+                    android:checked="true"
+                    android:checkable="true"
+                    android:id="@+id/action_show_all"
+                    android:onClick="onShowAll"
+                    android:title="Все" />
+                <item
+                    android:checked="false"
+                    android:checkable="true"
+                    android:id="@+id/action_show_film"
+                    android:onClick="onShowFilm"
+                    android:title="Фильмы" />
+                <item
+                    android:checked="false"
+                    android:checkable="true"
+                    android:id="@+id/action_show_serial"
+                    android:onClick="onShowSerial"
+                    android:title="Сериалы" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_db_filmix"
+        android:onClick="onDBrestFilmix"
+        android:orderInCategory="200"
+        android:title="Импорт. Filmix"
+        app:showAsAction="never" />
+
+</menu>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.SearchView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
+    android:background="@drawable/item_select_circle"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:searchIcon="@drawable/ic_menu_search" />
+
+    <!--android:background="@drawable/item_select"-->

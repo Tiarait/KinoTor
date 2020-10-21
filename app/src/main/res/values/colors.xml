@@ -2,17 +2,24 @@
 <resources>
     <color name="colorPrimary">#14181c</color>
     <color name="colorPrimaryDark">#14181c</color>
+    <color name="colorPrimaryDarkTr">#9014181c</color>
     <color name="colorPrimaryLight">#222b31</color>
+    <color name="colorPrimaryLighten">#506470</color>
     <color name="colorAccent">#25ae88</color>
     <color name="colorAccentDark">#148162</color>
+    <color name="colorAccentDarkGone">#5025ae88</color>
+    <color name="colorGreenDark">#0e5a45</color>
     <color name="colorGrey">#50000000</color>
     <color name="colorGone">#00000000</color>
-    <color name="colorWhite">#FFF</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorWhiteTr">#7FFFFFFF</color>
     <color name="colorDarkWhite">#c3c3c3</color>
+    <color name="colorDarkWhiteGone">#70c3c3c3</color>
     <color name="colorBlack">#000</color>
     <color name="colorDarkGrey">#90000000</color>
     <color name="colorOrange">#f88901</color>
     <color name="colorAccentRed">#ad0019</color>
     <color name="colorPrimaryDarkGone">#80203342</color>
+    <color name="colorPrimaryDarkGG">#99203342</color>
     <color name="colorGreyGone">#80000000</color>
 </resources>

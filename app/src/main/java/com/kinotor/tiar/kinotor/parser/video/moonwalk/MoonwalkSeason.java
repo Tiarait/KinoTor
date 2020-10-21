@@ -19,7 +19,7 @@ import static android.content.ContentValues.TAG;
 
 public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
     private String id, id_trans;
-    private final String TOKEN = "997e626ac4d9ce453e6c920785db8f45";
+    private final String TOKEN = "6eb82f15e2d7c6cbb2fdcebd05a197a2";
     private ItemVideo items;
     private OnTaskVideoCallback callback;
 
@@ -50,7 +50,6 @@ public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
 
     private void getSeson(String doc) {
         if (doc != null) {
-            String[] array = doc.split(",\"description")[0].split("\\{\"season_");
             String season = "error", episode = "error", translator = "error";
 
             if (doc.contains("title_ru\":\""))
@@ -72,41 +71,78 @@ public class MoonwalkSeason extends AsyncTask<Void, Void, Void> {
             items.setEpisode(episode.replace("[", "").trim());
             items.setTranslator(translator.trim());
 
-            //i = 0 - description season
-            for (int i = 1; i < array.length; i ++){
-                season = array[i].split("number\":")[1].split(",")[0].trim();
-                if (array[i].contains("episodes_count"))
-                    episode = array[i].split("episodes_count\":")[1].split(",")[0].trim();
-                if (array[i].contains("episodes\":")) {
-                    episode = array[i].split("episodes\":")[1].split("\\]")[0];
-                    episode = episode.split(",")[episode.split(",").length - 1].trim();
+            String arrayS = doc.split(",\"description")[0].split(",\"season_episodes_count")[1];
+            if (arrayS.contains("episodes_tokens") && id.contains("token")) {
+                int c = arrayS.split("episodes_tokens").length;
+                for (int i = 1; i < c; i ++){
+                    season = arrayS.split("season_number\":")[1].split(",")[0].trim();
+                    if (arrayS.contains("episodes\":")) {
+                        episode = arrayS.split("episodes\":")[1].split("\\]")[0];
+                        episode = episode.split(",")[episode.split(",").length - 1].trim();
+                        Log.e("test", "getSeson: "+episode );
+                    }
+                    Log.e("test", "getSeson2: "+episode );
+
+                    if (arrayS.split("episodes_tokens")[i].contains("episodes\":[0")) {
+                        try{
+                            episode = Integer.parseInt(episode) - 1 +"";
+                        } catch (Exception ignored){}
+                    }
+                    items.setTitle("season");
+                    items.setType("moonwalk");
+                    items.setToken(TOKEN);
+                    items.setId(doc.trim());
+                    items.setUrl(doc.trim());
+                    items.setId_trans(id_trans);
+                    items.setSeason(season.replace("[", "").trim());
+                    items.setEpisode(episode.replace("[", "").trim());
+                    items.setTranslator(translator.trim());
                 }
-                if (array[i].contains("episodes\":[0")) {
-                    try{
-                        episode = Integer.parseInt(episode) - 1 +"";
-                    } catch (Exception ignored){}
+            } else {
+                String[] array = arrayS.split("\\{\"season_");
+                //i = 0 - description season
+                for (int i = 1; i < array.length; i ++){
+                    season = array[i].split("number\":")[1].split(",")[0].trim();
+                    if (array[i].contains("episodes_count"))
+                        episode = array[i].split("episodes_count\":")[1].split(",")[0].trim();
+                    if (array[i].contains("episodes\":")) {
+                        episode = array[i].split("episodes\":")[1].split("\\]")[0];
+                        episode = episode.split(",")[episode.split(",").length - 1].trim();
+                    }
+                    if (array[i].contains("episodes\":[0")) {
+                        try{
+                            episode = Integer.parseInt(episode) - 1 +"";
+                        } catch (Exception ignored){}
+                    }
+                    items.setTitle("season");
+                    items.setType("moonwalk");
+                    items.setToken(TOKEN);
+                    items.setId(doc.trim());
+                    items.setUrl(doc.trim());
+                    items.setId_trans(id_trans);
+                    items.setSeason(season.replace("[", "").trim());
+                    items.setEpisode(episode.replace("[", "").trim());
+                    items.setTranslator(translator.trim());
                 }
-                items.setTitle("season");
-                items.setType("moonwalk");
-                items.setToken(TOKEN);
-                items.setId(doc.trim());
-                items.setUrl(doc.trim());
-                items.setId_trans(id_trans);
-                items.setSeason(season.replace("[", "").trim());
-                items.setEpisode(episode.replace("[", "").trim());
-                items.setTranslator(translator.trim());
             }
         }
     }
 
     private Document GetData(String id, String id_trans){
         final String url;
-        id = id.contains("world_art") ? "world_art_id=" + id.replace("world_art", "") : "kinopoisk_id=" + id;
-        if (id_trans.equals("null"))
-            url = "http://moonwalk.cc/api/serial_episodes.json?api_token="+ TOKEN +
+        Log.e("test", "GetSeasonMoonwalk: " + id);
+        if (id.contains("token=")) {
+            url = "http://moonwalk.cc/api/serial.json?api_token="+ TOKEN +
                     "&" + id;
-        else url = "http://moonwalk.cc/api/serial_episodes.json?api_token="+ TOKEN +
-                "&" + id + "&translator_id=" + id_trans;
+        } else {
+            id = id.contains("world_art") ? "world_art_id=" + id.replace("world_art", "") : "kinopoisk_id=" + id;
+
+            if (id_trans.equals("null"))
+                url = "http://moonwalk.cc/api/serial_episodes.json?api_token=" + TOKEN +
+                        "&" + id;
+            else url = "http://moonwalk.cc/api/serial_episodes.json?api_token=" + TOKEN +
+                    "&" + id + "&translator_id=" + id_trans;
+        }
         try {
             Document htmlDoc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")

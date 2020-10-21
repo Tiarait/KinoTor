@@ -1,15 +1,12 @@
 <resources>
     <string name="app_name">KinoTor</string>
-    <string name="app_version">версия : 0.46</string>
-    <string name="loading"> Загрузка... </string>
-    <string name="title_item_detail"> Загрузка... </string>
+    <string name="loading"> Загрузка… </string>
+    <string name="title_item_detail"> Загрузка… </string>
 
 
-    <string name="update_t">Доступно обновление приложения - желаете обновиться?</string>
-    <string name="update_d">Если вы согласны - apk файл будет загружен на ваше устройство.</string>
-    <!--<string name="update_d">Если вы согласны - вы будете перенаправлены на форум 4pda, где сможете скачать последнюю версию.</string>-->
-    <!--<string name="update_d">Если вы согласны - вы будете перенаправлены к скачиванию APK файла,-->
-        <!--который затем нужно будет открыть.</string>-->
+    <string name="update_t">Доступно обновление приложения</string>
+    <string name="down_t">Не закрывайте окно.\nИдет загрузка…</string>
+    <string name="update_d">Обновитесь или скачайте последнюю версию с сайта</string>
 
     <string name="search_hint">Поиск видео</string>
     <string name="search_label">Что искать?</string>
@@ -24,7 +21,7 @@
     <string name="pref_header_settings">Настройки</string>
 
     <string name="pref_title_grid_catalog">Тип отображения</string>
-    <string name="pref_desc_grid_catalog">Список/Сетка.</string>
+    <string name="pref_desc_grid_catalog">Список/Сетка</string>
     <string-array name="pref_list_grid_catalog">
         <item>Список</item>
         <item>Сетка</item>
@@ -33,21 +30,29 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="pref_list_grid_card">
+        <item>Вариант 1</item>
+        <item>Вариант 2</item>
+    </string-array>
 
     <string name="pref_title_moonwalk">Moonwalk</string>
     <string-array name="pref_list_moonwalk">
         <item>Источник 1</item>
         <item>Источник 2</item>
+        <!--<item>Источник by Tiar</item>-->
     </string-array>
     <string-array name="pref_values_moonwalk">
-        <item>http://wonky.lostcut.net/moonwalk.php?url=</item>
+        <item>https://movies.qwedl.com/api/movies.php?method=files&amp;q=</item>
         <item>http://smartportaltv.ru/20/4.php?url=</item>
+        <!--https://movies.qwedl.com/api/movies.php?method=files&q=-->
+        <!--http://wonky.lostcut.net/moonwalk.php?url=-->
+        <!--<item>http://tiarait.000webhostapp.com/moonwalk/url.php?url=</item>-->
     </string-array>
 
     <string name="pref_title_grid_count">Сетка</string>
-    <string name="pref_desc_grid_count">Кол-во фильмов в ряд.</string>
+    <string name="pref_desc_grid_count">Кол-во фильмов в ряд</string>
     <string-array name="pref_list_grid_count">
-        <item>По умолч.</item>
+        <item>По умолч</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -73,8 +78,8 @@
         <item>10</item>
     </string-array>
 
-    <string name="pref_title_display_content">Отображать</string>
-    <string name="pref_desc_display_content">Отображаемый контент в каталоге.</string>
+    <string name="pref_title_display_content">Отображаемый контент</string>
+    <string name="pref_desc_display_content">Отображаемый контент в миниатюрах</string>
     <string-array name="pref_list_display_content">
         <item>Название</item>
         <item>Год</item>
@@ -82,7 +87,8 @@
         <item>Качество</item>
         <item>Рейтинг</item>
         <item>Жанр</item>
-        <item>Доп. поле</item>
+        <item>Серии</item>
+        <item>Озвучка</item>
     </string-array>
     <string-array name="pref_values_display_content">
         <item>title</item>
@@ -91,11 +97,38 @@
         <item>quality</item>
         <item>rating</item>
         <item>genre</item>
-        <item>extra</item>
+        <item>series</item>
+        <item>trans</item>
+    </string-array>
+    <string-array name="pref_values_def_display_content">
+        <item>title</item>
+        <item>year</item>
+        <item>poster</item>
+        <item>quality</item>
+        <item>rating</item>
+        <item>series</item>
     </string-array>
 
+    <string name="pref_title_cat_content">Отображаемые категории</string>
+    <string name="pref_desc_cat_content">Зависит от каталога</string>
+    <string-array name="pref_list_cat_content">
+        <item>4K</item>
+        <item>3D</item>
+        <item>Новинки</item>
+        <item>Сейчас смотрят</item>
+        <item>Фильмы</item>
+        <item>Сериалы</item>
+        <item>Аниме</item>
+        <item>Мультфильмы</item>
+        <item>Мультсериалы</item>
+        <item>ТВ Передачи</item>
+    </string-array>
+
+    <string name="pref_cat_state">Отображать состояние фильма</string>
+    <string name="pref_cat_state_sum">Показывать, если фильм находится в избранном или истории</string>
+
     <string name="pref_title_display_detail_tab">Вкладки</string>
-    <string name="pref_desc_display_detail_tab">Отображаемые вкладки в фильмах.</string>
+    <string name="pref_desc_display_detail_tab">Отображаемые вкладки в фильмах</string>
     <string-array name="pref_list_display_detail_tab">
         <item>Видео</item>
         <item>Торренты</item>
@@ -105,64 +138,161 @@
         <item>tor_tab</item>
     </string-array>
 
-    <string name="pref_title_base_video">Видео</string>
-    <string name="pref_desc_base_video">Используемые бд для поиска mp4.</string>
-    <string-array name="pref_list_base_video">
-        <item>kinomania</item>
+
+    <string name="pref_title_proxy_def">Стандартные proxy</string>
+    <string name="pref_desc_proxy_def">МОГУТ НЕ РАБОТАТЬ</string>
+    <string-array name="pref_list_proxy_def">
+        <item>Указанный proxy</item>
+        <item>Украина</item>
+        <item>Россия</item>
+    </string-array>
+    <string-array name="pref_list_proxy_def_val">
+        <item>default</item>
+        <item>ua</item>
+        <item>ru</item>
+    </string-array>
+    <string name="pref_title_proxy_use">Использовать proxy</string>
+    <string name="pref_desc_proxy_use">Выберите ресурсы</string>
+    <string-array name="pref_list_proxy_use">
+        <item>animevost</item>
+        <item>filmix</item>
+        <item>coldfilm</item>
+        <item>kinoxa</item>
+        <item>kinofs</item>
+        <item>koshara</item>
+        <item>rufilmtv</item>
+        <item>topkino</item>
+        <!--<item>kinomania</item>-->
         <item>kinosha</item>
+        <!--<item>movieshd</item>-->
+    </string-array>
+    <string-array name="pref_def_proxy_use">
+        <item>..</item>
+    </string-array>
+
+    <string name="pref_title_base_video">Каталоги</string>
+    <string name="pref_desc_base_video">Используемые источники для поиска видео</string>
+    <string-array name="pref_name_base_video">
+        <item>Moonwalk (основной, 1080)</item>
+        <item>HDGO (основной, 1080)</item>
+        <item>Filmix (основной, 720)</item>
+        <item>Kinosha (забл. в РФ)</item>
+        <item>KinoHD (4k)</item>
+        <item>Kino-Live (1080, m3u8)</item>
+        <item>Kino-Dom (720, сериалы)</item>
+        <item>Kinopub (4k, авторизация)</item>
+        <item>ZombieFilm (m3u8)</item>
+        <item>AniDub (anime, m3u8)</item>
+        <item>AniMedia (anime, m3u8)</item>
+        <item>AnimeVost (anime, mp4)</item>
+    </string-array>
+    <!--<item>Kinoxa (фильмы, 720)</item>-->
+    <string-array name="pref_list_base_video">
         <item>moonwalk</item>
         <item>hdgo</item>
+        <item>filmix</item>
+        <item>kinosha</item>
+        <item>kinohd</item>
+        <item>kinoxa</item>
+        <item>kinolive</item>
+        <item>kinodom</item>
+        <item>kinopub</item>
+        <item>zombiefilm</item>
+        <item>anidub</item>
+        <item>animedia</item>
+        <item>animevost</item>
     </string-array>
     <string-array name="pref_def_base_video">
-        <item>kinomania</item>
-        <item>moonwalk</item>
         <item>hdgo</item>
+        <item>moonwalk</item>
+        <item>filmix</item>
+        <item>kinolive</item>
+        <item>kinodom</item>
+        <item>zombiefilm</item>
     </string-array>
 
-    <string name="pref_title_base_catalog">Каталог</string>
-    <string name="pref_desc_base_catalog">Используемый каталог видео.</string>
-    <string-array name="pref_list_base_catalog">
-        <item>amcet</item>
-        <item>koshara</item>
-        <item>kinofs</item>
-    </string-array>
-
-    <string name="pref_title_base_tparser">Торенты</string>
-    <string name="pref_desc_base_tparser">Используемые бд для поиска torrent\'ов.</string>
+    <string name="pref_title_base_tparser">Каталоги</string>
+    <string name="pref_desc_base_tparser">Используемые источники для поиска torrent\'ов</string>
     <string-array name="pref_list_base_tparser">
-        <item>zooqle.com</item>
-        <item>rutor.info</item>
-        <item>freerutor.me</item>
-        <item>rutracker.org</item>
-        <item>underverse.me</item>
-        <item>kinozal.tv</item>
-        <item>nnmclub.to</item>
+        <item>tparser</item>
+        <item>freerutor</item>
+        <item>yohoho</item>
+        <item>bitru</item>
+        <item>nnm</item>
+        <item>rutor(orig)</item>
+        <item>megapeer</item>
+        <item>piratbit</item>
+        <item>kinozal</item>
+        <item>hurtom</item>
+        <item>anidub</item>
+        <item>torlook</item>
+        <item>greentea</item>
+        <item>rutracker</item>
     </string-array>
     <string-array name="pref_def_base_tparser">
-        <item>zooqle.com</item>
-        <item>underverse.me</item>
-        <item>kinozal.tv</item>
+        <!--<item>zooqle</item>-->
+        <item>freerutor</item>
+        <item>tparser</item>
+        <item>megapeer</item>
+        <item>bitru</item>
+    </string-array>
+
+    <string name="pref_title_base">Каталоги</string>
+    <string name="pref_title_cur_base">Каталог</string>
+    <string name="pref_desc_base">Используемые каталоги</string>
+    <string name="pref_desc_cur_base">Текущий каталог</string>
+    <string-array name="pref_list_base">
+        <item>kinoxa</item>
+        <item>kinofs</item>
+        <item>koshara</item>
+        <item>rufilmtv</item>
+        <item>topkino</item>
+        <item>filmix</item>
+        <item>my-hit</item>
+        <item>kinolive</item>
+        <item>kinopub</item>
+    </string-array>
+
+    <string name="pref_title_pbase">Доп. каталоги</string>
+    <string name="pref_desc_pbase">Используемые каталоги</string>
+    <string-array name="pref_list_pbase">
+        <item>anidub</item>
+        <item>animevost</item>
+        <item>coldfilm</item>
+        <item>fanserials</item>
+        <item>kinodom</item>
+    </string-array>
+    <string-array name="pref_title_list_pbase">
+        <item>AniDub</item>
+        <item>AnimeVost</item>
+        <item>ColdFilm</item>
+        <item>FanSerials</item>
+        <item>KinoDom</item>
     </string-array>
 
     <string name="pref_title_start_category">Стартовая категория</string>
-    <string name="pref_desc_start_category">Выберите категорию с которой будет стартовать приложение.</string>
+    <string name="pref_desc_start_category">Выберите категорию с которой будет стартовать приложение</string>
     <string-array name="pref_list_start_category">
         <item>Фильмы</item>
         <item>Сериалы</item>
         <item>Мультфильмы</item>
+        <item>Мультсериалы</item>
         <item>Аниме</item>
+        <item>ТВ Передачи</item>
         <item>AnimeVost</item>
         <item>Coldfilm</item>
+        <item>Fanserials</item>
+        <item>KinoDom</item>
+        <item>Избранное</item>
+        <item>История</item>
     </string-array>
+
+    <!--<item>AnimeSpirit</item>-->
 
     <string name="pref_title_text_size_detail">Размер текста в описании</string>
     <string name="pref_title_text_size_main">Размер основного текста</string>
-    <string name="pref_desc_text_size">Установить размер текста.</string>
+    <string name="pref_desc_text_size">Установить размер текста</string>
     <string-array name="pref_list_text_size">
-        <item>0</item>
-        <item>2</item>
-        <item>4</item>
-        <item>6</item>
         <item>10</item>
         <item>12</item>
         <item>13</item>
@@ -182,21 +312,164 @@
         <item>27</item>
         <item>28</item>
         <item>29</item>
-        <item>39</item>
+        <item>30</item>
+    </string-array>
+    <string-array name="theme_list">
+        <item>Черная</item>
+        <item>Темная</item>
+    </string-array>
+    <string-array name="theme_list_val">
+        <item>black</item>
+        <item>gray</item>
+    </string-array>
+    <string-array name="keyboard_val">
+        <item>def</item>
+        <item>hide</item>
+    </string-array>
+    <string-array name="keyboard_title">
+        <item>Стандартная</item>
+        <item>Спрятать</item>
     </string-array>
 
+    <!--<item>white</item>-->
+
     <string name="pref_title_auto_update">Проверка обновлений</string>
-    <string name="pref_desc_auto_update">Проверять обновления при запуске приложения.</string>
+    <string name="pref_desc_auto_update">Проверять обновления при запуске приложения</string>
+
+    <string name="pref_title_download_video_def">Загрузчик</string>
+    <string name="pref_desc_download_video_def">Варианты скачивания видео</string>
+    <string-array name="pref_list_download_video">
+        <item>Стандартный загрузчик</item>
+        <item>DvGet/ADM</item>
+        <item>Выбирать</item>
+    </string-array>
+    <string-array name="pref_list_download_video_val">
+        <item>default</item>
+        <item>dvget</item>
+        <item>other</item>
+    </string-array>
+
+    <string name="pref_title_play_video_def">Плеер</string>
+    <string name="pref_desc_play_video_def">Варианты воспроизведения видео</string>
+    <string-array name="pref_list_play_video">
+        <item>По умолчанию</item>
+        <item>MxPlayer</item>
+        <item>VlcPlayer</item>
+        <item>VimuPlayer</item>
+        <item>Выбирать</item>
+    </string-array>
+    <string-array name="pref_list_play_video_val">
+        <item>default</item>
+        <item>mxplayer</item>
+        <item>vlcplayer</item>
+        <item>vimuplayer</item>
+        <item>other</item>
+    </string-array>
+    <string name="pref_title_quality">Качество</string>
+    <string name="pref_desc_quality">Предпочитаемое качество</string>
+    <string-array name="pref_list_quality">
+        <item>Лучшее</item>
+        <item>Худшее</item>
+        <item>Выбирать</item>
+    </string-array>
+    <string-array name="pref_val_quality">
+        <item>hight</item>
+        <item>low</item>
+        <item>select</item>
+    </string-array>
+
+    <string name="pref_title_save_db">Сохранить бд на…</string>
+    <string name="pref_desc_save_db">Варианты сохранения бд</string>
+    <string-array name="pref_list_save_db">
+        <item>Устройство</item>
+        <item>GoogleDrive</item>
+    </string-array>
+    <string-array name="pref_list_save_db_val">
+        <item>default</item>
+        <item>google</item>
+    </string-array>
+
+    <string-array name="pref_list_search_tor">
+        <item>Рус. Название</item>
+        <item>Ориг. название</item>
+        <item>Год</item>
+    </string-array>
+    <string-array name="pref_val_search_tor">
+        <item>title</item>
+        <item>orig</item>
+        <item>year</item>
+    </string-array>
+
+
+    <string name="pref_title_filtr_tor">Сортировка</string>
+    <string name="pref_desc_filtr_tor">Сортировать по..</string>
+    <string-array name="pref_list_filtr_tor">
+        <item>По источнику</item>
+        <item>По имени</item>
+        <item>По размеру</item>
+        <item>По раздающим</item>
+        <item>По качающим</item>
+        <item>Содержащие текст…</item>
+    </string-array>
+    <string-array name="pref_val_filtr_tor">
+        <item>none</item>
+        <item>name</item>
+        <item>size</item>
+        <item>sid</item>
+        <item>lich</item>
+        <item>words</item>
+    </string-array>
+    <string-array name="pref_empty">
+        <item> </item>
+    </string-array>
+    <string-array name="pref_list_filtr_vid">
+        <item>По источнику</item>
+        <item>По новым сериям</item>
+        <item>По имени ↑</item>
+        <item>По имени ↓</item>
+        <item>Просмотренные ↑</item>
+        <item>Просмотренные ↓</item>
+    </string-array>
+    <string-array name="pref_val_filtr_vid">
+        <item>none</item>
+        <item>new</item>
+        <item>name_up</item>
+        <item>name_down</item>
+        <item>history_up</item>
+        <item>history_down</item>
+    </string-array>
+
+    <string name="pref_serial_position">Запоминать сезон сериала</string>
+    <string name="pref_serial_position_sum">Открывать последний просмотренный сезон сериала</string>
+    <string name="pref_title_alt_cat">Алт. выбор каталога</string>
+    <string name="pref_title_db_cache">Кешировать данные</string>
+    <string name="pref_desc_db_cache">Ускоряет загрузку описания</string>
 
     <string name="pref_title_coldfilm">Coldfilm</string>
-    <string name="pref_desc_coldfilm">Включить coldfilm.info в пункт меню.</string>
-
+    <string name="pref_desc_coldfilm">Включить coldfilm в пункт меню</string>
     <string name="pref_title_animevost">AnimeVost</string>
-    <string name="pref_desc_animevost">Включить animevost.org в пункт меню.</string>
+    <string name="pref_desc_animevost">Включить animevost в пункт меню</string>
+    <string name="pref_title_anidub">Anidub</string>
+    <string name="pref_desc_anidub">Включить anidub в пункт меню</string>
+    <string name="pref_title_animespirit">AnimeSpirit</string>
+    <string name="pref_desc_animespirit">Включить animespirit в пункт меню</string>
+    <string name="pref_title_funserials">FanSerials</string>
+    <string name="pref_desc_funserials">Включить fanserials в пункт меню</string>
+
+    <string name="pref_title_search_all">Искать везде</string>
+    <string name="pref_desc_search_all">Поиск по всем включенным каталогам</string>
+
 
     <string name="pref_title_exit">Кнопка выхода</string>
-    <string name="pref_desc_exit">Добавить кнопку выхода в пункт меню.</string>
+    <string name="pref_desc_exit">Добавить кнопку выхода в пункт меню</string>
 
     <string name="pref_title_fullscreen">FullScreen mode</string>
-    <string name="pref_desc_fullscreen">Убрать статус бар телефона.</string>
+    <string name="pref_desc_fullscreen">Убрать статус бар телефона</string>
+
+    <string name="video_description">Android Promotional Video</string>
+    <!--<string name="content_url"><![CDATA[http://rmcdn.2mdn.net/MotifFiles/html/1248596/android_1330378998288.mp4]]></string>-->
+    <string name="ad_tag_url"><![CDATA[https://adbetnet.advertserve.com/servlet/vast3/zone?zid=5086&pid=134&random=[random]]]></string>
+    <string name="main_tag_url"><![CDATA[https://inv-nets.admixer.net/dsp.aspx?rct=3&zone=415971ad-223f-41cd-98d1-9ee66fa3e6de&zoneInt=33987&sect=10650&site=8497&rnd=[CACHEBUSTING]]]></string>
+
+    <!--https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=-->
 </resources>

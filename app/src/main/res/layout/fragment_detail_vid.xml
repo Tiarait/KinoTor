@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:paddingRight="8dp"
     android:paddingLeft="8dp"
-    android:background="@color/colorPrimaryDark"
-    tools:context="com.kinotor.tiar.kinotor.ui.DetailVideo">
+    tools:context="com.kinotor.tiar.kinotor.ui.fragments.DetailVideo">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,6 +20,7 @@
         android:id="@+id/vid_pb"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:animateLayoutChanges="true"
         android:gravity="center"
         android:background="@color/colorDarkGrey"
         android:layout_alignParentBottom="true"
@@ -29,7 +29,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="">
-            <include layout="@layout/pb"/>
+            <include layout="@layout/fg_pb"/>
         </LinearLayout>
         <TextView
             android:id="@+id/vid_pb_text"

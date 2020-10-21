@@ -8,4 +8,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="card_width">156dp</dimen>
+    <dimen name="card_height">88dp</dimen>
+
 </resources>

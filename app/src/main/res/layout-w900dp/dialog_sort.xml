@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="right"
+    android:layout_gravity="right">
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="12dp"
+                app:srcCompat="@drawable/ic_menu_sort"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:text="Фильтры"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="4dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:minWidth="300dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_marginTop="4dp"
+                    android:id="@+id/dialog_sort_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_select"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="Категория"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/dialog_sort_category_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:padding="4dp"
+                                android:text="Все"
+                                android:textColor="@color/colorDarkWhite"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="15dp"
+                            android:tint="@color/colorDarkWhite"
+                            app:srcCompat="@drawable/ic_arrow_down" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="4dp"
+                    android:id="@+id/dialog_sort_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_select"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="Страна"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/dialog_sort_country_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:padding="4dp"
+                                android:text="Все"
+                                android:textColor="@color/colorDarkWhite"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="15dp"
+                            android:tint="@color/colorDarkWhite"
+                            app:srcCompat="@drawable/ic_arrow_down" />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="4dp"
+                    android:id="@+id/dialog_sort_genre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_select"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="Жанр"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="20dp" />
+
+                            <TextView
+                                android:id="@+id/dialog_sort_genre_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:padding="4dp"
+                                android:text="Все"
+                                android:textColor="@color/colorDarkWhite"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="15dp"
+                            android:tint="@color/colorDarkWhite"
+                            app:srcCompat="@drawable/ic_arrow_down" />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="4dp"
+                    android:id="@+id/dialog_sort_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_select"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_marginRight="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/dialog_sort_year_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:padding="4dp"
+                            android:text="Год"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="20sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="c:"
+                                android:textColor="@color/colorDarkWhite"
+                                android:textSize="20sp" />
+                            <TextView
+                                android:id="@+id/dialog_sort_year_start"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/item_select"
+                                android:focusable="true"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="1902"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="по:"
+                                android:textColor="@color/colorDarkWhite"
+                                android:textSize="20sp" />
+                            <TextView
+                                android:id="@+id/dialog_sort_year_end"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/item_select"
+                                android:focusable="true"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="2019"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="4dp"
+                    android:id="@+id/dialog_sort_year_mult"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/item_select"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="Год"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/dialog_sort_year_mult_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:padding="4dp"
+                                android:text="Все"
+                                android:textColor="@color/colorDarkWhite"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="15dp"
+                            android:tint="@color/colorDarkWhite"
+                            app:srcCompat="@drawable/ic_arrow_down" />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="4dp"
+                    android:id="@+id/dialog_sort_kp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_select"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_marginRight="12dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/dialog_sort_kp_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:padding="4dp"
+                            android:text="Кинопоиск"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="20sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="c:"
+                                android:textColor="@color/colorDarkWhite"
+                                android:textSize="20sp" />
+                            <TextView
+                                android:id="@+id/dialog_sort_kp_start"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/item_select"
+                                android:focusable="true"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="0"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="по:"
+                                android:textColor="@color/colorDarkWhite"
+                                android:textSize="20sp" />
+                            <TextView
+                                android:id="@+id/dialog_sort_kp_end"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/item_select"
+                                android:focusable="true"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="4dp"
+                                android:text="10"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="4dp"
+                    android:id="@+id/dialog_sort_sort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/item_select"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:padding="4dp"
+                            android:text="Сортировка"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/dialog_sort_sort_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:padding="4dp"
+                            android:text="По дате"
+                            android:textColor="@color/colorDarkWhite"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="15dp"
+                        android:tint="@color/colorDarkWhite"
+                        app:srcCompat="@drawable/ic_arrow_down" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="400dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="right">
+        <Button
+            android:id="@+id/b_cancel"
+            android:background="@drawable/item_select"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:padding="12dp"
+            android:textSize="18sp"
+            android:text="СБРОСИТЬ"
+            tools:ignore="ButtonStyle"/>
+        <Button
+            android:id="@+id/b_ok"
+            android:background="@drawable/item_select"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:padding="12dp"
+            android:text="ПРИМЕНИТЬ"
+            tools:ignore="ButtonStyle"/>
+    </LinearLayout>
+</LinearLayout>

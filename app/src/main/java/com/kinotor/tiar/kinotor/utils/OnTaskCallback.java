@@ -8,5 +8,5 @@ import java.util.ArrayList;
  * Created by Tiar on 04.2018.
  */
 public interface OnTaskCallback {
-    void OnCompleted(ArrayList<ItemHtml> items, ItemHtml itempath);
+  void OnCompleted(ArrayList<ItemHtml> items, ItemHtml itempath);
 }

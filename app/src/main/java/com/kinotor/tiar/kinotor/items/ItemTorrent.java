@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class ItemTorrent {
     public ArrayList<String> tortitle = new ArrayList<>();
     ArrayList<String> torurl = new ArrayList<>();
+    ArrayList<String> url = new ArrayList<>();
     ArrayList<String> torsize = new ArrayList<>();
     ArrayList<String> tormagnet = new ArrayList<>();
     ArrayList<String> torsid = new ArrayList<>();
@@ -20,6 +21,9 @@ public class ItemTorrent {
     }
     public String getTorUrl(int i) {
         return torurl.get(i);
+    }
+    public String getUrl(int i) {
+        return url.get(i);
     }
     public String getTorSize(int i) {
         return torsize.get(i);
@@ -43,6 +47,9 @@ public class ItemTorrent {
     public void setTorUrl(String i) {
         this.torurl.add(i);
     }
+    public void setUrl(String i) {
+        this.url.add(i);
+    }
     public void setTorSize(String i) {
         this.torsize.add(i);
     }
@@ -62,6 +69,7 @@ public class ItemTorrent {
     public void addHtmlItems (ItemHtml items) {
         this.tortitle.addAll(items.tortitle);
         this.torurl.addAll(items.torurl);
+        this.url.addAll(items.toru);
         this.torsize.addAll(items.torsize);
         this.tormagnet.addAll(items.tormagnet);
         this.torsid.addAll(items.torsid);
@@ -72,6 +80,7 @@ public class ItemTorrent {
     public void addItems (ItemTorrent items) {
         this.tortitle.addAll(items.tortitle);
         this.torurl.addAll(items.torurl);
+        this.url.addAll(items.url);
         this.torsize.addAll(items.torsize);
         this.tormagnet.addAll(items.tormagnet);
         this.torsid.addAll(items.torsid);

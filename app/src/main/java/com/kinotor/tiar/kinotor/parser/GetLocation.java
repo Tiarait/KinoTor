@@ -3,6 +3,7 @@ package com.kinotor.tiar.kinotor.parser;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskLocationCallback;
 
 import java.io.IOException;
@@ -38,9 +39,10 @@ public class GetLocation extends AsyncTask<Void, Void, Void> {
     private String getLocation(String url) {
         String ref;
         if (url.contains("drek")) ref = "http://animevost.org/";
+        else if (url.contains(Statics.NNM_URL)) ref = Statics.NNM_URL;
         else ref = "http://hdgo.cc/";
         try {
-            URL uri = new URL(url.trim());
+            URL uri = new URL(checkUrl(url.trim()));
             HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Referer", ref);
@@ -56,5 +58,12 @@ public class GetLocation extends AsyncTask<Void, Void, Void> {
             Log.d(TAG, "Location: error");
             return url;
         }
+    }
+
+    private String checkUrl(String url) {
+        url = url.replace(" ", "").replace("\n", "").replaceAll("\r", "");
+        url = url.replace("\"", "");
+        if (!url.contains("http://") && !url.contains("https://")) url = url.contains("//") ? "http:" + url : "http://" + url;
+        return url;
     }
 }

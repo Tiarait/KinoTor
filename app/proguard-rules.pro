@@ -23,3 +23,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-ignorewarnings
+-dontwarn com.daimajia.**
+
+-keep class com.google.obf.** { *; }
+-keep interface com.google.obf.** { *; }
+
+-keep class com.google.ads.interactivemedia.** { *; }
+-keep interface com.google.ads.interactivemedia.** { *; }

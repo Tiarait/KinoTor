@@ -28,7 +28,8 @@
         android:layout_height="50dp"
         android:layout_marginTop="?android:attr/actionBarSize"
         android:background="@color/colorPrimaryDark"
-        app:tabBackground="@drawable/item_select"
+        style="@style/SelectableItemBackground"
+        android:focusable="true"
         app:tabSelectedTextColor="@color/colorAccent"
         app:tabTextColor="@color/colorDarkWhite" />
 
@@ -41,11 +42,12 @@
 
     <LinearLayout
         android:id="@+id/detail_pb"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorGrey"
         android:gravity="center">
 
-        <include layout="@layout/pb" />
+        <include layout="@layout/fg_pb" />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

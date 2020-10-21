@@ -9,7 +9,8 @@ import java.util.ArrayList;
 public class ItemHtml {
     public ArrayList<String> title = new ArrayList<>();
     ArrayList<String> subtitle = new ArrayList<>();
-    ArrayList<String> url = new ArrayList<>();
+    ArrayList<String> trailer = new ArrayList<>();
+    public ArrayList<String> url = new ArrayList<>();
     ArrayList<String> img = new ArrayList<>();
     ArrayList<String> date = new ArrayList<>();
     ArrayList<String> description = new ArrayList<>();
@@ -37,6 +38,7 @@ public class ItemHtml {
 
     public ArrayList<String> tortitle = new ArrayList<>();
     ArrayList<String> torurl = new ArrayList<>();
+    ArrayList<String> toru = new ArrayList<>();
     ArrayList<String> torsize = new ArrayList<>();
     ArrayList<String> tormagnet = new ArrayList<>();
     ArrayList<String> torsid = new ArrayList<>();
@@ -44,7 +46,7 @@ public class ItemHtml {
     ArrayList<String> torcontent = new ArrayList<>();
 
     public ArrayList<String> preimg = new ArrayList<>();
-    String extraDetail = "error";
+    String kpId = "error";
 
 
     //------------------Get---------------------------
@@ -53,7 +55,12 @@ public class ItemHtml {
         return title.get(i);
     }
     public String getSubTitle(int i) {
-        return subtitle.get(i);
+        try {
+            return subtitle.get(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
     }
     public String getUrl(int i) {
         return url.get(i);
@@ -74,10 +81,20 @@ public class ItemHtml {
         return quality.get(i);
     }
     public int getSeason(int i){
-        return season.get(i);
+        try {
+            return season.get(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
     public int getSeries(int i){
-        return series.get(i);
+        try {
+            return series.get(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
     public String getCountry(int i) {
         return country.get(i);
@@ -99,6 +116,15 @@ public class ItemHtml {
     }
     public String getIframe(int i) {
         return iframe.get(i);
+    }
+    public String getTrailer(int i) {
+        try {
+            return trailer.get(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+
     }
     public String getType(int i) {
         return type.get(i);
@@ -131,8 +157,8 @@ public class ItemHtml {
     public String getPreImg(int i) {
         return preimg.get(i);
     }
-    public String getExtraDetail() {
-        return extraDetail;
+    public String getKpId() {
+        return kpId;
     }
 
     //------------------Set---------------------------
@@ -142,6 +168,9 @@ public class ItemHtml {
     }
     public void setSubTitle(String subtitle) {
         this.subtitle.add(subtitle);
+    }
+    public void setTrailer(String trailer) {
+        this.trailer.add(trailer);
     }
     public void setUrl(String url) {
         this.url.add(url);
@@ -222,6 +251,9 @@ public class ItemHtml {
     public void setTorUrl(String i) {
         this.torurl.add(i);
     }
+    public void setTorU(String i) {
+        this.toru.add(i);
+    }
     public void setTorSize(String i) {
         this.torsize.add(i);
     }
@@ -242,7 +274,7 @@ public class ItemHtml {
     public void setPreImg(String i) {
         this.preimg.add(i);
     }
-    public void setExtraDetail(String i) {
-        this.extraDetail = i;
+    public void setKpId(String i) {
+        this.kpId = i;
     }
 }

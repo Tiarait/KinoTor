@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@color/colorPrimaryLight"
     android:gravity="center"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -13,7 +12,11 @@
         android:id="@+id/rv_catalog"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorGone"
+        android:nextFocusDown="@id/rv_catalog"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginLeft="4dp" />
-    <include layout="@layout/pb_relative"/>
+    <include layout="@layout/fg_pb_horiz"/>
 </RelativeLayout>

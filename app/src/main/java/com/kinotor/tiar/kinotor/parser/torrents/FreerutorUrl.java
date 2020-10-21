@@ -28,15 +28,7 @@ public class FreerutorUrl  extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         if (file.equals("magnet")) {
-            if (!magnet.startsWith("magnet")) {
-                FreerutorLocation getLocation = new FreerutorLocation(magnet, new OnTaskLocationCallback() {
-                    @Override
-                    public void OnCompleted(String location) {
-                        callback.OnCompleted(location);
-                    }
-                });
-                getLocation.execute();
-            } else callback.OnCompleted(magnet);
+            callback.OnCompleted(magnet);
         } else if (file.equals("play")) callback.OnCompleted(torrent);
     }
 
@@ -71,7 +63,6 @@ public class FreerutorUrl  extends AsyncTask<Void, Void, Void> {
             Log.d(TAG, "GetUrl: FreeRutorMe " + url);
             return htmlDoc;
         } catch (Exception e) {
-            Log.d(TAG, "GetUrl: FreeRutorMe error " + url);
             e.printStackTrace();
             return null;
         }

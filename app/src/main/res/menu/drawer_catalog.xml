@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/back"
+        android:icon="?attr/homeAsUpIndicator"
+        android:checkable="true"
+        android:title="Назад" />
+    <item android:title="Pro">
+        <menu>
+            <item
+                android:id="@+id/all"
+                android:checkable="true"
+                android:title="Везде" />
+        </menu>
+    </item>
+    <item android:title="Каталоги">
+        <menu>
+            <item
+                android:id="@+id/kinolive"
+                android:checkable="true"
+                android:title="KinoLive" />
+            <item
+                android:id="@+id/kinofs"
+                android:checkable="true"
+                android:title="KinoFs" />
+            <item
+                android:id="@+id/kinoxa"
+                android:checkable="true"
+                android:title="Kinoxa" />
+            <item
+                android:id="@+id/koshara"
+                android:checkable="true"
+                android:title="Koshara" />
+            <item
+                android:id="@+id/myhit"
+                android:checkable="true"
+                android:title="My-Hit" />
+            <item
+                android:id="@+id/rufilmtv"
+                android:checkable="true"
+                android:title="RuFilmTv" />
+            <item
+                android:id="@+id/topkino"
+                android:checkable="true"
+                android:title="TopKino" />
+            <item
+                android:id="@+id/filmix"
+                android:checkable="true"
+                android:title="Filmix" />
+            <item
+                android:id="@+id/kinopub"
+                android:checkable="true"
+                android:title="Kinopub" />
+        </menu>
+    </item>
+    <item android:title="Дополнительно">
+        <menu>
+            <item
+                android:id="@+id/animevost"
+                android:checkable="true"
+                android:title="AnimeVost" />
+            <item
+                android:id="@+id/anidub"
+                android:checkable="true"
+                android:title="Anidub" />
+            <item
+                android:id="@+id/coldfilm"
+                android:checkable="true"
+                android:title="ColdFilm" />
+            <item
+                android:id="@+id/fanserials"
+                android:checkable="true"
+                android:title="FanSerials" />
+            <item
+                android:id="@+id/kinodom"
+                android:checkable="true"
+                android:title="KinoDom" />
+        </menu>
+    </item>
+
+</menu>

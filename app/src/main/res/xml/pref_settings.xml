@@ -1,108 +1,31 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="Интерфейс">
-        <ListPreference
-            android:title="@string/pref_title_grid_catalog"
-            android:entries="@array/pref_list_grid_catalog"
-            android:entryValues="@array/pref_values_grid_catalog"
-            android:summary="@string/pref_desc_grid_catalog"
-            android:key="grid_catalog"
-            android:defaultValue="2"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null" />
-        <ListPreference
-            android:title="@string/pref_title_grid_count"
-            android:entries="@array/pref_list_grid_count"
-            android:entryValues="@array/pref_values_grid_count"
-            android:summary="@string/pref_desc_grid_count"
-            android:key="grid_count"
-            android:defaultValue="0"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null" />
-        <MultiSelectListPreference
-            android:title="@string/pref_title_display_content"
-            android:entries="@array/pref_list_display_content"
-            android:defaultValue="@array/pref_values_display_content"
-            android:entryValues="@array/pref_values_display_content"
-            android:summary="@string/pref_desc_display_content"
-            android:key="display_content" />
-        <MultiSelectListPreference
-            android:title="@string/pref_title_display_detail_tab"
-            android:entries="@array/pref_list_display_detail_tab"
-            android:defaultValue="@array/pref_values_display_detail_tab"
-            android:entryValues="@array/pref_values_display_detail_tab"
-            android:summary="@string/pref_desc_display_detail_tab"
-            android:key="display_detail_tab" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="fullscreen"
-            android:summary="@string/pref_desc_fullscreen"
-            android:title="@string/pref_title_fullscreen" />
-        <SwitchPreference
-            android:title="Боковое меню"
-            android:key="side_menu"
-            android:defaultValue="true"
-            android:summary="Закрепить меню(для больших экранов)"/>
-        <SwitchPreference
-            android:title="Страницы в каталоге"
-            android:key="show_pages"
-            android:defaultValue="false"
-            android:summary="Отображать текущую страницу при загрузки в каталогу"/>
-        <ListPreference
-            android:title="@string/pref_title_text_size_main"
-            android:entries="@array/pref_list_text_size"
-            android:entryValues="@array/pref_list_text_size"
-            android:summary="@string/pref_desc_text_size"
-            android:key="text_size_main"
-            android:defaultValue="14"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null" />
-        <ListPreference
-            android:title="@string/pref_title_text_size_detail"
-            android:entries="@array/pref_list_text_size"
-            android:entryValues="@array/pref_list_text_size"
-            android:summary="@string/pref_desc_text_size"
-            android:key="text_size_detail"
-            android:defaultValue="16"
-            android:negativeButtonText="@null"
-            android:positiveButtonText="@null" />
-    </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Базы данных">
+        android:title="Каталоги">
+        <MultiSelectListPreference
+            android:title="@string/pref_title_base"
+            android:entries="@array/pref_list_base"
+            android:defaultValue="@array/pref_list_base"
+            android:entryValues="@array/pref_list_base"
+            android:summary="@string/pref_desc_base"
+            android:key="base_catalog" />
+        <MultiSelectListPreference
+            android:title="@string/pref_title_pbase"
+            android:entries="@array/pref_title_list_pbase"
+            android:defaultValue="@array/pref_list_pbase"
+            android:entryValues="@array/pref_list_pbase"
+            android:summary="@string/pref_desc_base"
+            android:key="plus_catalog" />
         <ListPreference
-            android:title="@string/pref_title_base_catalog"
-            android:entries="@array/pref_list_base_catalog"
-            android:defaultValue="amcet"
-            android:entryValues="@array/pref_list_base_catalog"
-            android:summary="@string/pref_desc_base_catalog"
+            android:title="@string/pref_title_cur_base"
+            android:entries="@array/pref_list_base"
+            android:entryValues="@array/pref_list_base"
+            android:summary="%s"
             android:key="catalog"
+            android:defaultValue="filmix"
             android:negativeButtonText="@null"
-            android:positiveButtonText="@null"/>
-        <MultiSelectListPreference
-            android:title="@string/pref_title_base_video"
-            android:entries="@array/pref_list_base_video"
-            android:defaultValue="@array/pref_def_base_video"
-            android:entryValues="@array/pref_list_base_video"
-            android:summary="@string/pref_desc_base_video"
-            android:key="base_video" />
-        <MultiSelectListPreference
-            android:title="@string/pref_title_base_tparser"
-            android:entries="@array/pref_list_base_tparser"
-            android:defaultValue="@array/pref_def_base_tparser"
-            android:entryValues="@array/pref_list_base_tparser"
-            android:summary="@string/pref_desc_base_tparser"
-            android:key="base_tparser" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="Другое">
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="auto_update"
-            android:summary="@string/pref_desc_auto_update"
-            android:title="@string/pref_title_auto_update" />
+            android:positiveButtonText="@null" />
         <ListPreference
             android:title="@string/pref_title_start_category"
             android:entries="@array/pref_list_start_category"
@@ -112,18 +35,155 @@
             android:defaultValue="Фильмы"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Видео">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="tab_video"
+            android:summary="Вкладка видео в окне видео"
+            android:title="Поиск видеофайлов" />
+        <MultiSelectListPreference
+            android:title="@string/pref_title_base_video"
+            android:entries="@array/pref_name_base_video"
+            android:defaultValue="@array/pref_def_base_video"
+            android:entryValues="@array/pref_list_base_video"
+            android:summary="@string/pref_desc_base_video"
+            android:key="base_video" />
+        <ListPreference
+            android:title="@string/pref_title_download_video_def"
+            android:entries="@array/pref_list_download_video"
+            android:entryValues="@array/pref_list_download_video_val"
+            android:summary="%s"
+            android:key="download_video_d"
+            android:defaultValue="default"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <ListPreference
+            android:title="@string/pref_title_play_video_def"
+            android:entries="@array/pref_list_play_video"
+            android:entryValues="@array/pref_list_play_video_val"
+            android:summary="%s"
+            android:key="play_video_p"
+            android:defaultValue="default"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <ListPreference
+            android:title="@string/pref_title_quality"
+            android:entries="@array/pref_list_quality"
+            android:entryValues="@array/pref_val_quality"
+            android:summary="%s"
+            android:key="pref_quality"
+            android:defaultValue="select"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <ListPreference
+            android:title="@string/pref_title_filtr_tor"
+            android:entries="@array/pref_list_filtr_vid"
+            android:entryValues="@array/pref_val_filtr_vid"
+            android:summary="%s"
+            android:key="filter_tor"
+            android:defaultValue="none"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Торренты">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="tab_torrent"
+            android:summary="Вкладка торренты в окне видео"
+            android:title="Поиск торрент файлов" />
+        <MultiSelectListPreference
+            android:title="@string/pref_title_base_tparser"
+            android:entries="@array/pref_list_base_tparser"
+            android:defaultValue="@array/pref_list_base_tparser"
+            android:entryValues="@array/pref_list_base_tparser"
+            android:summary="@string/pref_desc_base_tparser"
+            android:key="base_tparser" />
+        <MultiSelectListPreference
+            android:key="torrent_search_list"
+            android:summary="Дополнительные критерии поиска"
+            android:entries="@array/pref_list_search_tor"
+            android:entryValues="@array/pref_val_search_tor"
+            android:defaultValue="@array/pref_empty"
+            android:title="Поиск по..."/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="torrent_hist_f"
+            android:summary="Сперва отображать избранные/просмотренные не зависимо от сортировки"
+            android:title="Просмотренные сверху" />
+        <ListPreference
+            android:title="@string/pref_title_filtr_tor"
+            android:entries="@array/pref_list_filtr_tor"
+            android:entryValues="@array/pref_val_filtr_tor"
+            android:summary="%s"
+            android:key="filter_tor"
+            android:defaultValue="none"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="База данных">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="db_cache"
+            android:title="@string/pref_title_db_cache"
+            android:summary="@string/pref_desc_db_cache" />
+        <Preference
+            android:key="db_del_historyWatch"
+            android:title="Очистить историю серий"
+            android:summary="Удаляет таблицу истории просмотренных видео."/>
+        <Preference
+            android:key="db_del_cache"
+            android:title="Очистить таблицу кэша"
+            android:summary="Удаляет таблицу информации об фильме."/>
+        <Preference
+            android:key="db_del_all"
+            android:title="Очистить базы"
+            android:summary="Удаляет избранное, историю, просмотренные серии, кэш-базу."/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Filmix">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="rate_imdb"
+            android:title="Рейтинг imdb в приоритете"/>
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="animevost_menu"
-            android:summary="@string/pref_desc_animevost"
-            android:title="@string/pref_title_animevost" />
+            android:key="sync_filmix_watch"
+            android:summary="Только для авторизированных"
+            android:title="Синхронизация просмотров"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Другое">
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="coldfilm_menu"
-            android:summary="@string/pref_desc_coldfilm"
-            android:title="@string/pref_title_coldfilm" />
+            android:key="save_serial_position"
+            android:title="@string/pref_serial_position"
+            android:summary="@string/pref_serial_position_sum" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="focus_on_video"
+            android:summary="Фокус на первую иконку фильма в каталоге"
+            android:title="Фокус на видео" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="check_qual"
+            android:summary="Проверять качество на blu-ray.com"
+            android:title="Проверка качества"/>
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="alt_catalog_select"
+            android:title="@string/pref_title_alt_cat" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="auto_update"
+            android:summary="@string/pref_desc_auto_update"
+            android:title="@string/pref_title_auto_update" />
+        <CheckBoxPreference
+            android:defaultValue="true"
             android:key="exit"
             android:summary="@string/pref_desc_exit"
             android:title="@string/pref_title_exit" />

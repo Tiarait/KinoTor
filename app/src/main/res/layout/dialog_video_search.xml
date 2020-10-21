@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@android:style/Theme.NoTitleBar"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:minWidth="400dp"
+    android:maxWidth="600dp"
+    android:maxHeight="500dp"
+    android:layout_gravity="top|center"
+    android:background="@color/colorPrimaryDark"
+    android:layout_margin="50dp"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <EditText
+                android:id="@+id/text_title"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="Название"
+                android:background="@color/colorPrimaryDark"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:textColor="@color/colorWhite"
+                android:inputType="text"
+                android:textSize="18sp"
+                android:padding="8dp"
+                android:textColorHint="@color/colorAccent"/>
+            <ImageButton
+                android:id="@+id/btn_voice"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:focusable="true"
+                android:nextFocusUp="@id/toolbar"
+                android:nextFocusDown="@id/rlrv"
+                android:nextFocusLeft="@id/btn_search"
+                android:background="@drawable/item_select_circle_a"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_microphone"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <include layout="@layout/separ_horizont_strict"/>
+        </LinearLayout>
+        <EditText
+            android:layout_margin="10dp"
+            android:id="@+id/text_title_orig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Оригинальное название"
+            android:background="@color/colorPrimaryDark"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textColor="@color/colorWhite"
+            android:inputType="text"
+            android:textSize="18sp"
+            android:textColorHint="@color/colorAccent"
+            android:padding="8dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <include layout="@layout/separ_horizont_strict"/>
+        </LinearLayout>
+        <EditText
+            android:layout_margin="10dp"
+            android:id="@+id/text_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Год"
+            android:background="@color/colorPrimaryDark"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorWhite"
+            android:inputType="number"
+            android:textSize="18sp"
+            android:padding="8dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <include layout="@layout/separ_horizont_strict"/>
+        </LinearLayout>
+        <EditText
+            android:layout_margin="10dp"
+            android:id="@+id/text_kp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="KinoPoisk id"
+            android:background="@color/colorPrimaryDark"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorAccent"
+            android:inputType="number"
+            android:textSize="18sp"
+            android:padding="8dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <include layout="@layout/separ_horizont_strict"/>
+        </LinearLayout>
+        <RadioGroup
+            android:layout_margin="10dp"
+            android:id="@+id/radioGroup"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/rb_Film"
+                android:background="@drawable/item_select_dark_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:textColor="@color/colorWhite"
+                android:text="Фильм" />
+
+            <RadioButton
+                android:id="@+id/rb_Serial"
+                android:background="@drawable/item_select_dark_light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:text="Сериал" />
+        </RadioGroup>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <include layout="@layout/separ_horizont_strict"/>
+        </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

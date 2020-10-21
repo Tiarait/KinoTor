@@ -2,69 +2,156 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:theme="@android:style/Theme.NoTitleBar"
-    android:layout_width="match_parent"
-    android:minWidth="300dp"
+    android:layout_width="wrap_content"
+    android:minWidth="350dp"
+    android:layout_gravity="center"
     android:layout_height="wrap_content"
+    android:minHeight="250dp"
     android:background="@color/colorPrimaryDark"
     android:paddingTop="8dp"
     android:paddingBottom="16dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/dialog_update_t"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/colorWhite"
-        android:text="@string/update_t"
-        android:textStyle="bold">
-    </TextView>
-
-    <TextView
-        android:id="@+id/dialog_update_d"
+    <LinearLayout
+        android:id="@+id/dialog_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:text="@string/update_d"
-        android:textColor="@color/colorDarkWhite">
-    </TextView>
-    <LinearLayout
-        android:id="@+id/btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <Button
-            android:id="@+id/yes"
-            android:focusable="true"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="50dp"
-            android:layout_marginRight="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dialog_update_t"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/update_t"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/colorWhite"
-            android:background="@drawable/item_select"
-            android:textStyle="bold"
-            android:text="Да"
-            tools:ignore="ButtonStyle">
-        </Button>
-        <Button
-            android:id="@+id/no"
-            android:focusable="true"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/colorWhite"
-            android:background="@drawable/item_select"
-            android:textStyle="bold"
-            android:text="Нет"
-            tools:ignore="ButtonStyle">
-        </Button>
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/dialog_update_d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="20dp"
+                    android:text="@string/update_d"
+                    android:textColor="@color/colorDarkWhite" />
+
+                <include layout="@layout/separ_horizont"/>
+                <TextView
+                    android:id="@+id/dialog_update_log"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:textColor="@color/colorWhite"/>
+
+                <include layout="@layout/separ_horizont"/>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:minWidth="300dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/url"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/item_select"
+                android:focusable="true"
+                android:text="Сайт"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                tools:ignore="ButtonStyle" />
+            <Button
+                android:id="@+id/yes"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/item_select"
+                android:focusable="true"
+                android:text="Обновить"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/no"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/item_select"
+                android:focusable="true"
+                android:text="Закрыть"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
     </LinearLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/dialog_down"
+        android:gravity="center"
+        android:layout_width="350dp"
+        android:layout_height="250dp">
+        <TextView
+            android:id="@+id/dialog_down_t"
+            android:layout_width="350dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorWhite"
+            android:text="@string/down_t"
+            android:textStyle="bold">
+        </TextView>
+        <RelativeLayout
+            android:gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ProgressBar
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:indeterminate="true"
+                android:indeterminateOnly="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <Button
+                android:visibility="gone"
+                android:id="@+id/ok"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textColor="@color/colorWhite"
+                android:background="@drawable/item_select"
+                android:textStyle="bold"
+                android:text="OK"
+                tools:ignore="ButtonStyle">
+            </Button>
+        </RelativeLayout>
+    </RelativeLayout>
 
 </LinearLayout>

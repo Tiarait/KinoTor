@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:id="@+id/cardview"
+    android:layout_width="130dp"
+    android:layout_height="220dp"
+    style="@style/SelectableItemBackground"
+    app:cardBackgroundColor="@color/colorPrimaryLight"
+    android:orientation="vertical"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--android:layout_width="175dp"-->
+    <!--android:layout_height="295dp"-->
+
+    <RelativeLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgPoster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp"
+                android:gravity="right">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+                    <TextView
+                        android:id="@+id/quality_roud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  "
+                        android:paddingRight="3dp"
+                        android:lines="1"
+                        android:textStyle="bold"
+                        android:textSize="17sp"
+                        android:background="@drawable/rounding_right_acent"
+                        android:textColor="@color/colorPrimaryDark" />
+                    <TextView
+                        android:id="@+id/quality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/loading"
+                        android:paddingRight="3dp"
+                        android:lines="1"
+                        android:textStyle="bold"
+                        android:textSize="17sp"
+                        android:background="@color/colorAccentDark"
+                        android:textColor="@color/colorWhite" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="bottom">
+
+                <TextView
+                    android:id="@+id/voice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="2dp"
+                    android:text="@string/loading"
+                    android:textAlignment="center"
+                    android:background="@color/colorPrimaryLight"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:id="@+id/l_title"
+                    android:padding="2dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="42dp"
+                        android:maxLines="2"
+                        android:paddingBottom="3dp"
+                        android:gravity="center"
+                        android:text="@string/loading"
+                        android:ellipsize="end"
+                        android:textSize="13sp"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold" />
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/state"
+                        android:paddingTop="5dp"
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/ic_menu_hist" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

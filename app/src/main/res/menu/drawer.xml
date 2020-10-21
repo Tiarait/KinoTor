@@ -4,6 +4,22 @@
     <item android:title="Навигация">
         <menu>
             <item
+                android:id="@+id/threed"
+                android:checkable="true"
+                android:title="3D" />
+            <item
+                android:id="@+id/fourk"
+                android:checkable="true"
+                android:title="4K" />
+            <item
+                android:id="@+id/news"
+                android:checkable="true"
+                android:title="Новинки" />
+            <item
+                android:id="@+id/viewing"
+                android:checkable="true"
+                android:title="Сейчас смотрят" />
+            <item
                 android:id="@+id/films"
                 android:checkable="true"
                 android:title="Фильмы" />
@@ -17,6 +33,11 @@
                 android:checked="true"
                 android:title="Мультфильмы" />
             <item
+                android:id="@+id/multserial"
+                android:checkable="true"
+                android:checked="true"
+                android:title="Мультсериалы" />
+            <item
                 android:id="@+id/anime"
                 android:checkable="true"
                 android:checked="true"
@@ -26,15 +47,23 @@
                 android:checkable="true"
                 android:checked="true"
                 android:title="ТВ Передачи" />
+            <item
+                android:id="@+id/fav"
+                android:checkable="true"
+                android:checked="true"
+                android:title="Избранное" />
+            <item
+                android:id="@+id/later"
+                android:checkable="true"
+                android:checked="true"
+                android:title="Посмотреть позже" />
         </menu>
     </item>
     <item
         android:id="@+id/favor"
-        android:checkable="true"
         android:title="Избранное" />
     <item
         android:id="@+id/history"
-        android:checkable="true"
         android:title="История" />
     <item android:title="Дополнительно">
         <menu>
@@ -43,14 +72,29 @@
                 android:checkable="true"
                 android:title="AnimeVost" />
             <item
+                android:id="@+id/anidub"
+                android:checkable="true"
+                android:title="Anidub" />
+            <item
                 android:id="@+id/coldfilm"
                 android:checkable="true"
-                android:title="Coldfilm" />
+                android:title="ColdFilm" />
+            <item
+                android:id="@+id/fanserials"
+                android:checkable="true"
+                android:title="FanSerials" />
+            <item
+                android:id="@+id/kinodom"
+                android:checkable="true"
+                android:title="KinoDom" />
+        </menu>
+    </item>
+    <item android:title="Выйти">
+        <menu>
             <item
                 android:id="@+id/exit"
                 android:title="Выход" />
         </menu>
     </item>
-
 
 </menu>

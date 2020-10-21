@@ -1,0 +1,153 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Основное окно">
+        <CheckBoxPreference
+            android:title="Новый дизайн"
+            android:enabled="false"
+            android:summary="Не готово"
+            android:key="tv_activity_main"
+            android:defaultValue="true"/>
+        <ListPreference
+            android:title="@string/pref_title_grid_catalog"
+            android:entries="@array/pref_list_grid_catalog"
+            android:entryValues="@array/pref_values_grid_catalog"
+            android:summary="%s"
+            android:key="grid_catalog"
+            android:defaultValue="2"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <ListPreference
+            android:title="Вариант отображения миниатюр"
+            android:entries="@array/pref_list_grid_card"
+            android:entryValues="@array/pref_values_grid_catalog"
+            android:summary="%s"
+            android:key="card_main"
+            android:defaultValue="2"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <ListPreference
+            android:title="@string/pref_title_grid_count"
+            android:entries="@array/pref_list_grid_count"
+            android:entryValues="@array/pref_values_grid_count"
+            android:summary="%s"
+            android:key="grid_count"
+            android:defaultValue="0"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <MultiSelectListPreference
+            android:title="@string/pref_title_display_content"
+            android:entries="@array/pref_list_display_content"
+            android:defaultValue="@array/pref_values_def_display_content"
+            android:entryValues="@array/pref_values_display_content"
+            android:summary="@string/pref_desc_display_content"
+            android:key="display_content" />
+        <MultiSelectListPreference
+            android:title="@string/pref_title_cat_content"
+            android:entries="@array/pref_list_cat_content"
+            android:defaultValue="@array/pref_list_cat_content"
+            android:entryValues="@array/pref_list_cat_content"
+            android:summary="@string/pref_desc_cat_content"
+            android:key="display_category" />
+        <ListPreference
+            android:title="Размер текста"
+            android:entries="@array/pref_list_text_size"
+            android:entryValues="@array/pref_list_text_size"
+            android:summary="%s"
+            android:key="text_size_main"
+            android:defaultValue="14"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="view_state"
+            android:title="@string/pref_cat_state"
+            android:summary="@string/pref_cat_state_sum" />
+        <CheckBoxPreference
+            android:title="Обрезать постеры"
+            android:key="poster_crop"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:title="Боковое меню"
+            android:key="side_menu"
+            android:defaultValue="true"
+            android:summary="Закрепить меню(для больших экранов)"/>
+        <CheckBoxPreference
+            android:title="Закругленные углы"
+            android:key="radius_card"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:title="Выделять качество цветом"
+            android:key="quality_color"
+            android:defaultValue="true"
+            android:summary="Зеленый - хорошее, Желтый - среднее, Красный - плохое"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Окно видео">
+        <CheckBoxPreference
+            android:title="Новый дизайн"
+            android:key="tv_activity_detail"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:dependency="tv_activity_detail"
+            android:title="Изображение в фон"
+            android:summary="Фон в виде изображения"
+            android:key="tv_activity_detail_bg"
+            android:defaultValue="true"/>
+        <ListPreference
+            android:title="Размер текста"
+            android:entries="@array/pref_list_text_size"
+            android:entryValues="@array/pref_list_text_size"
+            android:summary="%s"
+            android:key="text_size_detail"
+            android:defaultValue="16"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Окно поиска">
+        <CheckBoxPreference
+            android:title="Новый дизайн"
+            android:key="tv_activity_search"
+            android:defaultValue="true"/>
+        <ListPreference
+            android:title="Клавиатура"
+            android:entries="@array/keyboard_title"
+            android:entryValues="@array/keyboard_val"
+            android:summary="%s"
+            android:key="tv_keyboard"
+            android:defaultValue="def"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Тема">
+        <ListPreference
+            android:title="Тема на выбор"
+            android:summary="%s"
+            android:entries="@array/theme_list"
+            android:entryValues="@array/theme_list_val"
+            android:key="theme_list"
+            android:defaultValue="gray"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Прочие">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="fullscreen"
+            android:summary="@string/pref_desc_fullscreen"
+            android:title="@string/pref_title_fullscreen" />
+        <CheckBoxPreference
+            android:title="Выделение фокуса"
+            android:key="tv_focus_select"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:title="Увеличение фокуса"
+            android:key="tv_focus_zoom"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

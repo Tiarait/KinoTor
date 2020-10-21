@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorPrimaryLight"
+    android:background="@color/colorPrimaryDark"
     tools:context="com.kinotor.tiar.kinotor.ui.DetailActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -27,59 +27,85 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <ScrollView
-            android:background="@color/colorPrimaryDark"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             <LinearLayout
+                android:id="@+id/leftSide"
                 android:layout_width="300dp"
                 android:paddingTop="24dp"
                 android:paddingRight="8dp"
                 android:paddingLeft="8dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="350dp"
                     android:gravity="center">
                     <ImageView
+                        android:id="@+id/imgPoster_bg"
+                        style="@style/SelectableItemBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter" />
+                    <ImageView
                         android:id="@+id/imgPoster_d"
+                        style="@style/SelectableItemBackground"
                         android:layout_width="match_parent"
-                        android:layout_height="350dp"
-                        android:src="@drawable/loading"
+                        android:layout_height="match_parent"
                         android:scaleType="fitCenter"/>
-                    <TextView
-                        android:id="@+id/quality"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:textStyle="bold"
-                        android:gravity="right"
-                        android:textColor="@color/colorWhite"
-                        android:background="@color/colorAccentDark"
-                        android:textSize="16sp"
-                        android:layout_alignRight="@+id/imgPoster_d" />
                     <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/img_fg_poster"
                         android:layout_width="match_parent"
-                        android:gravity="bottom"
-                        android:layout_height="350dp">
-                        <TextView
-                            android:gravity="center"
-                            android:id="@+id/translator"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:textStyle="bold"
-                            android:textColor="@color/colorDarkWhite"
-                            android:background="@color/colorDarkGrey"
-                            android:textSize="16sp" />
+                        android:layout_height="match_parent">
+                        <include layout="@layout/fg_eye_green"/>
                     </LinearLayout>
                 </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/l_btn"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+                    <Button
+                        android:id="@+id/btn_trailer"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_menu_play"
+                        style="@style/SelectableItemBackground"
+                        android:text="Трейлер"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:background="@color/colorAccentDarkGone"
+                        android:layout_marginRight="4dp"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        />
+                    <Button
+                        android:id="@+id/btn_play"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_menu_play"
+                        style="@style/SelectableItemBackground"
+                        android:text="Смотреть"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:background="@color/colorAccentDarkGone"
+                        android:layout_marginLeft="4dp"
+                        android:lines="1"
+                        android:ellipsize="end"
+                        />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/l_year"
@@ -97,6 +123,75 @@
                         android:text="Год:"/>
                     <TextView
                         android:id="@+id/year"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorWhite"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/l_quality"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorWhite"
+                        android:text="Качество:"/>
+                    <TextView
+                        android:id="@+id/quality"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorWhite"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/l_rating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorWhite"
+                        android:text="Рейтинг:"/>
+                    <TextView
+                        android:id="@+id/rating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorWhite"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/l_translator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorWhite"
+                        android:text="Звук:"/>
+                    <TextView
+                        android:id="@+id/translator"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
@@ -183,44 +278,43 @@
                     android:textColor="@color/colorDarkWhite"
                     />
             </LinearLayout>
-        </ScrollView>
+            </ScrollView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/colorPrimaryDark"
-                app:tabBackground="@drawable/item_select"
-                app:tabSelectedTextColor="@color/colorAccent"
-                app:tabTextColor="@color/colorDarkWhite"/>
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/container"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-        </LinearLayout>
-    </LinearLayout>
+                android:orientation="vertical">
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/colorPrimaryDark"
+                    style="@style/SelectableItemBackground"
+                    android:focusable="true"
+                    app:tabSelectedTextColor="@color/colorAccent"
+                    app:tabTextColor="@color/colorDarkWhite"/>
 
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp">
-    <LinearLayout
-        android:id="@+id/detail_pb"
-        android:layout_marginLeft="300dp"
-        android:paddingTop="50dp"
-        android:layout_marginTop="?android:attr/actionBarSize"
-        android:background="@color/colorGrey"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <include layout="@layout/pb"/>
-    </LinearLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <LinearLayout
+            android:id="@+id/detail_pb"
+            android:visibility="gone"
+            android:layout_marginLeft="300dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/fg_pb"/>
+        </LinearLayout>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -66,9 +66,10 @@ public class HdgoSeries extends AsyncTask<Void, Void, Void> {
             items.setEpisode(episode);
             items.setTranslator(translator);
 
-            String iframe_url = "error";
-            if (doc.body().text().contains("iframe_url\":\""))
-                iframe_url = doc.body().text().split("iframe_url\":\"")[1].split("\",")[0];
+//            String iframe_url = "error";
+//            if (doc.body().text().contains("iframe_url\":\""))
+//                iframe_url = doc.body().text().split("iframe_url\":\"")[1].split("\",")[0];
+//            else Log.d(TAG, "ParseHdgoSeries: " + doc.body().text());
 
             String[] array = doc.body().text().split("\\{\"season_");
             //если колво сезонов меньше последнего сезона
@@ -87,9 +88,9 @@ public class HdgoSeries extends AsyncTask<Void, Void, Void> {
             //построение списка
             for (int i = 0; i < series_arr.length; i ++){
                 if (series_arr[i].contains("\""))
-                    url = series_arr[i].replaceAll("\"", "");
+                    series_arr[i] = series_arr[i].replace("\"", "");
                 if (!series_arr[i].contains("http://"))
-                    series_arr[i] = iframe_url + "?episode=" + series_arr[i] + "&season" + cur_season;
+                    series_arr[i] = series_arr[i] + "?episode=" + (i+1) + "&season" + cur_season;
                 url = series_arr[i];
                 items.setTitle("series");
                 items.setType("hdgo");

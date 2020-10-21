@@ -14,13 +14,12 @@
         android:fitsSystemWindows="true"
         tools:openDrawer="start">
 
-        <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            tools:context="co.koshara.tiar.kinotor.ui.MainCatalogActivity">
+            android:background="@color/colorPrimaryDark"
+            android:fitsSystemWindows="true">
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
@@ -38,6 +37,8 @@
             </android.support.design.widget.AppBarLayout>
             <FrameLayout
                 android:id="@+id/frameLayout"
+
+                android:nextFocusDown="@id/frameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -53,13 +54,16 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:theme="@style/AppTheme.NavigationView"
+            app:itemBackground="@drawable/item_select"
             app:itemIconTint="@color/colorWhite"
             android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.NavigationView"
             android:background="@color/colorPrimaryLight"
             app:itemTextColor="@color/colorWhite"
-            app:itemBackground="@drawable/item_select"
             app:menu="@menu/drawer" />
 
+        <!--<item name="colorControlHighlight">@color/colorAccent</item>-->
+        <!--android:theme="@style/SelectableItemDraver"-->
+        <!--app:itemBackground="@drawable/item_select"-->
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

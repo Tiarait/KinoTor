@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.reclam.ReclamActivity$VideoFragment"
+    android:background="@color/colorPrimaryDark"
+    android:id="@+id/videoOverlay">
+
+    <RelativeLayout
+        android:id="@+id/videoPlayerWithAdPlayback"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.kinotor.tiar.kinotor.ui.reclam.SampleVideoPlayer
+            android:id="@+id/sampleVideoPlayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <ProgressBar
+                android:indeterminate="true"
+                android:indeterminateOnly="true"
+                android:layout_width="70dp"
+                android:layout_height="70dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

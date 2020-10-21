@@ -8,7 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- <uses-permission android:name="android.permission.INSTALL_PACKAGES"/> -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS" />
     <uses-feature
         android:name="android.hardware.screen.portrait"
         android:required="false" />
@@ -38,7 +39,7 @@
         android:banner="@drawable/banner"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
@@ -51,23 +52,103 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${google_API_KEY}" />
+
         <activity
             android:name=".ui.MainCatalogActivity"
+            android:exported="true"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAINSCREEN" />
+                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
+                <data android:host="filmix.co"/>
+                <data android:host="filmix.vip"/>
+                <data android:host="filmix.cc"/>
+                <data android:host="filmix.site"/>
+                <data android:host="filmix.life"/>
+                <data android:host="filmix.pub"/>
+                <data android:host="filmix.zone"/>
+                <data android:host="filmix.today"/>
+                <data android:pathPattern="/.*/.*-.*-.*\\.html"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="*.kinopoisk.ru" android:pathPattern="/film/.*" android:scheme="http"/>
+                <data android:host="*.kinopoisk.ru" android:pathPattern="/film/.*" android:scheme="https"/>
+                <data android:host="*.kinopoisk.ru" android:pathPattern="/movie/.*/" android:scheme="https"/>
+                <data android:host="*.kinopoisk.ru" android:pathPattern="/movie/.*/" android:scheme="http"/>
+                <data android:host="*.kinopoisk.ru" android:pathPattern="/film/.*/app" android:scheme="http"/>
+                <data android:host="*.kinopoisk.ru" android:pathPattern="/film/.*/app" android:scheme="https"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
+                <data android:host="animevost.org"    />
+                <data android:host="kino-dom.tv"      />
+                <data android:host="fanserials.money" />
+                <data android:host="rufilmtv.club"    />
+                <data android:host="koshara777.org"   />
+                <data android:host="online.anidub.com"/>
+                <data android:host="kinoxa.me"        />
+                <data android:pathPattern="/.*\\.html"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="http"           />
+                <data android:scheme="https"          />
+                <data android:host="coldfilm.ws"      />
+                <data android:host="my-hit.org"       />
+                <data android:host="my-hit.org"       />
+                <data android:host="topkino.online"   />
+                <data android:pathPattern="/news/.*"  />
+                <data android:pathPattern="/film/.*/"  />
+                <data android:pathPattern="/serial/.*/"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name=".ui.DetailActivity"
-            android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.DetailActivityVid"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/transparent" />
+        <activity
+            android:name=".ui.DetailActivityTv"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.SplashActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -81,7 +162,42 @@
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/PreferencesTheme" />
-        <activity android:name=".ui.ImageActivity" />
+        <activity
+            android:name=".ui.reclam.ReclamActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.ImgActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.BDActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.SearchActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <provider
+            android:name=".utils.voice.VideoContentProvider"
+            android:authorities="com.kinotor.tiar.kinotor"
+            android:exported="true"
+            tools:ignore="ExportedContentProvider">
+
+            <!-- <path-permission -->
+            <!-- android:pathPrefix="search" -->
+            <!-- android:readPermission="android.permission.GLOBAL_SEARCH" /> -->
+        </provider>
+
+        <activity
+            android:name=".ui.MainActivityTv"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.MainActivityTvCat"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

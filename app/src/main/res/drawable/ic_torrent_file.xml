@@ -6,7 +6,7 @@
     android:height="45dp">
     <path
         android:pathData="M56.85 32.79A26.3 26.3 0 0 0 57 30 26 26 0 1 0 23.46 54.89c-5.55 -14 -13.62 -34.73 -13 -35.39 1 -1 7.5 -2.5 9 -2C20.96 18 26 37.5 33 38 40 38.5 43.5 33 42.5 30.5 41.5 28 36 15.5 36 15.5l8 -2c0 0 6 14.5 8.5 17.5a6.49 6.49 0 0 0 4.35 1.79zM35.15 55.67A26 26 0 0 0 55.42 38.94 16.53 16.53 0 0 1 51 38.5C47.5 37.5 46.5 36 46.5 36A12.35 12.35 0 0 1 41 42.5C37 44.5 30 44 30 44Z"
-        android:strokeWidth="1.5"
+        android:strokeWidth="2.5"
         android:strokeLineJoin="round"
         android:strokeColor="#FFF"
         android:strokeLineCap="round" />

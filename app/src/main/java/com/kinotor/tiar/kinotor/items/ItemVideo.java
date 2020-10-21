@@ -8,49 +8,105 @@ import java.util.ArrayList;
 
 public class ItemVideo {
     public ArrayList<String> url = new ArrayList<>();
-    ArrayList<String> urlSite = new ArrayList<>();
-    ArrayList<String> title = new ArrayList<>();
-    ArrayList<String> id = new ArrayList<>();
-    ArrayList<String> seasons_count = new ArrayList<>();
-    ArrayList<String> episodes_count = new ArrayList<>();
-    ArrayList<String> type = new ArrayList<>();
-    ArrayList<String> token = new ArrayList<>();
-    ArrayList<String> id_trans = new ArrayList<>();
+    public ArrayList<String> urlSite = new ArrayList<>();
+    public ArrayList<String> urlTrailer = new ArrayList<>();
+    public ArrayList<String> title = new ArrayList<>();
+    public ArrayList<String> id = new ArrayList<>();
+    public ArrayList<String> seasons_count = new ArrayList<>();
+    public ArrayList<String> episodes_count = new ArrayList<>();
+    public ArrayList<String> type = new ArrayList<>();
+    public ArrayList<String> token = new ArrayList<>();
+    public ArrayList<String> id_trans = new ArrayList<>();
     public ArrayList<String> translator = new ArrayList<>();
+    public ArrayList<String> description = new ArrayList<>();
 
     public String getUrl(int i) {
-        return url.get(i);
+        try {
+            return url.get(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
     }
 
     public String getUrlSite(int i) {
-        return urlSite.get(i);
+        try {
+            return urlSite.get(i);
+        } catch (Exception e) {
+            
+            return "error";
+        }
+    }
+    public String getUrlTrailer(int i) {
+        try {
+            return urlTrailer.get(i);
+        } catch (Exception e) {
+            
+            return "error";
+        }
     }
     public String getTitle(int i) {
-        return title.get(i);
+        try {
+            return title.get(i);
+        } catch (Exception e) {
+            return "error";
+        }
     }
     public String getType(int i) {
-        return type.get(i);
+        try {
+            return type.get(i);
+        } catch (Exception e){
+            return "error";
+        }
     }
     public String getId(int i) {
-        return id.get(i);
+        try {
+            return id.get(i);
+        } catch (Exception e) {
+            return "error";
+        }
     }
     public String getSeason(int i) {
-        return seasons_count.get(i);
+        try {
+            return seasons_count.get(i);
+        } catch (Exception e) {
+            return "error";
+        }
     }
     public String getEpisode(int i) {
-        return episodes_count.get(i);
+        try {
+            return episodes_count.get(i);
+        } catch (Exception e) {
+            return "error";
+        }
     }
     public String getTranslator(int i) {
-        return translator.get(i);
+        try {
+            return translator.get(i);
+        } catch (Exception e) {
+            return "error";
+        }
     }
     public String getToken(int i) {
-        return token.get(i);
+        try {
+            return token.get(i);
+        } catch (Exception e) {
+            return "error";
+        }
     }
     public String getId_trans(int i) {
-        return id_trans.get(i);
+        try {
+            return id_trans.get(i);
+        } catch (Exception e) {
+            return "error";
+        }
     }
-    public ArrayList<String> getAll_url() {
-        return url;
+    public String getDescription(int i) {
+        try {
+            return description.get(i);
+        } catch (Exception e) {
+            return "error";
+        }
     }
     public ArrayList<String> getAll_urlSite() {
         return urlSite;
@@ -61,6 +117,9 @@ public class ItemVideo {
     }
     public void setUrlSite(String urlSite) {
         this.urlSite.add(urlSite);
+    }
+    public void setUrlTrailer(String urlTrailer) {
+        this.urlTrailer.add(urlTrailer);
     }
     public void setTitle(String title) {
         this.title.add(title);
@@ -86,10 +145,14 @@ public class ItemVideo {
     public void setId_trans(String id_trans) {
         this.id_trans.add(id_trans);
     }
+    public void setDescription(String description) {
+        this.description.add(description);
+    }
 
     public void addItems (ItemVideo items) {
         this.url.addAll(items.url);
         this.urlSite.addAll(items.urlSite);
+        this.urlTrailer.addAll(items.urlTrailer);
         this.title.addAll(items.title);
         this.id.addAll(items.id);
         this.seasons_count.addAll(items.seasons_count);
@@ -98,5 +161,6 @@ public class ItemVideo {
         this.token.addAll(items.token);
         this.id_trans.addAll(items.id_trans);
         this.translator.addAll(items.translator);
+        this.description.addAll(items.description);
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="frame_films" type="id"/>
+    <item name="frame_serials" type="id"/>
+    <item name="frame_mults" type="id"/>
+    <item name="frame_anime" type="id"/>
+    <item name="frame_tv" type="id"/>
+    <item name="frame_favor" type="id"/>
+    <item name="frame_history" type="id"/>
+    <item name="frame_anidub" type="id"/>
+    <item name="frame_animevost" type="id"/>
+    <item name="frame_fanserials" type="id"/>
+    <item name="frame_coldfim" type="id"/>
+    <item name="frame_kinodom" type="id"/>
+
+    <item name="category_films" type="id"/>
+    <item name="category_serials" type="id"/>
+    <item name="category_mults" type="id"/>
+    <item name="category_anime" type="id"/>
+    <item name="category_tv" type="id"/>
+    <item name="category_favor" type="id"/>
+    <item name="category_history" type="id"/>
+    <item name="category_anidub" type="id"/>
+    <item name="category_animevost" type="id"/>
+    <item name="category_fanserials" type="id"/>
+    <item name="category_coldfim" type="id"/>
+    <item name="category_kinodom" type="id"/>
+</resources>

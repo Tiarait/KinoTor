@@ -1,0 +1,38 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Аккаунты">
+        <Preference
+            android:key="sing_in_filmix"
+            android:title="Filmix"/>
+        <!--<Preference-->
+            <!--android:key="sing_out_filmix"-->
+            <!--android:title="Выйти"/>-->
+        <Preference
+            android:key="sing_in_kinozal"
+            android:title="Kinozal"/>
+        <!--<Preference-->
+            <!--android:key="sing_in_kinodom"-->
+            <!--android:title="Kinodom"/>-->
+        <Preference
+            android:key="sing_in_hurtom"
+            android:title="Hurtom"/>
+        <Preference
+            android:key="sing_in_anidub_tr"
+            android:title="Anidub tracker"/>
+        <Preference
+            android:key="sing_in_greentea_tr"
+            android:title="GreenTea tracker"/>
+        <Preference
+            android:key="sing_in_rutracker"
+            android:title="Rutracker"/>
+        <Preference
+            android:key="sing_in_kinopub"
+            android:title="Kinopub"/>
+        <!--<Preference-->
+            <!--android:key="sing_out_filmix"-->
+            <!--android:title="Выход">-->
+        <!--</Preference>-->
+    </PreferenceCategory>
+
+</PreferenceScreen>

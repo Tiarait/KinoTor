@@ -7,7 +7,6 @@ import com.kinotor.tiar.kinotor.items.ItemHtml;
 import com.kinotor.tiar.kinotor.items.ItemVideo;
 import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskVideoCallback;
-import com.kinotor.tiar.kinotor.utils.Utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,9 +30,11 @@ public class ParserKinosha extends AsyncTask<Void, Void, Void> {
         this.callback = callback;
         this.items = new ItemVideo();
 
-        if (itempath.getTitle(0).contains("("))
-            search_title = itempath.getTitle(0).split("\\(")[0];
-        else search_title = itempath.getTitle(0);
+        search_title = item.getTitle(0).trim();
+        if (search_title.contains("("))
+            search_title = search_title.split("\\(")[0].trim();
+        if (search_title.contains("["))
+            search_title = search_title.split("\\[")[0].trim();
         search_title = search_title.trim().replace("\u00a0", " ");
         type = itempath.getType(0);
     }
@@ -82,12 +83,20 @@ public class ParserKinosha extends AsyncTask<Void, Void, Void> {
                     if (entry.html().contains("class=\"li link-cat\"")) {
                         q = " (" + entry.select(".li.link-cat").text().trim() + ")";
                     }
-                    String t_m = title_m.toLowerCase().replace("ё", "е");
-                    String t_n = search_title.toLowerCase().replace("ё", "е");
-                    boolean tit = new Utils().trueTitle(t_m, t_n);
+                    String t_m = title_m.toLowerCase().replace("ё", "е").trim();
+                    String s = itempath.getTitle(0).contains("(") ?
+                            itempath.getTitle(0).split("\\(")[0].trim().replace("ё", "е") :
+                            itempath.getTitle(0).trim().replace("ё", "е");
+                    if (s.contains("[")) s = s.split("\\[")[0].trim();
+                    boolean tit = t_m.equals(s.toLowerCase());
 
-                    Log.d(TAG, "ParserKinosha: " + this.type + " " + type_m);
-                    if (this.type.contains(type_m) && tit) {
+
+//                    Log.e(TAG, "ParserKinosha: ||" + s + "||" + t_m+"||");
+//                    Log.e(TAG, "ParserKinosha: " + this.type + " " + type_m);
+                    boolean tp = true;
+                    if (!this.type.contains("error"))
+                        tp = this.type.contains(type_m);
+                    if (tp && tit) {
                         if (type_m.equals("movie")) items.setTitle("catalog video");
                         else items.setTitle("catalog serial");
                         items.setType(title_m + " " + year + q + "\nkinosha");
@@ -95,6 +104,8 @@ public class ParserKinosha extends AsyncTask<Void, Void, Void> {
                         items.setId_trans("");
                         items.setId(id);
                         items.setUrl(url);
+                        items.setUrlTrailer("error");
+//                        items.setUrlSite("error");
                         items.setSeason(season);
                         items.setEpisode(episode);
                         items.setTranslator(translator);
@@ -107,19 +118,17 @@ public class ParserKinosha extends AsyncTask<Void, Void, Void> {
     }
 
     private Document Getdata(String s) {
+        if (s.contains("[")) s = s.split("\\[")[0].trim();
         String n = s.trim().replace("\u00a0", "%20").trim();
         n = n.trim().replace(" ", "%20");
 
         String url = Statics.KINOSHA_URL + "/search/f:" + n;
         try {
-            Document htmlDoc = Jsoup.connect(url)
+            return Jsoup.connect(url)
                         .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
                         .timeout(5000).ignoreContentType(true).get();
-
-            Log.d(TAG, "Getdata: get connected to " + htmlDoc.location());
-            return htmlDoc;
         } catch (Exception e) {
-            Log.d(TAG, "Getdata: connected false to " + url);
+            e.printStackTrace();
             return null;
         }
     }

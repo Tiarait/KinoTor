@@ -1,56 +1,213 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
+        android:title="Настройки">
+        <SwitchPreference
+            android:key="domen_auto_check"
+            android:title="Авто"
+            android:summary="Проверяет ссылки вместе с обновлением."
+            android:defaultValue="true" />
+        <Preference
+            android:key="domen_check"
+            android:title="Обновить"
+            android:summary="Обновляет все ссылки с сервера."/>
+        <Preference
+            android:key="domen_def"
+            android:title="Сбросить"/>
+    </PreferenceCategory>
+    <!--<PreferenceCategory-->
+        <!--android:shouldDisableView="true"-->
+        <!--android:title="Proxy">-->
+        <!--<EditTextPreference-->
+            <!--android:title="Proxy"-->
+            <!--android:key="proxy_cur"-->
+            <!--android:defaultValue="адрес:порт"/>-->
+        <!--<ListPreference-->
+            <!--android:title="@string/pref_title_proxy_def"-->
+            <!--android:entries="@array/pref_list_proxy_def"-->
+            <!--android:entryValues="@array/pref_list_proxy_def_val"-->
+            <!--android:summary="@string/pref_desc_proxy_def"-->
+            <!--android:key="proxy_def"-->
+            <!--android:defaultValue="default"-->
+            <!--android:negativeButtonText="@null"-->
+            <!--android:positiveButtonText="@null" />-->
+        <!--<MultiSelectListPreference-->
+            <!--android:title="@string/pref_title_proxy_use"-->
+            <!--android:entries="@array/pref_list_proxy_use"-->
+            <!--android:defaultValue="@array/pref_def_proxy_use"-->
+            <!--android:entryValues="@array/pref_list_proxy_use"-->
+            <!--android:summary="@string/pref_desc_proxy_use"-->
+            <!--android:key="proxy_use" />-->
+    <!--</PreferenceCategory>-->
+    <PreferenceCategory
+        android:key="domen_catalog"
         android:title="Каталоги">
+        <!--<EditTextPreference-->
+            <!--android:title="Amcet"-->
+            <!--android:key="amcet_furl"-->
+            <!--android:defaultValue="https://amcet.net"/>-->
         <EditTextPreference
-            android:title="Coldfilm"
-            android:key="coldfilm_furl"
-            android:defaultValue="http://coldfilm.cc"/>
+            android:title="Filmix"
+            android:key="filmix_furl"
+            android:defaultValue="https://filmix.zone"/>
+        <EditTextPreference
+            android:title="KinoFS"
+            android:key="kinofs_furl"
+            android:defaultValue="http://kino-fs.ucoz.net"/>
+        <EditTextPreference
+            android:title="Kinoxa"
+            android:key="kinoxa_furl"
+            android:defaultValue="http://kinoxa.me"/>
+        <EditTextPreference
+            android:title="Koshara"
+            android:key="koshara_furl"
+            android:defaultValue="http://koshara777.net"/>
+        <EditTextPreference
+            android:title="My-Hit"
+            android:key="myhit_furl"
+            android:defaultValue="https://my-hit.org"/>
+        <EditTextPreference
+            android:title="RufilmTv"
+            android:key="rufilmtv_furl"
+            android:defaultValue="http://rufilmtv.club"/>
+        <EditTextPreference
+            android:title="TopKino"
+            android:key="topkino_furl"
+            android:defaultValue="https://infilms.ru"/>
+        <EditTextPreference
+            android:title="Kinopub"
+            android:key="kinopub_furl"
+            android:defaultValue="https://kino.pub"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="domen_catalog_plus"
+        android:title="Доп. каталоги">
         <EditTextPreference
             android:title="Animevost"
             android:key="animevost_furl"
             android:defaultValue="http://animevost.org"/>
         <EditTextPreference
-            android:title="Amcet"
-            android:key="amcet_furl"
-            android:defaultValue="https://amcet.net"/>
+            android:title="Anidub"
+            android:key="anidub_furl"
+            android:defaultValue="https://anidub.tv"/>
         <EditTextPreference
-            android:title="Koshara"
-            android:key="koshara_furl"
-            android:defaultValue="http://koshara.net"/>
+            android:title="Coldfilm"
+            android:key="coldfilm_furl"
+            android:defaultValue="http://coldfilm.cc"/>
         <EditTextPreference
-            android:title="KinoFS"
-            android:key="kinofs_furl"
-            android:defaultValue="http://kino-fs.ucoz.net"/>
+            android:title="Fanserials"
+            android:key="fanserials_furl"
+            android:defaultValue="http://fanserials.email"/>
+        <EditTextPreference
+            android:title="KinoDom"
+            android:key="kinodom_furl"
+            android:defaultValue="http://kino-dom.tv"/>
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="domen_vid"
         android:title="Видео">
         <ListPreference
             android:title="@string/pref_title_moonwalk"
             android:entries="@array/pref_list_moonwalk"
             android:entryValues="@array/pref_values_moonwalk"
             android:key="moonwalk_furl"
-            android:defaultValue="http://smartportaltv.ru/20/4.php?url="
+            android:defaultValue="http://wonky.lostcut.net/moonwalk.php?url="
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
+
+        <!--http://smartportaltv.ru/20/4.php?url=-->
+        <!--http://wonky.lostcut.net/moonwalk.php?url=-->
+
+        <EditTextPreference
+            android:title="Animedia"
+            android:key="animedia_furl"
+            android:defaultValue="http://online.animedia.tv"/>
         <EditTextPreference
             android:title="Kinosha"
             android:key="kinosha_furl"
-            android:defaultValue="http://kinosha.su"/>
+            android:defaultValue="http://kinosha.se"/>
+        <!--<EditTextPreference-->
+            <!--android:title="Kinomania"-->
+            <!--android:key="kinomania_furl"-->
+            <!--android:defaultValue="http://www.kinomania.ru"/>-->
         <EditTextPreference
-            android:title="Kinomania"
-            android:key="kinomania_furl"
-            android:defaultValue="http://www.kinomania.ru"/>
+            android:title="KinoHd"
+            android:key="kinohd_furl"
+            android:defaultValue="https://kino-v-hd.com"/>
+        <EditTextPreference
+            android:title="KinoLive"
+            android:key="kinolive_furl"
+            android:defaultValue="http://kino-live2.life"/>
+        <EditTextPreference
+            android:title="ZombieFilm"
+            android:key="zombiefilm_furl"
+            android:defaultValue="https://zombie-film.com"/>
+
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="domen_tor"
         android:title="Торренты">
+        <EditTextPreference
+            android:title="Tparser"
+            android:key="tparser_furl"
+            android:defaultValue="http://tparser.me"/>
+        <EditTextPreference
+            android:title="Anidub tracker"
+            android:key="anidub_tr_furl"
+            android:defaultValue="https://tr.anidub.com"/>
+        <EditTextPreference
+            android:title="GreenTea tracker"
+            android:key="greentea_tr_furl"
+            android:defaultValue="http://tracker.green-teatv.com"/>
         <EditTextPreference
             android:title="Freerutor"
             android:key="freerutor_furl"
             android:defaultValue="https://kinopad.club"/>
         <EditTextPreference
-            android:title="Zooqle"
-            android:key="zooqle_furl"
-            android:defaultValue="https://zooqle.unblocked.vet"/>
+            android:title="Rutracker"
+            android:key="rutracker_furl"
+            android:defaultValue="https://rutracker.org"/>
+        <!--<EditTextPreference-->
+            <!--android:visibility="gone"-->
+            <!--android:title="Zooqle"-->
+            <!--android:key="zooqle_furl"-->
+            <!--android:defaultValue="https://zooqle.unblocked.vet"/>-->
+        <EditTextPreference
+            android:title="Rutor"
+            android:key="rutor_furl"
+            android:defaultValue="http://the-rutor.org"/>
+        <EditTextPreference
+            android:title="NNM"
+            android:key="nnm_furl"
+            android:defaultValue="http://nnm-club-me.appspot.com"/>
+        <EditTextPreference
+            android:title="Bitru"
+            android:key="bitru_furl"
+            android:defaultValue="http://bit-ru.org"/>
+        <!--<EditTextPreference-->
+            <!--android:title="Ba3a"-->
+            <!--android:key="ba3a_furl"-->
+            <!--android:defaultValue="http://ba3a.net"/>-->
+        <EditTextPreference
+            android:title="Megapeer"
+            android:key="megapeer_furl"
+            android:defaultValue="http://shad.megapeer.ru"/>
+        <EditTextPreference
+            android:title="PiratBit"
+            android:key="piratbit_furl"
+            android:defaultValue="https://pb.wtf"/>
+        <EditTextPreference
+            android:title="Kinozal"
+            android:key="kinozal_furl"
+            android:defaultValue="http://kinozal.tv"/>
+        <EditTextPreference
+            android:title="Hurtom"
+            android:key="hurtom_furl"
+            android:defaultValue="https://toloka.to"/>
+        <EditTextPreference
+            android:title="Torlook"
+            android:key="torlook_furl"
+            android:defaultValue="https://torlook.info"/>
     </PreferenceCategory>
 </PreferenceScreen>

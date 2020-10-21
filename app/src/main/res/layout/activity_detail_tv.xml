@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorPrimaryLight"
+    tools:context="com.kinotor.tiar.kinotor.ui.DetailActivityTv"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <ImageView
+        android:id="@+id/image_bg"
+        android:layout_width="match_parent"
+        android:layout_height="700dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/loading" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="700dp"
+        android:background="@color/colorGrey" />
+    <View
+        android:id="@+id/bg"
+        android:layout_width="match_parent"
+        android:layout_height="700dp"
+        android:background="@drawable/gradient_darkgone_dark" />
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--android:scrollY="-100dp"-->
+            <LinearLayout
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/app_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorGone"
+                    android:theme="@style/AppTheme.AppBarOverlay">
+
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="?android:attr/actionBarSize"
+                        android:background="@color/colorPrimaryDarkGone"
+                        app:popupTheme="@style/AppTheme.AppBarOverlay" />
+
+                </android.support.design.widget.AppBarLayout>
+                <!-- Row 1 with single column -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/top"
+                        android:focusable="true"
+                        android:nextFocusUp="@id/toolbar"
+                        android:nextFocusDown="@id/btn_play"
+                        android:nextFocusLeft="@id/toolbar"
+                        android:nextFocusRight="@id/image_poster"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:id="@+id/title"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:focusable="false"
+                                    android:textIsSelectable="true"
+                                    android:text="......"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/subtitle"
+                                    android:textIsSelectable="true"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="......"
+                                    android:focusable="false"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="200dp"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:paddingTop="8dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:orientation="vertical">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp">
+                                    <LinearLayout
+                                        android:id="@+id/rate_imdb_l"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content">
+                                        <ImageView
+                                            android:layout_width="40dp"
+                                            android:layout_height="match_parent"
+                                            android:background="@color/colorGone"
+                                            app:srcCompat="@drawable/ic_imdb"/>
+                                        <TextView
+                                            android:id="@+id/rate_imdb"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:padding="8dp"
+                                            android:textStyle="bold"
+                                            android:textColor="@color/colorWhite"
+                                            android:textSize="20sp"
+                                            android:text="-"/>
+                                    </LinearLayout>
+                                    <LinearLayout
+                                        android:id="@+id/rate_kp_l"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content">
+                                        <ImageView
+                                            android:layout_width="25dp"
+                                            android:layout_height="match_parent"
+                                            android:background="@color/colorGone"
+                                            app:srcCompat="@drawable/ic_kinopoisk"/>
+                                        <TextView
+                                            android:id="@+id/rate_kp"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:padding="8dp"
+                                            android:textStyle="bold"
+                                            android:textColor="@color/colorWhite"
+                                            android:textSize="20sp"
+                                            android:text="-"/>
+                                    </LinearLayout>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp">
+                                    <LinearLayout
+                                        android:id="@+id/rate_site_l"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content">
+                                        <ImageView
+                                            android:layout_width="40dp"
+                                            android:layout_height="match_parent"
+                                            android:tint="@color/colorOrange"
+                                            android:background="@color/colorGone"
+                                            app:srcCompat="@drawable/ic_stars"/>
+                                        <TextView
+                                            android:id="@+id/rate_site"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:padding="8dp"
+                                            android:textStyle="bold"
+                                            android:textColor="@color/colorWhite"
+                                            android:textSize="20sp"
+                                            android:text="-"/>
+                                    </LinearLayout>
+                                    <TextView
+                                        android:visibility="gone"
+                                        android:id="@+id/quality"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:padding="8dp"
+                                        android:textStyle="bold"
+                                        android:background="@drawable/rounding_red"
+                                        android:textColor="@color/colorWhite"
+                                        android:textSize="20sp"
+                                        android:text="xxx"/>
+                                </LinearLayout>
+                                <TextView
+                                    android:visibility="gone"
+                                    android:id="@+id/status"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="20sp"
+                                    android:text=""/>
+                                <TextView
+                                    android:id="@+id/other"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/genre"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="4"
+                                android:orientation="vertical">
+                                <RelativeLayout
+                                    android:id="@+id/image_poster_r"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+                                    <ImageView
+                                        android:id="@+id/image_poster"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:focusable="true"
+                                        android:nextFocusDown="@id/rv_image"
+                                        android:nextFocusLeft="@id/btn_later"
+                                        android:nextFocusRight="@id/btn_play"
+                                        android:scaleType="fitCenter" />
+                                </RelativeLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp">
+
+                            <Button
+                                android:id="@+id/btn_play"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:padding="4dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="8dp"
+                                android:background="@drawable/btn_bg"
+                                app:srcCompat="@drawable/ic_mp4_file"
+                                android:focusable="true"
+                                android:nextFocusUp="@id/toolbar"
+                                android:nextFocusDown="@id/rv_image"
+                                android:nextFocusLeft="@id/image_poster"
+                                android:nextFocusRight="@id/btn_trailer"
+                                android:shadowColor="@color/colorGreenDark"
+                                android:text="Смотреть"
+                                android:textColor="@color/colorWhite"
+                                android:textStyle="bold" />
+
+                            <Button
+                                android:visibility="gone"
+                                android:id="@+id/btn_trailer"
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="8dp"
+                                android:background="@drawable/btn_bg"
+                                android:focusable="true"
+                                android:nextFocusUp="@id/toolbar"
+                                android:nextFocusDown="@id/rv_image"
+                                android:nextFocusLeft="@id/btn_play"
+                                android:shadowColor="@color/colorGreenDark"
+                                android:text="Трейлер"
+                                android:textColor="@color/colorWhite"
+                                android:textStyle="bold" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center|right"
+                                android:orientation="horizontal">
+                                <ImageButton
+                                    android:id="@+id/btn_fav"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginRight="8dp"
+                                    android:padding="5dp"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/item_select_circle_a"
+                                    android:focusable="true"
+                                    android:nextFocusUp="@id/toolbar"
+                                    android:nextFocusDown="@id/rv_image"
+                                    android:nextFocusLeft="@id/btn_trailer"
+                                    android:nextFocusRight="@id/btn_later"
+                                    android:scaleType="centerInside"
+                                    app:srcCompat="@drawable/ic_menu_fav" />
+
+                                <ImageButton
+                                    android:id="@+id/btn_later"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginRight="8dp"
+                                    android:padding="5dp"
+                                    android:layout_margin="5dp"
+                                    android:background="@drawable/item_select_circle_a"
+                                    android:focusable="true"
+                                    android:nextFocusUp="@id/toolbar"
+                                    android:nextFocusDown="@id/rv_image"
+                                    android:nextFocusLeft="@id/btn_fav"
+                                    android:nextFocusRight="@id/image_poster"
+                                    android:scaleType="centerInside"
+                                    app:srcCompat="@drawable/ic_menu_flag" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <include layout="@layout/separ_horizont" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp" />
+                    <TextView
+                        android:id="@+id/sound"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="ЗВУК: ..."
+                        android:textColor="@color/colorWhite"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/director"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="РЕЖИССЕР: ..."
+                        android:textColor="@color/colorWhite"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/actor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="В РОЛЯХ: ..."
+                        android:textColor="@color/colorWhite"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/title_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="28dp"
+                        android:text="ОПИСАНИЕ"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="..."
+                        android:textColor="@color/colorWhite"
+                        android:textSize="20sp" />
+                </LinearLayout>
+                <!-- Row 2 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="24dp"
+                        android:text="ИЗОБРАЖЕНИЯ"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="4dp"
+                        android:focusable="true"
+                        android:nextFocusDown="@id/rv_more"
+                        android:nextFocusLeft="@id/rv_image"
+                        android:nextFocusRight="@id/rv_image"
+                        android:nextFocusUp="@id/top" />
+                </LinearLayout>
+                <!-- Row 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="24dp"
+                        android:text="СМОТРЕТЬ ЕЩЕ"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="4dp"
+                        android:focusable="true"
+                        android:nextFocusDown="@id/rv_more"
+                        android:nextFocusLeft="@id/rv_more"
+                        android:nextFocusRight="@id/rv_more"
+                        android:nextFocusUp="@id/rv_image" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/detail_pb"
+        android:focusable="true"
+        android:nextFocusUp="@id/detail_pb"
+        android:nextFocusDown="@id/detail_pb"
+        android:nextFocusLeft="@id/detail_pb"
+        android:nextFocusRight="@id/detail_pb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorGrey"
+        android:gravity="center">
+        <View
+            android:background="@color/colorGrey"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/fg_pb" />
+        </LinearLayout>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

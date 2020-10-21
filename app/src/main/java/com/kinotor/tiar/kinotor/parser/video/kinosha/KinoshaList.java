@@ -4,9 +4,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.kinotor.tiar.kinotor.items.ItemVideo;
+import com.kinotor.tiar.kinotor.items.Statics;
 import com.kinotor.tiar.kinotor.utils.OnTaskUrlCallback;
 import com.kinotor.tiar.kinotor.utils.OnTaskVideoCallback;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -26,6 +28,9 @@ public class KinoshaList extends AsyncTask<Void, Void, Void> {
     private OnTaskVideoCallback callbackVideo;
     private ItemVideo items;
     private boolean file = false, season = false, series = false;
+
+    private ArrayList<String> videoList = new ArrayList<>();
+    private ArrayList<String> videoListName = new ArrayList<>();
 
     public KinoshaList(String url, String se, String ep, OnTaskUrlCallback callback, boolean file) {
         this.url = url;
@@ -57,7 +62,13 @@ public class KinoshaList extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         if (file) callbackUrl.OnCompleted(quality_arr, url_arr);
-        if (season || series) callbackVideo.OnCompleted(items);
+        if (season || series) {
+            if (videoList.size() > 1) {
+                Statics.videoList = videoList.toArray(new String[videoList.size()]);
+                Statics.videoListName = videoListName.toArray(new String[videoListName.size()]);
+            }
+            callbackVideo.OnCompleted(items);
+        }
     }
 
     @Override
@@ -71,7 +82,7 @@ public class KinoshaList extends AsyncTask<Void, Void, Void> {
     private void getHtml(Document doc) {
         if (doc != null) {
             parse(doc.text());
-        }
+        } else Log.e("KinoshaList", "doc null");
     }
     
     private void parse (String url) {
@@ -120,6 +131,8 @@ public class KinoshaList extends AsyncTask<Void, Void, Void> {
                 all = doc.split("\\{\"id\":" + se)[1].replace("\\", "");
             else if (doc.contains("{\"id\":\"" + se))
                 all = doc.split("\\{\"id\":\"" + se)[1].replace("\\", "");
+
+            Log.e(TAG, "parseFile: "+all);
 
             if (all.contains("]}"))
                 all = all.split("\\]\\}")[0];
@@ -238,27 +251,38 @@ public class KinoshaList extends AsyncTask<Void, Void, Void> {
                             //если серий больше 1
                             if (episode.contains("},{")) {
                                 for (int j = 0; j < episode.split("\\},\\{").length; j ++){
-                                    addSeries(String.valueOf(j + 1));
+                                    addSeries(parseSUrl(episode.split("\\},\\{")[j]), String.valueOf(j + 1));
                                 }
-                            } else addSeries("1");
+                            } else addSeries(parseSUrl(episode), "1");
                         }
                     }
                 } else {
                     if (doc.contains("},{")) {
                         for (int j = 0; j < doc.split("\\},\\{").length; j++) {
-                            addSeries(String.valueOf(j + 1));
+                            addSeries(parseSUrl(doc.split("\\},\\{")[j]), String.valueOf(j + 1));
                         }
-                    } else addSeries("1");
+                    } else addSeries(parseSUrl(doc), "1");
                 }
             }
         }
     }
 
-    private void addSeries(String s) {
+    private String parseSUrl(String doc) {
+        String ur ="error";
+        if (doc.contains("file\":\"")) {
+            ur = doc.split("file\":\"")[1].split("\"")[0].replace("\\", "");
+        }
+        return ur;
+    }
+
+    private void addSeries(String url, String s) {
+        videoList.add(url);
+        videoListName.add("s"+se+"e"+s);
+
         items.setTitle("series");
         items.setType("kinosha");
-        items.setUrl(url);
-        items.setToken(url);
+        items.setUrl(this.url);
+        items.setToken(this.url);
         items.setId("error");
         items.setId_trans("error");
         items.setSeason(se);
@@ -273,16 +297,19 @@ public class KinoshaList extends AsyncTask<Void, Void, Void> {
 
     private Document GetData(String s){
         String u = s;
-        if (u.contains("kinosha") && u.contains("/") && u.contains("-"))
+        if (u.contains("/") && u.contains("-"))
             u = s.split("/")[s.split("/").length-1].split("-")[0];
         try {
-            Document htmlDoc = Jsoup.connect("http://api.kinosha.su/getplay?pl_type=movie&key%5Bid%5D=" + u)
+            Document htmlDoc = Jsoup.connect("http://api.kinosha.se/getplay")
+                    .header("Host", "api.kinosha.se")
+                    .data("key[id]", u.trim())
+                    .data("pl_type", "movie")
+                    .data("is_mobile", "0")
+                    .data("dle_group", "5")
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
-                    .timeout(5000).ignoreContentType(true).get();
-            Log.d(TAG, "GetdataKinoshaUrl: connected to " + htmlDoc.location());
+                    .timeout(5000).ignoreContentType(true).post();
             return htmlDoc;
         } catch (Exception e) {
-            Log.d(TAG, "GetdataKinoshaUrl: connected false to " + u);
             e.printStackTrace();
             return null;
         }

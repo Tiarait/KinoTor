@@ -5,10 +5,41 @@
         android:title="Избанное"
         android:icon="@drawable/ic_menu_fav_add"
         app:showAsAction="always" />
+    <item
+        android:visible="false"
+        android:id="@+id/menuDBTorrent"
+        android:onClick="onDBTorrent"
+        android:icon="@drawable/ic_menu_db"
+        android:title="Торренты"
+        app:showAsAction="always" />
+    <item
+        android:visible="false"
+        android:id="@+id/menuDBVideo"
+        android:onClick="onDBVideo"
+        android:title="Видео"
+        android:icon="@drawable/ic_menu_db"
+        app:showAsAction="always">
+    </item>
+    <item
+        android:visible="false"
+        android:id="@+id/set_sortTor"
+        android:title="Сортировать"
+        android:onClick="onSortTor"
+        android:icon="@drawable/ic_menu_sort"
+        app:showAsAction="always">
+    </item>
+    <item
+        android:visible="false"
+        android:id="@+id/set_sortVid"
+        android:title="Сортировать"
+        android:onClick="onSortVid"
+        android:icon="@drawable/ic_menu_sort"
+        app:showAsAction="always">
+    </item>
     <item android:id="@+id/action_refresh"
         android:title="Обновить"
         android:icon="@drawable/ic_menu_refresh"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item android:id="@+id/action_copy"
         android:title="Скопировать..."
         android:onClick="onActionCopy"
@@ -33,6 +64,35 @@
                     android:onClick="onSearchYoutube"
                     android:title="YouTube"
                     app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuSearchKinopoisk"
+                    android:onClick="onSearchKinopoisk"
+                    android:title="Kinopoisk"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_addDB"
+        android:title="Добавить в...">
+        <menu>
+            <group
+                android:checkableBehavior="all">
+                <item
+                    android:id="@+id/menuAddFavor"
+                    android:onClick="onAddDB"
+                    android:title="Избранное"
+                    android:checkable="true"/>
+                <item
+                    android:id="@+id/menuAddLater"
+                    android:title="Посмотреть позже"
+                    android:onClick="onAddDB"
+                    android:checkable="true" />
+                <item
+                    android:id="@+id/menuAddHistory"
+                    android:onClick="onAddDB"
+                    android:title="История"
+                    android:checkable="true" />
             </group>
         </menu>
     </item>

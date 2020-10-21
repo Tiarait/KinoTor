@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_search"
         android:title="Поиск"
-        android:icon="@drawable/ic_menu_search"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        app:actionLayout="@layout/search_view"/>
     <item android:id="@+id/action_category"
         android:orderInCategory="10"
         android:title="Категории"
@@ -14,7 +14,13 @@
     <item android:id="@+id/action_settings"
         android:title="Настройки"
         app:showAsAction="always"
+        android:orderInCategory="3"
         android:icon="@drawable/ic_menu_settings">
+    </item>
+    <item android:id="@+id/action_alt_cat"
+        android:orderInCategory="20"
+        android:title="Каталог"
+        app:showAsAction="never">
     </item>
     <item
         android:id="@+id/action_catalog"
@@ -27,6 +33,7 @@
                     android:onClick="onSelectCatalog"
                     android:title="Amcet"
                     android:checkable="true"
+                    android:visible="false"
                     app:showAsAction="never" />
                 <item
                     android:id="@+id/menuСatalogKoshara"
@@ -35,35 +42,70 @@
                     android:title="Koshara"
                     app:showAsAction="never" />
                 <item
+                    android:visible="false"
                     android:id="@+id/menuСatalogKinoFS"
                     android:onClick="onSelectCatalog"
                     android:checkable="true"
                     android:title="KinoFS"
                     app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuСatalogKinoxa"
+                    android:onClick="onSelectCatalog"
+                    android:checkable="true"
+                    android:title="Kinoxa"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuСatalogRufilmtv"
+                    android:onClick="onSelectCatalog"
+                    android:checkable="true"
+                    android:title="RufilmTv"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuСatalogTopkino"
+                    android:onClick="onSelectCatalog"
+                    android:checkable="true"
+                    android:title="Topkino"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuСatalogFilmix"
+                    android:onClick="onSelectCatalog"
+                    android:checkable="true"
+                    android:title="Filmix"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuСatalogMyhit"
+                    android:onClick="onSelectCatalog"
+                    android:checkable="true"
+                    android:title="My-Hit"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuСatalogKinolive"
+                    android:onClick="onSelectCatalog"
+                    android:checkable="true"
+                    android:title="KinoLive"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuСatalogKinopub"
+                    android:onClick="onSelectCatalog"
+                    android:checkable="true"
+                    android:title="Kinopub"
+                    app:showAsAction="never" />
             </group>
         </menu>
     </item>
     <item
+        android:id="@+id/action_sort_all"
+        app:showAsAction="always"
         android:visible="false"
-        android:id="@+id/action_db_save"
-        android:onClick="onDBsave"
-        android:title="Сохранить"
-        app:showAsAction="never" />
-    <item
-        android:visible="false"
-        android:id="@+id/action_db_del"
-        android:onClick="onDBdel"
-        android:title="Очистить"
-        app:showAsAction="never" />
-    <item
-        android:visible="false"
-        android:id="@+id/action_db_restore"
-        android:onClick="onDBrest"
-        android:title="Восстановить"
-        app:showAsAction="never" />
+        android:onClick="onSortAll"
+        android:icon="@drawable/ic_menu_sort"
+        android:orderInCategory="2"
+        android:title="Фильтры"/>
     <item
         android:id="@+id/action_sort"
-        android:orderInCategory="30"
+        app:showAsAction="always"
+        android:orderInCategory="2"
+        android:icon="@drawable/ic_menu_sort"
         android:title="Сортировать">
         <menu>
             <group>
@@ -71,6 +113,11 @@
                     android:id="@+id/menuSortOrderList"
                     android:onClick="onSortOrderList"
                     android:title="По списку"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/menuSortOrderType"
+                    android:onClick="onSortOrderType"
+                    android:title="По типу"
                     app:showAsAction="never" />
                 <item
                     android:id="@+id/menuSortOrderCategory"
@@ -87,12 +134,6 @@
                     android:onClick="onSortOrderCountry"
                     android:title="По стране"
                     app:showAsAction="never" />
-                <item
-                    android:visible="false"
-                    android:id="@+id/menuSortAll"
-                    android:onClick="onSortAll"
-                    android:title="Все параметры"
-                    app:showAsAction="never" />
             </group>
         </menu>
     </item>
@@ -102,5 +143,11 @@
         android:onClick="onActorSearch"
         android:orderInCategory="1"
         android:title="Поиск по актерам"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_video_search"
+        android:onClick="onVideoSearch"
+        android:orderInCategory="2"
+        android:title="Поиск файлов"
         app:showAsAction="never" />
 </menu>

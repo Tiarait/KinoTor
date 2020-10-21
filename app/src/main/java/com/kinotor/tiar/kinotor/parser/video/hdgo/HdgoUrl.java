@@ -36,6 +36,7 @@ public class HdgoUrl extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         getSeries(GetData(url));
+        Log.e(TAG, "HdgoUrl: parse");
         return null;
     }
 
@@ -61,65 +62,85 @@ public class HdgoUrl extends AsyncTask<Void, Void, Void> {
             //film
             Elements video = doc.select("video source");
             for (Element iframe : video) {
-                if (iframe.attr("src").contains("/1/")) {
-                    q.add("360 (mp4)");
-                    u.add(iframe.attr("src") + "[hdgo]");
-                } else if (iframe.attr("src").contains("/2/")) {
-                    q.add("480 (mp4)");
+                if (iframe.attr("src").contains("/4/")) {
+                    q.add("1080 (mp4)");
                     u.add(iframe.attr("src") + "[hdgo]");
                 } else if (iframe.attr("src").contains("/3/")) {
                     q.add("720 (mp4)");
                     u.add(iframe.attr("src") + "[hdgo]");
-                } else if (iframe.attr("src").contains("/4/")) {
-                    q.add("1080 (mp4)");
+                } else if (iframe.attr("src").contains("/2/")) {
+                    q.add("480 (mp4)");
+                    u.add(iframe.attr("src") + "[hdgo]");
+                } else if (iframe.attr("src").contains("/1/")) {
+                    q.add("360 (mp4)");
                     u.add(iframe.attr("src") + "[hdgo]");
                 }
             }
-        } else if (doc.body().html().contains("media: [")) {
-            String video_arr = doc.body().html().split("media: \\[\\{")[1]
+            Log.d(TAG, "ParseHdgoMp4 0: "+q.toString());
+            if (q.isEmpty()){
+                Log.d(TAG, "ParseHdgoMp4: "+doc.html());
+                q.add("видео недоступно");
+                u.add("error");
+            }
+        } else if (doc.body().html().contains("media: [") || doc.body().html().contains("\"media\": [")) {
+            String video_arr = doc.body().html().replace("\"","").split("media: \\[\\{")[1]
                     .split("\\}]")[0];
-            if (video_arr.contains("\\},\\{")) {
+            if (video_arr.contains("},{")) {
                 String[] video_url = video_arr.split("\\},\\{");
                 for (int i = 0; i < video_url.length; i++) {
                     video_url[i] = video_url[i].replace("url: '", "")
                             .replace("', type: 'video/mp4'", "")
                             .replace("'", "");
-                    if (video_url[i].contains("/1/")) {
-                        q.add("360 (mp4)");
-                        u.add(video_url[i] + "[hdgo]");
-                    } else if (video_url[i].contains("/2/")) {
-                        q.add("480 (mp4)");
+                    if (video_url[i].contains("/4/")) {
+                        q.add("1080 (mp4)");
                         u.add(video_url[i] + "[hdgo]");
                     } else if (video_url[i].contains("/3/")) {
                         q.add("720 (mp4)");
                         u.add(video_url[i] + "[hdgo]");
-                    } else if (video_url[i].contains("/4/")) {
-                        q.add("1080 (mp4)");
+                    } else if (video_url[i].contains("/2/")) {
+                        q.add("480 (mp4)");
+                        u.add(video_url[i] + "[hdgo]");
+                    } else if (video_url[i].contains("/1/")) {
+                        q.add("360 (mp4)");
                         u.add(video_url[i] + "[hdgo]");
                     }
+                }
+
+                Log.d(TAG, "ParseHdgoMp4 1: "+q.toString());
+                if (q.isEmpty()){
+                    Log.d(TAG, "ParseHdgoMp4: "+doc.html());
+                    q.add("видео недоступно");
+                    u.add("error");
                 }
             } else {
                 String[] video_url = video_arr.split("'");
                 for (String aVideo_url : video_url) {
-                    if (aVideo_url.contains("http://")) {
-                        if (aVideo_url.contains("/1/")) {
-                            q.add("360 (mp4)");
+                    if (aVideo_url.contains("//")) {
+                        if (aVideo_url.contains("/4/")) {
+                            q.add("1080 (mp4)");
+                            u.add(aVideo_url + "[hdgo]");
+                        } else if (aVideo_url.contains("/3/")) {
+                            q.add("720 (mp4)");
                             u.add(aVideo_url + "[hdgo]");
                         } else if (aVideo_url.contains("/2/")) {
                             q.add("480 (mp4)");
                             u.add(aVideo_url  + "[hdgo]");
-                        } else if (aVideo_url.contains("/3/")) {
-                            q.add("720 (mp4)");
-                            u.add(aVideo_url + "[hdgo]");
-                        } else if (aVideo_url.contains("/4/")) {
-                            q.add("1080 (mp4)");
+                        } else if (aVideo_url.contains("/1/")) {
+                            q.add("360 (mp4)");
                             u.add(aVideo_url + "[hdgo]");
                         }
                     }
                 }
+
+                Log.d(TAG, "ParseHdgoMp4 2: "+q.toString());
+                if (q.isEmpty()){
+                    Log.e(TAG, "ParseHdgoMp4: "+doc.html());
+                    q.add("видео недоступно");
+                    u.add("error");
+                }
             }
         } else {
-            Log.d(TAG, "ParseHdgoMp4: видео недоступно");
+            Log.d(TAG, "ParseHdgoMp4: видео недоступно" + doc.body().html());
             q.add("видео недоступно");
             u.add("error");
         }
@@ -129,23 +150,27 @@ public class HdgoUrl extends AsyncTask<Void, Void, Void> {
 
     private Document GetData(String url){
         try {
-            Document htmlDoc = Jsoup.connect(checkUrl(url))
+            Log.d(TAG, "ParseHdgo: " + url.trim());
+            String ref = "http://hdgo.cc";
+            if (url.contains("vio.to/video/playlist") && url.contains("&e=")) {
+                url = "https://vio.to/api/videoget.json?token=test&id=" + url.split("&e=")[1].trim();
+                ref = "https://vio.to/";
+            }
+            Log.d(TAG, "ParseHdgo2: " + url.trim());
+            return Jsoup.connect(checkUrl(url.trim()))
                     .userAgent("Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9) Gecko/2008052906 Firefox/3.0")
-                    .referrer("http://hdgo.cc")
-                    .timeout(5000).ignoreContentType(true).get();
-            Log.d(TAG, "GetdataHdgoUrl: connected to " + checkUrl(url));
-            return htmlDoc;
+                    .referrer(ref)
+                    .ignoreContentType(true).get();
         } catch (Exception e) {
-            Log.d(TAG, "GetdataHdgoUrl: connected false to " + checkUrl(url));
             e.printStackTrace();
             return null;
         }
     }
 
     private String checkUrl(String url) {
-        url = url.replaceAll(" ", "").replaceAll("\n", "").replaceAll("\r", "");
-        url = url.replaceAll("\"", "");
-        if (!url.contains("http://")) url = url.contains("//") ? "http:" + url : "http://" + url;
+        url = url.replace(" ", "").replace("\n", "").replaceAll("\r", "");
+        url = url.replace("\"", "");
+        if (!url.contains("http://") && !url.contains("https://")) url = url.contains("//") ? "http:" + url : "http://" + url;
         return url;
     }
 }
