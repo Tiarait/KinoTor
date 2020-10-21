@@ -7,16 +7,18 @@
 ### Реализовано в учебных целях и больше не распространяется
 ---
 ### Скриншоты:
-
-![alt text](https://github.com/Tiarait/KinoTor/blob/master/screenshots/m1.png)
-![alt text](https://github.com/Tiarait/KinoTor/blob/master/screenshots/m2.png)
-![alt text](https://github.com/Tiarait/KinoTor/blob/master/screenshots/m3.png)
+<p align="center">
+  <img src="https://github.com/Tiarait/KinoTor/blob/master/screenshots/m1.png" height="450" title="hover text">
+  <img src="https://github.com/Tiarait/KinoTor/blob/master/screenshots/m2.png" height="450" alt="accessibility text">
+  <img src="https://github.com/Tiarait/KinoTor/blob/master/screenshots/m3.png" height="450" title="hover text">
+</p>
 ---
 ### Скриншоты TV:
-
-![alt text](https://github.com/Tiarait/KinoTor/blob/master/screenshots/tv1.png)
-![alt text](https://github.com/Tiarait/KinoTor/blob/master/screenshots/tv2.png)
-![alt text](https://github.com/Tiarait/KinoTor/blob/master/screenshots/tv3.png)
+<p align="center">
+  <img src="https://github.com/Tiarait/KinoTor/blob/master/screenshots/tv1.png" width="350" title="hover text">
+  <img src="https://github.com/Tiarait/KinoTor/blob/master/screenshots/tv2.png" width="350" alt="accessibility text">
+  <img src="https://github.com/Tiarait/KinoTor/blob/master/screenshots/tv3.png" width="350" title="hover text">
+</p>
 
 ## License
 
