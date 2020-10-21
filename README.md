@@ -12,7 +12,10 @@
   <img src="https://github.com/Tiarait/KinoTor/blob/master/screenshots/m2.png" height="450" alt="accessibility text">
   <img src="https://github.com/Tiarait/KinoTor/blob/master/screenshots/m3.png" height="450" title="hover text">
 </p>
+
+
 ---
+
 ### Скриншоты TV:
 <p align="center">
   <img src="https://github.com/Tiarait/KinoTor/blob/master/screenshots/tv1.png" width="350" title="hover text">
